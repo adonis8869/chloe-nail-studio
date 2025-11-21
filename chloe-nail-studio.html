@@ -25,27 +25,26 @@
                 dateText: "*活動日期：即日起至 11/30 止", 
                 infoImage: "promo4.jpg",
                 items: [
-                    {
-                        artist: "By Chloe",
-                        price: "款式優惠價 $1099",
-                        image: "promo2.jpg"
-                    },
-                    {
-                        artist: "By ChiChi",
-                        price: "款式優惠價 $700",
-                        image: "promo3.jpg"
-                    }
+                    { artist: "By Chloe", price: "款式優惠價 $1099", image: "promo2.jpg" },
+                    { artist: "By ChiChi", price: "款式優惠價 $700", image: "promo3.jpg" }
                 ]
             },
 
-            // 2. 穿戴甲商店設定 (已更新為您的4款編號)
+            // 2. 穿戴甲資訊圖片 (新功能)
+            pressonInfo: [
+                "presson_price.jpg",   // 價目表
+                "presson_custom.jpg",  // 客製說明
+                "presson_tools.jpg"    // 工具包
+            ],
+
+            // 3. 穿戴甲商店設定
             products: [
                 {
-                    id: 250801,                 // 為了對應編號
-                    name: "款式 No.250801",      // 顯示在網站和訂單的名字
-                    price: 890,                 // 價格 (可自行修改)
-                    tag: "預購",                 // 標籤
-                    image: "product1.jpg",      // 對應的圖片
+                    id: 250801,
+                    name: "款式 No.250801",
+                    price: 890, // 您圖片寫造型款 $799 up，這裡我先設 $890，您可自行修改
+                    tag: "預購",
+                    image: "product1.jpg",
                     defaultImg: "promo2.jpg"
                 },
                 {
@@ -236,7 +235,20 @@
     </section>
 
     <section id="shop" class="py-16 px-4 md:px-8 max-w-7xl mx-auto bg-white rounded-xl my-8 border border-brand-bg">
-        <div class="text-center mb-12">
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12 px-4">
+            <div class="cursor-pointer hover:opacity-90 transition">
+                <img src="presson_price.jpg" onclick="openLightbox(this.src)" class="w-full rounded shadow-sm zoomable" alt="價目表">
+            </div>
+            <div class="cursor-pointer hover:opacity-90 transition">
+                <img src="presson_custom.jpg" onclick="openLightbox(this.src)" class="w-full rounded shadow-sm zoomable" alt="客製化說明">
+            </div>
+            <div class="cursor-pointer hover:opacity-90 transition">
+                <img src="presson_tools.jpg" onclick="openLightbox(this.src)" class="w-full rounded shadow-sm zoomable" alt="工具包內容">
+            </div>
+        </div>
+
+        <div class="text-center mb-12 border-t border-brand-bg pt-12">
             <h2 class="text-3xl md:text-4xl font-serif text-brand-text">Press-on Nails Shop</h2>
             <p class="font-hand text-2xl text-brand-accent">手工穿戴甲販售</p>
             <p class="text-sm text-gray-500 mt-2">全手工製作 • 獨家設計 • 可重複使用</p>
@@ -297,7 +309,7 @@
     </div>
 
     <script>
-        // 0. 初始化畫面 (渲染資料)
+        // 0. 初始化畫面
         function renderSite() {
             // 渲染優惠區
             document.getElementById('promo-title').textContent = SITE_CONFIG.promo.title;
@@ -305,8 +317,7 @@
             document.getElementById('promo-date').textContent = SITE_CONFIG.promo.dateText;
             document.getElementById('promo-info-img').src = SITE_CONFIG.promo.infoImage;
 
-            const promoContainer = document.getElementById('promo-items-container');
-            promoContainer.innerHTML = SITE_CONFIG.promo.items.map(item => `
+            document.getElementById('promo-items-container').innerHTML = SITE_CONFIG.promo.items.map(item => `
                 <div class="text-center group">
                     <div class="overflow-hidden rounded-lg shadow-md mb-3">
                         <img src="${item.image}" onclick="openLightbox(this.src)" class="w-full h-64 md:h-80 object-cover zoomable">
@@ -316,16 +327,17 @@
                 </div>
             `).join('');
 
-            // 渲染商店區
+            // 渲染商店區 (含更新的選單)
             const shopContainer = document.getElementById('shop-container');
             
-            // 定義標準尺寸選項
+            // ★ 更新：尺寸選單增加 +$500 / +$150 的標示
             const sizeOptions = `
                 <option value="XS">XS (14mm)</option>
                 <option value="S">S (15mm)</option>
                 <option value="M">M (16mm)</option>
                 <option value="L">L (17mm)</option>
-                <option value="Custom">訂製翻模</option>
+                <option value="CustomSize">尺寸客製 (+$150)</option>
+                <option value="CustomMold">翻模量身訂製 (+$500)</option>
             `;
 
             shopContainer.innerHTML = SITE_CONFIG.products.map(product => `
@@ -349,7 +361,7 @@
             `).join('');
         }
 
-        // 1. 燈箱功能
+        // 1. 燈箱
         function openLightbox(src) {
             document.getElementById('lightbox-img').src = src;
             document.getElementById('lightbox').classList.add('show');
@@ -360,28 +372,42 @@
             document.body.style.overflow = 'auto';
         }
 
-        // 2. 購物車邏輯
+        // 2. 購物車邏輯 (升級版：自動加價)
         let cart = [];
         function toggleCart() {
             document.getElementById('cart-modal').classList.toggle('open');
             document.getElementById('cart-overlay').classList.toggle('show');
         }
-        function addToCart(id, name, price, sizeSelectId, img) {
+        
+        function addToCart(id, name, basePrice, sizeSelectId, img) {
             const selectElement = document.getElementById(sizeSelectId);
             const sizeValue = selectElement.value;
-            const sizeText = selectElement.options[selectElement.selectedIndex].text; // 抓取完整文字如 XS (14mm)
+            const sizeText = selectElement.options[selectElement.selectedIndex].text; 
+
+            // ★ 核心邏輯：根據選項加價
+            let finalPrice = basePrice;
+            if (sizeValue === "CustomMold") {
+                finalPrice += 500; // 翻模 +500
+            } else if (sizeValue === "CustomSize") {
+                finalPrice += 150; // 客製尺寸 +150
+            }
 
             const uniqueId = id + '-' + sizeValue;
             const existingItem = cart.find(item => item.uniqueId === uniqueId);
+            
+            // 注意：這裡存的是 finalPrice
             if (existingItem) existingItem.qty += 1;
-            else cart.push({ uniqueId, id, name, price, size: sizeText, img, qty: 1 });
+            else cart.push({ uniqueId, id, name, price: finalPrice, size: sizeText, img, qty: 1 });
+            
             updateCartUI();
             toggleCart();
         }
+
         function removeFromCart(uniqueId) {
             cart = cart.filter(item => item.uniqueId !== uniqueId);
             updateCartUI();
         }
+
         function updateCartUI() {
             const cartItemsContainer = document.getElementById('cart-items');
             const countBadge = document.getElementById('cart-count');
@@ -406,12 +432,14 @@
             }
             updateCartTotal();
         }
+
         function updateCartTotal() {
             const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
             const shippingFee = parseInt(document.querySelector('input[name="shipping"]:checked').value);
             document.getElementById('cart-subtotal').innerText = '$' + subtotal;
             document.getElementById('cart-total').innerText = '$' + (subtotal + shippingFee);
         }
+
         function checkout() {
             if (cart.length === 0) { alert('購物車是空的喔！'); return; }
             const name = document.getElementById('customer-name').value.trim();
