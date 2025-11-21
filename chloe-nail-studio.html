@@ -80,7 +80,7 @@
                         'brand-dark': '#5D534A',
                     },
                     fontFamily: {
-                        // ★ 強制將預設字體設為圓體
+                        // 強制圓體
                         'sans': ['"Zen Maru Gothic"', 'sans-serif'], 
                         'serif': ['"Zen Maru Gothic"', 'sans-serif'],
                         'hand': ['"Dancing Script"', 'cursive'],
@@ -100,15 +100,12 @@
         
         /* 分頁切換邏輯 */
         .page-section {
-            display: none; /* 預設隱藏所有分頁 */
+            display: none;
             animation: fadeIn 0.5s ease-in-out;
-            padding-top: 100px; /* 避開導航列 */
+            padding-top: 100px;
             min-height: 80vh;
         }
-        .page-section.active {
-            display: block; /* 只有 active 的分頁會顯示 */
-        }
-        /* 首頁 Hero 特殊處理 */
+        .page-section.active { display: block; }
         #page-home { padding-top: 0; }
 
         @keyframes fadeIn {
@@ -163,7 +160,9 @@
         .overlay.show { display: block; }
     </style>
 </head>
-<body class="pb-24 md:pb-0"> <div id="lightbox" onclick="closeLightbox()">
+<body class="pb-24 md:pb-0">
+
+    <div id="lightbox" onclick="closeLightbox()">
         <img id="lightbox-img" src="" alt="Enlarged Image">
     </div>
 
@@ -211,12 +210,10 @@
         <div onclick="switchPage('page-home')" class="nav-btn active" id="nav-home">首頁</div>
         <div onclick="switchPage('page-rules')" class="nav-btn" id="nav-rules">預約須知</div>
         <div onclick="switchPage('page-november')" class="nav-btn text-brand-accent" id="nav-november">✨ 本月限定</div>
-        
         <div class="text-center px-4 cursor-pointer" onclick="switchPage('page-home')">
             <div class="text-2xl lg:text-3xl font-bold tracking-widest font-serif">CHLOE NAIL</div>
             <div class="font-hand text-lg text-brand-accent">Chloe nail studio</div>
         </div>
-        
         <div onclick="switchPage('page-shop')" class="nav-btn" id="nav-shop">穿戴甲商店</div>
         <div onclick="switchPage('page-menu')" class="nav-btn" id="nav-menu">服務價目</div>
         <div onclick="switchPage('page-location')" class="nav-btn" id="nav-location">預約資訊</div>
@@ -232,17 +229,12 @@
             <div class="absolute inset-0 z-0">
                 <img src="Title.jpg" class="w-full h-full object-cover opacity-90">
             </div>
-            
             <div class="relative z-10 text-white drop-shadow-lg bg-black/10 p-8 rounded-lg backdrop-blur-[2px]">
                 <h1 class="text-5xl md:text-7xl font-serif tracking-widest mb-4">Chloe Nail</h1>
                 <p class="font-hand text-3xl md:text-4xl mb-8">Press-on Nails & Design</p>
                 <div class="flex flex-col md:flex-row gap-4 justify-center">
-                    <button onclick="switchPage('page-shop')" class="bg-white/80 text-brand-dark px-8 py-3 hover:bg-white transition rounded shadow-lg font-bold">
-                        穿戴甲商店
-                    </button>
-                    <button onclick="switchPage('page-november')" class="bg-brand-accent/90 text-white px-8 py-3 hover:bg-brand-accent transition rounded shadow-lg font-bold">
-                        本月限定款
-                    </button>
+                    <button onclick="switchPage('page-shop')" class="bg-white/80 text-brand-dark px-8 py-3 hover:bg-white transition rounded shadow-lg font-bold">穿戴甲商店</button>
+                    <button onclick="switchPage('page-november')" class="bg-brand-accent/90 text-white px-8 py-3 hover:bg-brand-accent transition rounded shadow-lg font-bold">本月限定款</button>
                 </div>
             </div>
         </header>
@@ -391,29 +383,22 @@
             `).join('');
         }
 
-        // 分頁切換功能
+        // 分頁切換
         function switchPage(pageId) {
-            // 1. 隱藏所有頁面
             document.querySelectorAll('.page-section').forEach(page => {
                 page.classList.remove('active');
             });
-            // 2. 顯示目標頁面
             document.getElementById(pageId).classList.add('active');
-            
-            // 3. 捲動到頂部
             window.scrollTo(0, 0);
-
-            // 4. 更新導航列 Active 狀態 (電腦版)
             document.querySelectorAll('.nav-btn').forEach(btn => {
                 btn.classList.remove('text-brand-accent', 'font-bold');
             });
-            // 嘗試找到對應的 nav-button 並加亮
             const navId = 'nav-' + pageId.replace('page-', '');
             const activeBtn = document.getElementById(navId);
             if(activeBtn) activeBtn.classList.add('text-brand-accent', 'font-bold');
         }
 
-        // 1. 燈箱
+        // 燈箱
         function openLightbox(src) {
             document.getElementById('lightbox-img').src = src;
             document.getElementById('lightbox').classList.add('show');
@@ -424,7 +409,7 @@
             document.body.style.overflow = 'auto';
         }
 
-        // 2. 購物車邏輯
+        // 購物車
         let cart = [];
         function toggleCart() {
             document.getElementById('cart-modal').classList.toggle('open');
@@ -435,16 +420,11 @@
             const selectElement = document.getElementById(sizeSelectId);
             const sizeValue = selectElement.value;
             const sizeText = selectElement.options[selectElement.selectedIndex].text; 
-
             let finalPrice = basePrice; 
-            // 注意：這裡不再加價，只記錄選項，最後計算才加
-
             const uniqueId = id + '-' + sizeValue;
             const existingItem = cart.find(item => item.uniqueId === uniqueId);
-            
             if (existingItem) existingItem.qty += 1;
             else cart.push({ uniqueId, id, name, price: finalPrice, sizeValue: sizeValue, size: sizeText, img, qty: 1 });
-            
             updateCartUI();
             toggleCart();
         }
@@ -480,11 +460,9 @@
         }
 
         function updateCartTotal() {
-            // 1. 計算商品小計
             const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
             document.getElementById('cart-subtotal').innerText = '$' + subtotal;
 
-            // 2. 計算翻模費用 (滿3副免翻模費)
             const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
             const hasCustomMold = cart.some(item => item.sizeValue === 'CustomMold');
             let moldFee = 0;
@@ -506,7 +484,6 @@
                 document.getElementById('mold-fee-row').style.display = 'none';
             }
 
-            // 3. 計算運費
             let shippingFee = parseInt(document.querySelector('input[name="shipping"]:checked').value);
             let shippingText = "$" + shippingFee;
             
@@ -519,7 +496,6 @@
             }
             document.getElementById('shipping-fee-display').innerText = shippingText;
 
-            // 4. 總金額
             const total = subtotal + moldFee + shippingFee;
             document.getElementById('cart-total').innerText = '$' + total;
         }
@@ -536,7 +512,6 @@
                 message += `${index + 1}. ${item.name} (${item.size}) x${item.qty} - $${item.price * item.qty}\n`;
             });
 
-            // 重新計算費用
             const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
             const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
             const hasCustomMold = cart.some(item => item.sizeValue === 'CustomMold');
@@ -576,8 +551,22 @@
             message += `門市/地址：${store}\n`;
             message += `\n(請確認訂單內容無誤)`;
             
-            const lineUrl = `https://line.me/R/oaMessage/@866wnpdc/?${encodeURIComponent(message)}`;
-            window.open(lineUrl, '_blank');
+            // ★ 智慧判斷裝置 ★
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            
+            if (isMobile) {
+                // 手機版：直接打開 LINE 並帶入文字
+                window.location.href = `https://line.me/R/oaMessage/@866wnpdc/?${encodeURIComponent(message)}`;
+            } else {
+                // 電腦版：自動複製文字 + 打開聊天視窗
+                navigator.clipboard.writeText(message).then(() => {
+                    alert("✅ 訂單內容已自動複製！\n\n請在跳出的 LINE 視窗中，按下「貼上 (Ctrl+V)」傳送即可。");
+                    window.open('https://line.me/R/ti/p/@866wnpdc', '_blank');
+                }).catch(err => {
+                    alert("⚠️ 自動複製失敗，請手動複製以下內容傳送：\n\n" + message);
+                    window.open('https://line.me/R/ti/p/@866wnpdc', '_blank');
+                });
+            }
         }
 
         renderSite();
