@@ -7,7 +7,7 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600&family=Noto+Sans+TC:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Zen+Maru+Gothic:wght@300;400;500;700&display=swap" rel="stylesheet">
     
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -30,12 +30,12 @@
                 ]
             },
 
-            // 2. 穿戴甲商店設定 (已更新價格)
+            // 2. 穿戴甲商店設定
             products: [
                 {
                     id: 250801,
                     name: "款式 No.250801",
-                    price: 899, // 更新價格
+                    price: 899,
                     tag: "預購",
                     image: "product1.jpg",
                     defaultImg: "promo2.jpg"
@@ -43,7 +43,7 @@
                 {
                     id: 250802,
                     name: "款式 No.250802",
-                    price: 799, // 更新價格
+                    price: 799,
                     tag: "預購",
                     image: "product2.jpg",
                     defaultImg: "promo2.jpg"
@@ -51,7 +51,7 @@
                 {
                     id: 250803,
                     name: "款式 No.250803",
-                    price: 899, // 更新價格
+                    price: 899,
                     tag: "預購",
                     image: "product3.jpg",
                     defaultImg: "promo2.jpg"
@@ -59,7 +59,7 @@
                 {
                     id: 250804,
                     name: "款式 No.250804",
-                    price: 899, // 更新價格
+                    price: 899,
                     tag: "預購",
                     image: "product4.jpg",
                     defaultImg: "promo2.jpg"
@@ -84,7 +84,7 @@
                     },
                     fontFamily: {
                         'serif': ['"Playfair Display"', 'serif'],
-                        'sans': ['"Noto Sans TC"', 'sans-serif'],
+                        'sans': ['"Zen Maru Gothic"', 'sans-serif'], // ★ 改為 Zen Maru Gothic
                         'hand': ['"Dancing Script"', 'cursive'],
                     }
                 }
@@ -231,7 +231,19 @@
 
     <section id="shop" class="py-16 px-4 md:px-8 max-w-7xl mx-auto bg-white rounded-xl my-8 border border-brand-bg">
         
-        <div class="text-center mb-12">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12 px-4">
+            <div class="cursor-pointer hover:opacity-90 transition">
+                <img src="presson_price.jpg" onclick="openLightbox(this.src)" class="w-full rounded shadow-sm zoomable" alt="價目表">
+            </div>
+            <div class="cursor-pointer hover:opacity-90 transition">
+                <img src="presson_custom.jpg" onclick="openLightbox(this.src)" class="w-full rounded shadow-sm zoomable" alt="客製化說明">
+            </div>
+            <div class="cursor-pointer hover:opacity-90 transition">
+                <img src="presson_tools.jpg" onclick="openLightbox(this.src)" class="w-full rounded shadow-sm zoomable" alt="工具包內容">
+            </div>
+        </div>
+
+        <div class="text-center mb-12 border-t border-brand-bg pt-12">
             <h2 class="text-3xl md:text-4xl font-serif text-brand-text">Press-on Nails Shop</h2>
             <p class="font-hand text-2xl text-brand-accent">手工穿戴甲販售</p>
             <p class="text-sm text-gray-500 mt-2">全手工製作 • 獨家設計 • 可重複使用</p>
@@ -319,7 +331,7 @@
             // 渲染商店區
             const shopContainer = document.getElementById('shop-container');
             
-            // ★ 更新：尺寸選單 (已移除備註與客製選項)
+            // ★ 更新：精簡尺寸選單 (XS, S, M, L, 翻模)
             const sizeOptions = `
                 <option value="XS">XS</option>
                 <option value="S">S</option>
@@ -372,7 +384,7 @@
             const sizeValue = selectElement.value;
             const sizeText = selectElement.options[selectElement.selectedIndex].text; 
 
-            // 加價邏輯：只有翻模要加錢
+            // 加價邏輯
             let finalPrice = basePrice;
             if (sizeValue === "CustomMold") {
                 finalPrice += 500;
