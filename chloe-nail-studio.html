@@ -78,12 +78,11 @@
                         'brand-accent': '#C5A086',
                         'brand-white': '#FFFFFF',
                         'brand-dark': '#5D534A',
-                        'brand-highlight': '#BFA094',
                     },
                     fontFamily: {
-                        // 全部字體都改成圓體 (手寫感)
-                        'serif': ['"Zen Maru Gothic"', 'sans-serif'],
+                        // ★ 強制將預設字體設為圓體
                         'sans': ['"Zen Maru Gothic"', 'sans-serif'], 
+                        'serif': ['"Zen Maru Gothic"', 'sans-serif'],
                         'hand': ['"Dancing Script"', 'cursive'],
                     }
                 }
@@ -92,13 +91,37 @@
     </script>
 
     <style>
-        /* 強制全站使用圓體 */
-        body { background-color: #F5F0F0; color: #8B7E74; font-family: "Zen Maru Gothic", sans-serif; }
-        html { scroll-behavior: smooth; }
+        /* 全站字體強制設定 */
+        body { 
+            background-color: #F5F0F0; 
+            color: #8B7E74; 
+            font-family: "Zen Maru Gothic", sans-serif; 
+        }
         
-        .nav-btn { position: relative; padding-bottom: 4px; }
-        .nav-btn::after { content: ''; position: absolute; width: 0; height: 1px; bottom: 0; left: 0; background-color: #C5A086; transition: width 0.3s; }
-        .nav-btn:hover::after { width: 100%; }
+        /* 分頁切換邏輯 */
+        .page-section {
+            display: none; /* 預設隱藏所有分頁 */
+            animation: fadeIn 0.5s ease-in-out;
+            padding-top: 100px; /* 避開導航列 */
+            min-height: 80vh;
+        }
+        .page-section.active {
+            display: block; /* 只有 active 的分頁會顯示 */
+        }
+        /* 首頁 Hero 特殊處理 */
+        #page-home { padding-top: 0; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 導航按鈕特效 */
+        .nav-btn { position: relative; padding-bottom: 4px; cursor: pointer; }
+        .nav-btn::after { content: ''; position: absolute; width: 0; height: 2px; bottom: 0; left: 0; background-color: #C5A086; transition: width 0.3s; }
+        .nav-btn:hover::after, .nav-btn.active::after { width: 100%; }
+        
+        /* 其他樣式 */
         .zoomable { cursor: zoom-in; transition: transform 0.3s ease; }
         .zoomable:hover { transform: scale(1.02); }
         
@@ -140,9 +163,7 @@
         .overlay.show { display: block; }
     </style>
 </head>
-<body class="font-sans antialiased tracking-wide leading-relaxed pb-24 md:pb-0">
-
-    <div id="lightbox" onclick="closeLightbox()">
+<body class="pb-24 md:pb-0"> <div id="lightbox" onclick="closeLightbox()">
         <img id="lightbox-img" src="" alt="Enlarged Image">
     </div>
 
@@ -162,156 +183,169 @@
         <div class="p-5 border-t bg-gray-50">
             <div class="space-y-3 mb-4 text-sm">
                 <div class="flex justify-between"><span>商品小計</span><span id="cart-subtotal">$0</span></div>
-                
                 <div class="flex justify-between text-brand-dark bg-brand-bg/50 p-2 rounded" id="mold-fee-row" style="display:none">
                     <span>翻模費用</span>
                     <span id="cart-mold-fee" class="font-bold">$0</span>
                 </div>
-
                 <div class="flex flex-col gap-2 border-b pb-2">
                     <span class="font-bold text-brand-dark">選擇運費：</span>
                     <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="shipping" value="60" checked onchange="updateCartTotal()"><span>7-11 店到店 (+$60)</span></label>
-                    <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="shipping" value="40" onchange="updateCartTotal()"><span>郵寄掛號 (+$40)</span></label>
+                    <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="shipping" value="130" onchange="updateCartTotal()"><span>黑貓宅急便 (+$130)</span></label>
                     <div class="flex justify-between text-gray-500 text-xs">
                         <span>運費金額</span>
                         <span id="shipping-fee-display">$60</span>
                     </div>
                 </div>
-                
                 <div class="flex justify-between text-lg font-bold text-brand-accent pt-2"><span>總金額</span><span id="cart-total">$0</span></div>
             </div>
             <div class="space-y-2 mb-4">
                 <input type="text" id="customer-name" placeholder="您的姓名" class="w-full p-2 border rounded text-sm">
                 <input type="tel" id="customer-phone" placeholder="聯絡電話" class="w-full p-2 border rounded text-sm">
-                <input type="text" id="customer-store" placeholder="取件門市名稱 / 郵寄地址" class="w-full p-2 border rounded text-sm">
+                <input type="text" id="customer-store" placeholder="取件門市名稱 / 宅配地址" class="w-full p-2 border rounded text-sm">
             </div>
             <button onclick="checkout()" class="w-full bg-brand-accent text-white py-3 rounded hover:bg-brand-dark transition font-bold tracking-widest">LINE 傳送訂單</button>
         </div>
     </div>
 
     <nav class="hidden md:flex fixed w-full z-40 bg-brand-bg/95 backdrop-blur-sm border-b border-brand-accent/20 py-5 justify-center items-center space-x-8 lg:space-x-12 text-brand-text font-medium shadow-sm transition-all">
-        <a href="#rules" class="nav-btn hover:text-brand-accent transition">預約須知</a>
-        <a href="#november" class="nav-btn hover:text-brand-accent transition text-brand-accent">✨ 本月限定</a>
-        <div class="text-center px-4"><div class="text-2xl lg:text-3xl font-bold tracking-widest">CHLOE NAIL</div><div class="font-hand text-lg text-brand-accent">Chloe nail studio</div></div>
-        <a href="#shop" class="nav-btn hover:text-brand-accent transition">穿戴甲商店</a>
-        <a href="#menu" class="nav-btn hover:text-brand-accent transition">服務價目</a>
+        <div onclick="switchPage('page-home')" class="nav-btn active" id="nav-home">首頁</div>
+        <div onclick="switchPage('page-rules')" class="nav-btn" id="nav-rules">預約須知</div>
+        <div onclick="switchPage('page-november')" class="nav-btn text-brand-accent" id="nav-november">✨ 本月限定</div>
+        
+        <div class="text-center px-4 cursor-pointer" onclick="switchPage('page-home')">
+            <div class="text-2xl lg:text-3xl font-bold tracking-widest font-serif">CHLOE NAIL</div>
+            <div class="font-hand text-lg text-brand-accent">Chloe nail studio</div>
+        </div>
+        
+        <div onclick="switchPage('page-shop')" class="nav-btn" id="nav-shop">穿戴甲商店</div>
+        <div onclick="switchPage('page-menu')" class="nav-btn" id="nav-menu">服務價目</div>
+        <div onclick="switchPage('page-location')" class="nav-btn" id="nav-location">預約資訊</div>
     </nav>
 
-    <div class="md:hidden text-center py-4 bg-brand-bg border-b border-brand-accent/20 sticky top-0 z-40 shadow-sm/50 backdrop-blur-md bg-opacity-90">
-        <div class="text-xl font-bold text-brand-text tracking-widest">CHLOE NAIL</div>
+    <div class="md:hidden text-center py-4 bg-brand-bg border-b border-brand-accent/20 sticky top-0 z-40 shadow-sm/50 backdrop-blur-md bg-opacity-90 cursor-pointer" onclick="switchPage('page-home')">
+        <div class="text-xl font-bold text-brand-text tracking-widest font-serif">CHLOE NAIL</div>
         <div class="font-hand text-sm text-brand-accent">Chloe nail studio</div>
     </div>
 
-    <header class="pt-4 md:pt-32 pb-8 md:pb-12 px-4 text-center">
-        <div class="max-w-6xl mx-auto relative">
-            <img src="Title.jpg" alt="Chloe Nail Studio" class="w-full h-[350px] md:h-[550px] lg:h-[650px] object-cover rounded-lg shadow-md">
-            <div class="absolute inset-0 flex flex-col items-center justify-center text-white px-4 rounded-lg">
-                <h1 class="text-4xl md:text-5xl lg:text-7xl tracking-widest mb-3 opacity-0 animate-[fadeIn_1s_ease-out_forwards] drop-shadow-xl">Chloe Nail</h1>
-                <p class="font-hand text-2xl md:text-3xl lg:text-4xl mb-6 opacity-0 animate-[fadeIn_1s_ease-out_0.5s_forwards] drop-shadow-xl">Press-on Nails & Design</p>
-                <a href="#shop" class="bg-white/30 backdrop-blur-sm border border-white text-white px-6 py-2 md:px-8 md:py-3 hover:bg-white hover:text-brand-text transition duration-300 text-sm tracking-widest uppercase opacity-0 animate-[fadeIn_1s_ease-out_1s_forwards] shadow-lg">SHOP NOW</a>
+    <div id="page-home" class="page-section active">
+        <header class="h-screen flex items-center justify-center px-4 text-center relative">
+            <div class="absolute inset-0 z-0">
+                <img src="Title.jpg" class="w-full h-full object-cover opacity-90">
             </div>
-        </div>
-    </header>
-
-    <section id="rules" class="py-12 px-4 md:px-8 max-w-5xl mx-auto">
-        <div class="text-center mb-8">
-            <h2 class="text-2xl md:text-3xl text-brand-text">Booking Rules</h2>
-            <p class="font-hand text-xl text-brand-accent">預約須知</p>
-            <p class="text-xs text-gray-400 mt-2">(點擊圖片可放大)</p>
-        </div>
-        <div class="bg-white p-2 rounded shadow-sm"><img src="rules.jpg" onclick="openLightbox(this.src)" alt="預約須知" class="w-full h-auto rounded-sm zoomable"></div>
-    </section>
-
-    <section id="november" class="py-16 px-4 md:px-8 max-w-7xl mx-auto bg-brand-white rounded-xl my-8 shadow-sm">
-        <div class="text-center mb-10">
-            <span class="bg-brand-accent text-white px-4 py-1 text-xs tracking-widest uppercase rounded-full">Limited Time</span>
-            <h2 class="text-3xl md:text-4xl text-brand-text mt-4" id="promo-title"></h2>
-            <p class="font-hand text-2xl text-brand-accent" id="promo-subtitle"></p>
-        </div>
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
-            <div class="lg:col-span-1">
-                <div class="bg-brand-bg p-2 rounded-lg shadow-md transform rotate-1 hover:rotate-0 transition duration-500">
-                    <img id="promo-info-img" onclick="openLightbox(this.src)" class="w-full h-auto rounded zoomable">
+            
+            <div class="relative z-10 text-white drop-shadow-lg bg-black/10 p-8 rounded-lg backdrop-blur-[2px]">
+                <h1 class="text-5xl md:text-7xl font-serif tracking-widest mb-4">Chloe Nail</h1>
+                <p class="font-hand text-3xl md:text-4xl mb-8">Press-on Nails & Design</p>
+                <div class="flex flex-col md:flex-row gap-4 justify-center">
+                    <button onclick="switchPage('page-shop')" class="bg-white/80 text-brand-dark px-8 py-3 hover:bg-white transition rounded shadow-lg font-bold">
+                        穿戴甲商店
+                    </button>
+                    <button onclick="switchPage('page-november')" class="bg-brand-accent/90 text-white px-8 py-3 hover:bg-brand-accent transition rounded shadow-lg font-bold">
+                        本月限定款
+                    </button>
                 </div>
             </div>
-            <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6" id="promo-items-container">
-                </div>
-        </div>
-        <div class="text-center mt-8 text-sm text-gray-400" id="promo-date"></div>
-    </section>
+        </header>
+    </div>
 
-    <section id="shop" class="py-16 px-4 md:px-8 max-w-7xl mx-auto bg-white rounded-xl my-8 border border-brand-bg">
-        
-        <div class="text-center mb-12 pt-12">
-            <h2 class="text-3xl md:text-4xl text-brand-text">Press-on Nails Shop</h2>
-            <p class="font-hand text-2xl text-brand-accent">手工穿戴甲販售</p>
-            <p class="text-sm text-gray-500 mt-2">全手工製作 • 獨家設計 • 可重複使用</p>
-
-            <div class="mt-6 inline-block bg-brand-bg/50 px-6 py-4 rounded-lg border border-brand-accent/20">
-                <p class="text-brand-dark font-bold text-lg mb-1">🎉 全館滿 $3000 免運費</p>
-                <p class="text-brand-highlight font-medium">🎁 購買 3 副穿戴甲即贈送「翻模」乙次 (自動折抵)</p>
+    <div id="page-rules" class="page-section">
+        <div class="max-w-5xl mx-auto px-6">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl text-brand-text font-bold">Booking Rules</h2>
+                <p class="font-hand text-xl text-brand-accent">預約須知</p>
+                <p class="text-xs text-gray-400 mt-2">(點擊圖片可放大)</p>
             </div>
+            <div class="bg-white p-2 rounded shadow-sm"><img src="rules.jpg" onclick="openLightbox(this.src)" class="w-full h-auto rounded-sm zoomable"></div>
         </div>
+    </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="shop-container">
-            </div>
-    </section>
-
-    <section id="menu" class="py-12 px-4 md:px-8 max-w-7xl mx-auto">
-        <div class="text-center mb-10">
-            <h2 class="text-2xl md:text-3xl text-brand-text">Service Menu</h2>
-            <p class="font-hand text-xl text-brand-accent">服務價目表</p>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-            <div class="bg-white p-1 rounded shadow-sm"><img src="menu_gel.jpg" onclick="openLightbox(this.src)" class="w-full h-auto zoomable"></div>
-            <div class="bg-white p-1 rounded shadow-sm"><img src="menu_care.jpg" onclick="openLightbox(this.src)" class="w-full h-auto zoomable"></div>
-            <div class="bg-white p-1 rounded shadow-sm"><img src="menu_winter.jpg" onclick="openLightbox(this.src)" class="w-full h-auto zoomable"></div>
-        </div>
-    </section>
-
-    <section id="location" class="py-16 px-6 bg-brand-text text-white mt-12 relative overflow-hidden">
-        <div class="absolute top-0 left-0 w-20 h-20 bg-brand-accent opacity-20 rounded-full -translate-x-10 -translate-y-10"></div>
-        <div class="max-w-5xl mx-auto relative z-10">
+    <div id="page-november" class="page-section">
+        <div class="max-w-7xl mx-auto px-6">
             <div class="text-center mb-10">
-                <h2 class="text-2xl md:text-3xl mb-2">Location & Contact</h2>
+                <span class="bg-brand-accent text-white px-4 py-1 text-xs tracking-widest uppercase rounded-full">Limited Time</span>
+                <h2 class="text-3xl md:text-4xl text-brand-text mt-4 font-bold" id="promo-title"></h2>
+                <p class="font-hand text-2xl text-brand-accent" id="promo-subtitle"></p>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
+                <div class="lg:col-span-1">
+                    <div class="bg-brand-bg p-2 rounded-lg shadow-md transform rotate-1 hover:rotate-0 transition duration-500">
+                        <img id="promo-info-img" onclick="openLightbox(this.src)" class="w-full h-auto rounded zoomable">
+                    </div>
+                </div>
+                <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6" id="promo-items-container"></div>
+            </div>
+            <div class="text-center mt-8 text-sm text-gray-400" id="promo-date"></div>
+        </div>
+    </div>
+
+    <div id="page-shop" class="page-section">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl text-brand-text font-bold">Press-on Nails Shop</h2>
+                <p class="font-hand text-2xl text-brand-accent">手工穿戴甲販售</p>
+                <p class="text-sm text-gray-500 mt-2">全手工製作 • 獨家設計 • 可重複使用</p>
+
+                <div class="mt-6 inline-block bg-brand-bg px-6 py-4 rounded-lg border border-brand-accent/20 shadow-sm">
+                    <p class="text-brand-dark font-bold text-lg mb-1">🎉 全館滿 $3000 免運費</p>
+                    <p class="text-brand-accent font-medium">🎁 購買 3 副穿戴甲即贈送「翻模」乙次 (自動折抵)</p>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-12" id="shop-container"></div>
+        </div>
+    </div>
+
+    <div id="page-menu" class="page-section">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl text-brand-text font-bold">Service Menu</h2>
+                <p class="font-hand text-xl text-brand-accent">服務價目表</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                <div class="bg-white p-1 rounded shadow-sm"><img src="menu_gel.jpg" onclick="openLightbox(this.src)" class="w-full h-auto zoomable"></div>
+                <div class="bg-white p-1 rounded shadow-sm"><img src="menu_care.jpg" onclick="openLightbox(this.src)" class="w-full h-auto zoomable"></div>
+                <div class="bg-white p-1 rounded shadow-sm"><img src="menu_winter.jpg" onclick="openLightbox(this.src)" class="w-full h-auto zoomable"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="page-location" class="page-section">
+        <div class="max-w-5xl mx-auto px-6">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl mb-2 font-bold">Location & Contact</h2>
                 <p class="font-hand text-xl text-brand-accent">預約資訊</p>
             </div>
             <div class="flex flex-col lg:flex-row gap-8 items-start">
                 <div class="w-full lg:w-1/2 h-64 md:h-80 rounded-lg overflow-hidden shadow-2xl border-4 border-white/20">
                     <iframe width="100%" height="100%" frameborder="0" scrolling="no" src="https://maps.google.com/maps?q=高雄市三民區大豐一路163-2號&t=&z=15&ie=UTF8&iwloc=&output=embed"></iframe>
                 </div>
-                <div class="w-full lg:w-1/2 bg-white/10 p-8 rounded-lg backdrop-blur-sm border border-white/10 shadow-lg text-gray-100 text-sm md:text-base space-y-6">
-                    <p>📍 <strong>地址：</strong>高雄市三民區大豐一路163-2號1樓</p>
-                    <p>📱 <strong>IG：</strong>@chloe_nail.studio_</p>
-                    <p>💬 <strong>LINE：</strong>@866wnpdc</p>
+                <div class="w-full lg:w-1/2 bg-white p-8 rounded-lg border border-brand-accent/10 shadow-lg text-brand-text space-y-6">
+                    <p class="flex items-center gap-2"><span class="text-xl">📍</span> <strong>地址：</strong>高雄市三民區大豐一路163-2號1樓</p>
+                    <p class="flex items-center gap-2"><span class="text-xl">📱</span> <strong>IG：</strong>@chloe_nail.studio_</p>
+                    <p class="flex items-center gap-2"><span class="text-xl">💬</span> <strong>LINE：</strong>@866wnpdc</p>
                     <div class="pt-4 flex flex-col sm:flex-row gap-4">
-                        <a href="https://line.me/R/ti/p/@866wnpdc?oat_content=url" target="_blank" class="flex-1 text-center bg-brand-accent text-white py-3 rounded hover:bg-white hover:text-brand-text transition shadow-lg">LINE 立即預約</a>
-                        <a href="https://www.instagram.com/chloe_nail.studio_/" target="_blank" class="flex-1 text-center border border-white py-3 rounded hover:bg-white hover:text-brand-text transition">追蹤 IG</a>
+                        <a href="https://line.me/R/ti/p/@866wnpdc?oat_content=url" target="_blank" class="flex-1 text-center bg-brand-accent text-white py-3 rounded hover:bg-brand-dark transition shadow-lg font-bold">LINE 立即預約</a>
+                        <a href="https://www.instagram.com/chloe_nail.studio_/" target="_blank" class="flex-1 text-center border border-brand-accent text-brand-accent py-3 rounded hover:bg-brand-accent hover:text-white transition font-bold">追蹤 IG</a>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <footer class="bg-brand-bg py-8 text-center text-xs text-gray-400 mb-16 md:mb-0">
+    <footer class="bg-brand-bg py-8 text-center text-xs text-gray-400 mb-16 md:mb-0 mt-12">
         <p>© 2025 Chloe Nail Studio. All Rights Reserved.</p>
     </footer>
 
     <div class="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-brand-accent/20 z-30 flex justify-around items-end py-2 px-2 text-[10px] text-brand-text shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
-        <a href="#shop" class="flex flex-col items-center p-2 active:text-brand-accent"><span class="text-lg mb-1">🛍️</span><span>商店</span></a>
-        <a href="#november" class="flex flex-col items-center p-2 active:text-brand-accent"><span class="text-lg mb-1">✨</span><span>限定</span></a>
-        <a href="https://line.me/R/ti/p/@866wnpdc?oat_content=url" target="_blank" class="relative flex flex-col items-center -top-5">
-            <div class="bg-brand-accent text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg shadow-brand-accent/40 animate-pulse"><span class="text-2xl">📅</span></div>
-            <span class="font-bold text-brand-accent mt-1">預約</span>
-        </a>
-        <a href="#menu" class="flex flex-col items-center p-2 active:text-brand-accent"><span class="text-lg mb-1">💅</span><span>價目</span></a>
-        <a href="#location" class="flex flex-col items-center p-2 active:text-brand-accent"><span class="text-lg mb-1">📍</span><span>資訊</span></a>
+        <div onclick="switchPage('page-home')" class="flex flex-col items-center p-2 active:text-brand-accent"><span class="text-lg mb-1">🏠</span><span>首頁</span></div>
+        <div onclick="switchPage('page-shop')" class="flex flex-col items-center p-2 active:text-brand-accent"><span class="text-lg mb-1">🛍️</span><span>商店</span></div>
+        <div onclick="switchPage('page-november')" class="flex flex-col items-center p-2 active:text-brand-accent"><span class="text-lg mb-1">✨</span><span>限定</span></div>
+        <div onclick="switchPage('page-menu')" class="flex flex-col items-center p-2 active:text-brand-accent"><span class="text-lg mb-1">💅</span><span>價目</span></div>
+        <div onclick="switchPage('page-location')" class="flex flex-col items-center p-2 active:text-brand-accent"><span class="text-lg mb-1">📍</span><span>資訊</span></div>
     </div>
 
     <script>
         // 0. 初始化畫面
         function renderSite() {
-            // 渲染優惠區
             document.getElementById('promo-title').textContent = SITE_CONFIG.promo.title;
             document.getElementById('promo-subtitle').textContent = SITE_CONFIG.promo.subtitle;
             document.getElementById('promo-date').textContent = SITE_CONFIG.promo.dateText;
@@ -327,7 +361,6 @@
                 </div>
             `).join('');
 
-            // 渲染商店區
             const shopContainer = document.getElementById('shop-container');
             const sizeOptions = `
                 <option value="XS">XS</option>
@@ -358,6 +391,28 @@
             `).join('');
         }
 
+        // 分頁切換功能
+        function switchPage(pageId) {
+            // 1. 隱藏所有頁面
+            document.querySelectorAll('.page-section').forEach(page => {
+                page.classList.remove('active');
+            });
+            // 2. 顯示目標頁面
+            document.getElementById(pageId).classList.add('active');
+            
+            // 3. 捲動到頂部
+            window.scrollTo(0, 0);
+
+            // 4. 更新導航列 Active 狀態 (電腦版)
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-brand-accent', 'font-bold');
+            });
+            // 嘗試找到對應的 nav-button 並加亮
+            const navId = 'nav-' + pageId.replace('page-', '');
+            const activeBtn = document.getElementById(navId);
+            if(activeBtn) activeBtn.classList.add('text-brand-accent', 'font-bold');
+        }
+
         // 1. 燈箱
         function openLightbox(src) {
             document.getElementById('lightbox-img').src = src;
@@ -369,7 +424,7 @@
             document.body.style.overflow = 'auto';
         }
 
-        // 2. 購物車邏輯 (升級版：正確計算翻模與免運)
+        // 2. 購物車邏輯
         let cart = [];
         function toggleCart() {
             document.getElementById('cart-modal').classList.toggle('open');
@@ -381,12 +436,14 @@
             const sizeValue = selectElement.value;
             const sizeText = selectElement.options[selectElement.selectedIndex].text; 
 
-            // ★ 修改：加入購物車時不加價，統一在結帳區計算
+            let finalPrice = basePrice; 
+            // 注意：這裡不再加價，只記錄選項，最後計算才加
+
             const uniqueId = id + '-' + sizeValue;
             const existingItem = cart.find(item => item.uniqueId === uniqueId);
             
             if (existingItem) existingItem.qty += 1;
-            else cart.push({ uniqueId, id, name, price: basePrice, sizeValue: sizeValue, size: sizeText, img, qty: 1 });
+            else cart.push({ uniqueId, id, name, price: finalPrice, sizeValue: sizeValue, size: sizeText, img, qty: 1 });
             
             updateCartUI();
             toggleCart();
@@ -427,13 +484,12 @@
             const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
             document.getElementById('cart-subtotal').innerText = '$' + subtotal;
 
-            // 2. 計算翻模費用
+            // 2. 計算翻模費用 (滿3副免翻模費)
             const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
             const hasCustomMold = cart.some(item => item.sizeValue === 'CustomMold');
             let moldFee = 0;
             let moldText = "$0";
 
-            // 邏輯：如果有選翻模，且總數量 < 3，則收 $500。 若滿3副則 $0。
             if (hasCustomMold) {
                 if (totalQty >= 3) {
                     moldFee = 0;
@@ -450,11 +506,10 @@
                 document.getElementById('mold-fee-row').style.display = 'none';
             }
 
-            // 3. 計算運費 (滿3000免運)
+            // 3. 計算運費
             let shippingFee = parseInt(document.querySelector('input[name="shipping"]:checked').value);
             let shippingText = "$" + shippingFee;
             
-            // 如果小計 + 翻模費 >= 3000，免運
             if ((subtotal + moldFee) >= 3000) {
                 shippingFee = 0;
                 shippingText = "滿額免運 ($0)";
@@ -481,7 +536,7 @@
                 message += `${index + 1}. ${item.name} (${item.size}) x${item.qty} - $${item.price * item.qty}\n`;
             });
 
-            // 重新計算最後費用 (與顯示邏輯一致)
+            // 重新計算費用
             const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
             const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
             const hasCustomMold = cart.some(item => item.sizeValue === 'CustomMold');
@@ -525,7 +580,6 @@
             window.open(lineUrl, '_blank');
         }
 
-        // 啟動網站渲染
         renderSite();
     </script>
 </body>
