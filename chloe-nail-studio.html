@@ -7,18 +7,17 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Zen+Maru+Gothic:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600&family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
     
     <script src="https://cdn.tailwindcss.com"></script>
     
     <script>
         // =================================================================
-        // 🔧 網站後台設定區 (CENTRAL CONTROL)
+        // 🔧 網站後台設定區
         // =================================================================
         
         const SITE_CONFIG = {
-            
-            // 1. 本月限定優惠設定
+            // 1. 本月限定優惠
             promo: {
                 title: "November Specials",
                 subtitle: "11月限定款式",
@@ -29,8 +28,7 @@
                     { artist: "By ChiChi", price: "款式優惠價 $700", image: "promo3.jpg" }
                 ]
             },
-
-            // 2. 穿戴甲商店設定
+            // 2. 穿戴甲商品
             products: [
                 {
                     id: 250801,
@@ -83,8 +81,9 @@
                         'brand-highlight': '#BFA094',
                     },
                     fontFamily: {
-                        'serif': ['"Playfair Display"', 'serif'],
-                        'sans': ['"Zen Maru Gothic"', 'sans-serif'], // ★ 改為 Zen Maru Gothic
+                        // 全部字體都改成圓體 (手寫感)
+                        'serif': ['"Zen Maru Gothic"', 'sans-serif'],
+                        'sans': ['"Zen Maru Gothic"', 'sans-serif'], 
                         'hand': ['"Dancing Script"', 'cursive'],
                     }
                 }
@@ -93,8 +92,10 @@
     </script>
 
     <style>
-        body { background-color: #F5F0F0; color: #8B7E74; }
+        /* 強制全站使用圓體 */
+        body { background-color: #F5F0F0; color: #8B7E74; font-family: "Zen Maru Gothic", sans-serif; }
         html { scroll-behavior: smooth; }
+        
         .nav-btn { position: relative; padding-bottom: 4px; }
         .nav-btn::after { content: ''; position: absolute; width: 0; height: 1px; bottom: 0; left: 0; background-color: #C5A086; transition: width 0.3s; }
         .nav-btn:hover::after { width: 100%; }
@@ -152,7 +153,7 @@
     <div class="overlay" id="cart-overlay" onclick="toggleCart()"></div>
     <div id="cart-modal">
         <div class="p-5 border-b flex justify-between items-center bg-brand-bg">
-            <h3 class="text-xl font-serif font-bold text-brand-dark">Shopping Cart</h3>
+            <h3 class="text-xl font-bold text-brand-dark">Shopping Cart</h3>
             <button onclick="toggleCart()" class="text-gray-500 hover:text-red-500 text-2xl">×</button>
         </div>
         <div class="flex-1 overflow-y-auto p-5 space-y-4" id="cart-items">
@@ -160,14 +161,24 @@
         </div>
         <div class="p-5 border-t bg-gray-50">
             <div class="space-y-3 mb-4 text-sm">
-                <div class="flex justify-between"><span>小計</span><span id="cart-subtotal">$0</span></div>
-                <div class="flex flex-col gap-2">
+                <div class="flex justify-between"><span>商品小計</span><span id="cart-subtotal">$0</span></div>
+                
+                <div class="flex justify-between text-brand-dark bg-brand-bg/50 p-2 rounded" id="mold-fee-row" style="display:none">
+                    <span>翻模費用</span>
+                    <span id="cart-mold-fee" class="font-bold">$0</span>
+                </div>
+
+                <div class="flex flex-col gap-2 border-b pb-2">
                     <span class="font-bold text-brand-dark">選擇運費：</span>
                     <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="shipping" value="60" checked onchange="updateCartTotal()"><span>7-11 店到店 (+$60)</span></label>
                     <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="shipping" value="40" onchange="updateCartTotal()"><span>郵寄掛號 (+$40)</span></label>
-                    <div class="text-xs text-brand-accent mt-1">* 滿 $3000 免運費 (結帳時請告知確認)</div>
+                    <div class="flex justify-between text-gray-500 text-xs">
+                        <span>運費金額</span>
+                        <span id="shipping-fee-display">$60</span>
+                    </div>
                 </div>
-                <div class="flex justify-between text-lg font-bold text-brand-accent pt-2 border-t"><span>總金額</span><span id="cart-total">$0</span></div>
+                
+                <div class="flex justify-between text-lg font-bold text-brand-accent pt-2"><span>總金額</span><span id="cart-total">$0</span></div>
             </div>
             <div class="space-y-2 mb-4">
                 <input type="text" id="customer-name" placeholder="您的姓名" class="w-full p-2 border rounded text-sm">
@@ -181,13 +192,13 @@
     <nav class="hidden md:flex fixed w-full z-40 bg-brand-bg/95 backdrop-blur-sm border-b border-brand-accent/20 py-5 justify-center items-center space-x-8 lg:space-x-12 text-brand-text font-medium shadow-sm transition-all">
         <a href="#rules" class="nav-btn hover:text-brand-accent transition">預約須知</a>
         <a href="#november" class="nav-btn hover:text-brand-accent transition text-brand-accent">✨ 本月限定</a>
-        <div class="text-center px-4"><div class="font-serif text-2xl lg:text-3xl font-bold tracking-widest">CHLOE NAIL</div><div class="font-hand text-lg text-brand-accent">Chloe nail studio</div></div>
+        <div class="text-center px-4"><div class="text-2xl lg:text-3xl font-bold tracking-widest">CHLOE NAIL</div><div class="font-hand text-lg text-brand-accent">Chloe nail studio</div></div>
         <a href="#shop" class="nav-btn hover:text-brand-accent transition">穿戴甲商店</a>
         <a href="#menu" class="nav-btn hover:text-brand-accent transition">服務價目</a>
     </nav>
 
     <div class="md:hidden text-center py-4 bg-brand-bg border-b border-brand-accent/20 sticky top-0 z-40 shadow-sm/50 backdrop-blur-md bg-opacity-90">
-        <div class="font-serif text-xl font-bold text-brand-text tracking-widest">CHLOE NAIL</div>
+        <div class="text-xl font-bold text-brand-text tracking-widest">CHLOE NAIL</div>
         <div class="font-hand text-sm text-brand-accent">Chloe nail studio</div>
     </div>
 
@@ -195,7 +206,7 @@
         <div class="max-w-6xl mx-auto relative">
             <img src="Title.jpg" alt="Chloe Nail Studio" class="w-full h-[350px] md:h-[550px] lg:h-[650px] object-cover rounded-lg shadow-md">
             <div class="absolute inset-0 flex flex-col items-center justify-center text-white px-4 rounded-lg">
-                <h1 class="text-4xl md:text-5xl lg:text-7xl font-serif tracking-widest mb-3 opacity-0 animate-[fadeIn_1s_ease-out_forwards] drop-shadow-xl">Chloe Nail</h1>
+                <h1 class="text-4xl md:text-5xl lg:text-7xl tracking-widest mb-3 opacity-0 animate-[fadeIn_1s_ease-out_forwards] drop-shadow-xl">Chloe Nail</h1>
                 <p class="font-hand text-2xl md:text-3xl lg:text-4xl mb-6 opacity-0 animate-[fadeIn_1s_ease-out_0.5s_forwards] drop-shadow-xl">Press-on Nails & Design</p>
                 <a href="#shop" class="bg-white/30 backdrop-blur-sm border border-white text-white px-6 py-2 md:px-8 md:py-3 hover:bg-white hover:text-brand-text transition duration-300 text-sm tracking-widest uppercase opacity-0 animate-[fadeIn_1s_ease-out_1s_forwards] shadow-lg">SHOP NOW</a>
             </div>
@@ -204,7 +215,7 @@
 
     <section id="rules" class="py-12 px-4 md:px-8 max-w-5xl mx-auto">
         <div class="text-center mb-8">
-            <h2 class="text-2xl md:text-3xl font-serif text-brand-text">Booking Rules</h2>
+            <h2 class="text-2xl md:text-3xl text-brand-text">Booking Rules</h2>
             <p class="font-hand text-xl text-brand-accent">預約須知</p>
             <p class="text-xs text-gray-400 mt-2">(點擊圖片可放大)</p>
         </div>
@@ -214,7 +225,7 @@
     <section id="november" class="py-16 px-4 md:px-8 max-w-7xl mx-auto bg-brand-white rounded-xl my-8 shadow-sm">
         <div class="text-center mb-10">
             <span class="bg-brand-accent text-white px-4 py-1 text-xs tracking-widest uppercase rounded-full">Limited Time</span>
-            <h2 class="text-3xl md:text-4xl font-serif text-brand-text mt-4" id="promo-title"></h2>
+            <h2 class="text-3xl md:text-4xl text-brand-text mt-4" id="promo-title"></h2>
             <p class="font-hand text-2xl text-brand-accent" id="promo-subtitle"></p>
         </div>
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
@@ -231,26 +242,14 @@
 
     <section id="shop" class="py-16 px-4 md:px-8 max-w-7xl mx-auto bg-white rounded-xl my-8 border border-brand-bg">
         
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12 px-4">
-            <div class="cursor-pointer hover:opacity-90 transition">
-                <img src="presson_price.jpg" onclick="openLightbox(this.src)" class="w-full rounded shadow-sm zoomable" alt="價目表">
-            </div>
-            <div class="cursor-pointer hover:opacity-90 transition">
-                <img src="presson_custom.jpg" onclick="openLightbox(this.src)" class="w-full rounded shadow-sm zoomable" alt="客製化說明">
-            </div>
-            <div class="cursor-pointer hover:opacity-90 transition">
-                <img src="presson_tools.jpg" onclick="openLightbox(this.src)" class="w-full rounded shadow-sm zoomable" alt="工具包內容">
-            </div>
-        </div>
-
-        <div class="text-center mb-12 border-t border-brand-bg pt-12">
-            <h2 class="text-3xl md:text-4xl font-serif text-brand-text">Press-on Nails Shop</h2>
+        <div class="text-center mb-12 pt-12">
+            <h2 class="text-3xl md:text-4xl text-brand-text">Press-on Nails Shop</h2>
             <p class="font-hand text-2xl text-brand-accent">手工穿戴甲販售</p>
             <p class="text-sm text-gray-500 mt-2">全手工製作 • 獨家設計 • 可重複使用</p>
 
             <div class="mt-6 inline-block bg-brand-bg/50 px-6 py-4 rounded-lg border border-brand-accent/20">
                 <p class="text-brand-dark font-bold text-lg mb-1">🎉 全館滿 $3000 免運費</p>
-                <p class="text-brand-highlight font-medium">🎁 購買 3 副穿戴甲即贈送「翻模」乙次</p>
+                <p class="text-brand-highlight font-medium">🎁 購買 3 副穿戴甲即贈送「翻模」乙次 (自動折抵)</p>
             </div>
         </div>
 
@@ -260,7 +259,7 @@
 
     <section id="menu" class="py-12 px-4 md:px-8 max-w-7xl mx-auto">
         <div class="text-center mb-10">
-            <h2 class="text-2xl md:text-3xl font-serif text-brand-text">Service Menu</h2>
+            <h2 class="text-2xl md:text-3xl text-brand-text">Service Menu</h2>
             <p class="font-hand text-xl text-brand-accent">服務價目表</p>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
@@ -274,7 +273,7 @@
         <div class="absolute top-0 left-0 w-20 h-20 bg-brand-accent opacity-20 rounded-full -translate-x-10 -translate-y-10"></div>
         <div class="max-w-5xl mx-auto relative z-10">
             <div class="text-center mb-10">
-                <h2 class="text-2xl md:text-3xl font-serif mb-2">Location & Contact</h2>
+                <h2 class="text-2xl md:text-3xl mb-2">Location & Contact</h2>
                 <p class="font-hand text-xl text-brand-accent">預約資訊</p>
             </div>
             <div class="flex flex-col lg:flex-row gap-8 items-start">
@@ -323,21 +322,19 @@
                     <div class="overflow-hidden rounded-lg shadow-md mb-3">
                         <img src="${item.image}" onclick="openLightbox(this.src)" class="w-full h-64 md:h-80 object-cover zoomable">
                     </div>
-                    <p class="font-serif text-lg text-brand-dark">${item.artist}</p>
+                    <p class="text-lg text-brand-dark font-bold">${item.artist}</p>
                     <p class="text-brand-accent">${item.price}</p>
                 </div>
             `).join('');
 
             // 渲染商店區
             const shopContainer = document.getElementById('shop-container');
-            
-            // ★ 更新：精簡尺寸選單 (XS, S, M, L, 翻模)
             const sizeOptions = `
                 <option value="XS">XS</option>
                 <option value="S">S</option>
                 <option value="M">M</option>
                 <option value="L">L</option>
-                <option value="CustomMold">翻模量身訂製 (+$500)</option>
+                <option value="CustomMold">翻模量身訂製</option>
             `;
 
             shopContainer.innerHTML = SITE_CONFIG.products.map(product => `
@@ -347,9 +344,9 @@
                         ${product.tag ? `<div class="absolute top-2 right-2 bg-brand-dark text-white text-xs px-2 py-1 rounded">${product.tag}</div>` : ''}
                     </div>
                     <h3 class="text-lg font-bold text-brand-dark">${product.name}</h3>
-                    <p class="text-brand-accent font-serif text-xl mb-2">$${product.price}</p>
+                    <p class="text-brand-accent text-xl mb-2">$${product.price}</p>
                     <div class="flex gap-2">
-                        <select id="size-${product.id}" class="border border-gray-300 rounded px-2 py-2 text-sm bg-white w-1/3">
+                        <select id="size-${product.id}" class="border border-gray-300 rounded px-2 py-2 text-sm bg-white w-1/3 font-sans">
                             ${sizeOptions}
                         </select>
                         <button onclick="addToCart(${product.id}, '${product.name}', ${product.price}, 'size-${product.id}', '${product.image}')" 
@@ -372,7 +369,7 @@
             document.body.style.overflow = 'auto';
         }
 
-        // 2. 購物車邏輯
+        // 2. 購物車邏輯 (升級版：正確計算翻模與免運)
         let cart = [];
         function toggleCart() {
             document.getElementById('cart-modal').classList.toggle('open');
@@ -384,17 +381,12 @@
             const sizeValue = selectElement.value;
             const sizeText = selectElement.options[selectElement.selectedIndex].text; 
 
-            // 加價邏輯
-            let finalPrice = basePrice;
-            if (sizeValue === "CustomMold") {
-                finalPrice += 500;
-            }
-
+            // ★ 修改：加入購物車時不加價，統一在結帳區計算
             const uniqueId = id + '-' + sizeValue;
             const existingItem = cart.find(item => item.uniqueId === uniqueId);
             
             if (existingItem) existingItem.qty += 1;
-            else cart.push({ uniqueId, id, name, price: finalPrice, size: sizeText, img, qty: 1 });
+            else cart.push({ uniqueId, id, name, price: basePrice, sizeValue: sizeValue, size: sizeText, img, qty: 1 });
             
             updateCartUI();
             toggleCart();
@@ -431,10 +423,50 @@
         }
 
         function updateCartTotal() {
+            // 1. 計算商品小計
             const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-            const shippingFee = parseInt(document.querySelector('input[name="shipping"]:checked').value);
             document.getElementById('cart-subtotal').innerText = '$' + subtotal;
-            document.getElementById('cart-total').innerText = '$' + (subtotal + shippingFee);
+
+            // 2. 計算翻模費用
+            const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+            const hasCustomMold = cart.some(item => item.sizeValue === 'CustomMold');
+            let moldFee = 0;
+            let moldText = "$0";
+
+            // 邏輯：如果有選翻模，且總數量 < 3，則收 $500。 若滿3副則 $0。
+            if (hasCustomMold) {
+                if (totalQty >= 3) {
+                    moldFee = 0;
+                    moldText = "活動贈送 ($0)";
+                } else {
+                    moldFee = 500;
+                    moldText = "$500";
+                }
+                document.getElementById('mold-fee-row').style.display = 'flex';
+                document.getElementById('cart-mold-fee').innerText = moldText;
+                if(moldFee === 0) document.getElementById('cart-mold-fee').className = "font-bold text-red-500";
+                else document.getElementById('cart-mold-fee').className = "font-bold";
+            } else {
+                document.getElementById('mold-fee-row').style.display = 'none';
+            }
+
+            // 3. 計算運費 (滿3000免運)
+            let shippingFee = parseInt(document.querySelector('input[name="shipping"]:checked').value);
+            let shippingText = "$" + shippingFee;
+            
+            // 如果小計 + 翻模費 >= 3000，免運
+            if ((subtotal + moldFee) >= 3000) {
+                shippingFee = 0;
+                shippingText = "滿額免運 ($0)";
+                document.getElementById('shipping-fee-display').className = "text-red-500 font-bold";
+            } else {
+                document.getElementById('shipping-fee-display').className = "";
+            }
+            document.getElementById('shipping-fee-display').innerText = shippingText;
+
+            // 4. 總金額
+            const total = subtotal + moldFee + shippingFee;
+            document.getElementById('cart-total').innerText = '$' + total;
         }
 
         function checkout() {
@@ -448,11 +480,46 @@
             cart.forEach((item, index) => {
                 message += `${index + 1}. ${item.name} (${item.size}) x${item.qty} - $${item.price * item.qty}\n`;
             });
+
+            // 重新計算最後費用 (與顯示邏輯一致)
             const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-            const shippingType = document.querySelector('input[name="shipping"]:checked').nextElementSibling.innerText;
-            const shippingFee = parseInt(document.querySelector('input[name="shipping"]:checked').value);
-            const total = subtotal + shippingFee;
-            message += `------------------\n商品小計：$${subtotal}\n運費 (${shippingType})：$${shippingFee}\n總金額：$${total}\n------------------\n【寄送資訊】\n姓名：${name}\n電話：${phone}\n門市/地址：${store}\n\n(請確認訂單內容無誤)`;
+            const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+            const hasCustomMold = cart.some(item => item.sizeValue === 'CustomMold');
+            let moldFee = 0;
+            let moldInfo = "";
+
+            if (hasCustomMold) {
+                if (totalQty >= 3) {
+                    moldFee = 0;
+                    moldInfo = " (購買3副贈送翻模)";
+                } else {
+                    moldFee = 500;
+                }
+            }
+
+            let shippingType = document.querySelector('input[name="shipping"]:checked').nextElementSibling.innerText;
+            let shippingFee = parseInt(document.querySelector('input[name="shipping"]:checked').value);
+            
+            if ((subtotal + moldFee) >= 3000) {
+                shippingFee = 0;
+                shippingType += " [滿額免運]";
+            }
+
+            const total = subtotal + moldFee + shippingFee;
+
+            message += `------------------\n`;
+            message += `商品小計：$${subtotal}\n`;
+            if (hasCustomMold) {
+                message += `翻模費用：$${moldFee}${moldInfo}\n`;
+            }
+            message += `運費 (${shippingType})：$${shippingFee}\n`;
+            message += `總金額：$${total}\n`;
+            message += `------------------\n`;
+            message += `【寄送資訊】\n`;
+            message += `姓名：${name}\n`;
+            message += `電話：${phone}\n`;
+            message += `門市/地址：${store}\n`;
+            message += `\n(請確認訂單內容無誤)`;
             
             const lineUrl = `https://line.me/R/oaMessage/@866wnpdc/?${encodeURIComponent(message)}`;
             window.open(lineUrl, '_blank');
