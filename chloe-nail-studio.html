@@ -12,6 +12,80 @@
     <script src="https://cdn.tailwindcss.com"></script>
     
     <script>
+        // =================================================================
+        // 🔧 網站後台設定區 (CENTRAL CONTROL)
+        // 每個月只需要修改這裡的內容，網站就會自動更新！
+        // =================================================================
+        
+        const SITE_CONFIG = {
+            
+            // 1. 本月限定優惠設定 (November Specials)
+            promo: {
+                title: "November Specials",       // 英文標題
+                subtitle: "11月限定款式",         // 中文副標
+                dateText: "*活動日期：即日起至 11/30 止", // 底部日期說明
+                infoImage: "promo4.jpg",          // 左邊那張說明文字圖的檔名
+                
+                // 右邊的兩張優惠款式
+                items: [
+                    {
+                        artist: "By Chloe",       // 美甲師名字
+                        price: "$1099 / $999",    // 價格文字
+                        image: "promo2.jpg"       // 圖片檔名
+                    },
+                    {
+                        artist: "By ChiChi",      // 美甲師名字
+                        price: "$700 / $600",     // 價格文字
+                        image: "promo3.jpg"       // 圖片檔名
+                    }
+                ]
+            },
+
+            // 2. 穿戴甲商店設定 (Shop Products)
+            // 想新增商品，就複製一段 { ... }, 貼在下面即可
+            products: [
+                {
+                    id: 1,                        // 商品編號 (不可重複)
+                    name: "No.01 琥珀暈染系",      // 商品名稱
+                    price: 890,                   // 價格 (純數字)
+                    tag: "現貨",                  // 標籤 (現貨/熱銷/新款)，留空 "" 就不會顯示
+                    image: "product1.jpg",        // 圖片檔名
+                    defaultImg: "promo2.jpg"      // 如果找不到圖片，要顯示哪張圖當替代
+                },
+                {
+                    id: 2,
+                    name: "No.02 韓系手繪小花",
+                    price: 790,
+                    tag: "",                      // 沒有標籤
+                    image: "product2.jpg",
+                    defaultImg: "promo3.jpg"
+                },
+                {
+                    id: 3,
+                    name: "No.03 極簡法式貓眼",
+                    price: 950,
+                    tag: "熱銷",
+                    image: "product3.jpg",
+                    defaultImg: "promo2.jpg"
+                },
+                // ★ 如果要新增商品，請從這裡複製到下面 ★
+                /*
+                {
+                    id: 4,
+                    name: "No.04 聖誕限定款",
+                    price: 1200,
+                    tag: "新款",
+                    image: "product4.jpg",
+                    defaultImg: "promo2.jpg"
+                },
+                */
+            ]
+        };
+
+        // =================================================================
+        // 🔧 設定結束 (以下是程式碼核心，非工程師建議不要更動)
+        // =================================================================
+
         tailwind.config = {
             theme: {
                 extend: {
@@ -35,15 +109,12 @@
     <style>
         body { background-color: #F5F0F0; color: #8B7E74; }
         html { scroll-behavior: smooth; }
-        
         .nav-btn { position: relative; padding-bottom: 4px; }
         .nav-btn::after { content: ''; position: absolute; width: 0; height: 1px; bottom: 0; left: 0; background-color: #C5A086; transition: width 0.3s; }
         .nav-btn:hover::after { width: 100%; }
-
         .zoomable { cursor: zoom-in; transition: transform 0.3s ease; }
         .zoomable:hover { transform: scale(1.02); }
-
-        /* 燈箱樣式 */
+        
         #lightbox {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: rgba(0, 0, 0, 0.9); z-index: 9999;
@@ -52,9 +123,8 @@
         #lightbox.show { display: flex; opacity: 1; }
         #lightbox img { max-width: 100%; max-height: 95vh; object-fit: contain; }
 
-        /* 購物車懸浮按鈕 */
         .cart-float-btn {
-            position: fixed; bottom: 90px; right: 20px; /* 手機版位置 */
+            position: fixed; bottom: 90px; right: 20px;
             background-color: #C5A086; color: white;
             width: 60px; height: 60px; border-radius: 50%;
             display: flex; justify-content: center; align-items: center;
@@ -62,18 +132,14 @@
             transition: transform 0.2s;
         }
         .cart-float-btn:hover { transform: scale(1.1); }
-        .cart-count {
-            position: absolute; top: -5px; right: -5px;
-            background-color: #b91c1c; color: white;
-            font-size: 12px; width: 24px; height: 24px;
-            border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold;
-        }
+        @media (min-width: 768px) { .cart-float-btn { bottom: 30px; right: 30px; } }
         
-        @media (min-width: 768px) {
-            .cart-float-btn { bottom: 30px; right: 30px; } /* 電腦版位置 */
+        .cart-count {
+            position: absolute; top: -5px; right: -5px; background-color: #b91c1c; color: white;
+            font-size: 12px; width: 24px; height: 24px; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center; font-weight: bold;
         }
 
-        /* 購物車側邊欄 */
         #cart-modal {
             position: fixed; top: 0; right: -100%; width: 100%; max-width: 400px; height: 100%;
             background: white; z-index: 100; box-shadow: -5px 0 25px rgba(0,0,0,0.1);
@@ -85,7 +151,6 @@
             background: rgba(0,0,0,0.5); z-index: 90; display: none;
         }
         .overlay.show { display: block; }
-
     </style>
 </head>
 <body class="font-sans antialiased tracking-wide leading-relaxed pb-24 md:pb-0">
@@ -95,65 +160,41 @@
     </div>
 
     <div class="cart-float-btn" onclick="toggleCart()">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
-        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" /></svg>
         <div class="cart-count" id="cart-count">0</div>
     </div>
-
     <div class="overlay" id="cart-overlay" onclick="toggleCart()"></div>
     <div id="cart-modal">
         <div class="p-5 border-b flex justify-between items-center bg-brand-bg">
             <h3 class="text-xl font-serif font-bold text-brand-dark">Shopping Cart</h3>
             <button onclick="toggleCart()" class="text-gray-500 hover:text-red-500 text-2xl">×</button>
         </div>
-        
         <div class="flex-1 overflow-y-auto p-5 space-y-4" id="cart-items">
-            <div class="text-center text-gray-400 mt-10">購物車是空的<br>快去挑選喜歡的穿戴甲吧！</div>
+            <div class="text-center text-gray-400 mt-10">購物車是空的</div>
         </div>
-
         <div class="p-5 border-t bg-gray-50">
             <div class="space-y-3 mb-4 text-sm">
-                <div class="flex justify-between">
-                    <span>小計</span>
-                    <span id="cart-subtotal">$0</span>
-                </div>
+                <div class="flex justify-between"><span>小計</span><span id="cart-subtotal">$0</span></div>
                 <div class="flex flex-col gap-2">
                     <span class="font-bold text-brand-dark">選擇運費：</span>
-                    <label class="flex items-center gap-2 cursor-pointer">
-                        <input type="radio" name="shipping" value="60" checked onchange="updateCartTotal()">
-                        <span>7-11 店到店 (+$60)</span>
-                    </label>
-                    <label class="flex items-center gap-2 cursor-pointer">
-                        <input type="radio" name="shipping" value="40" onchange="updateCartTotal()">
-                        <span>郵寄掛號 (+$40)</span>
-                    </label>
+                    <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="shipping" value="60" checked onchange="updateCartTotal()"><span>7-11 店到店 (+$60)</span></label>
+                    <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="shipping" value="40" onchange="updateCartTotal()"><span>郵寄掛號 (+$40)</span></label>
                 </div>
-                <div class="flex justify-between text-lg font-bold text-brand-accent pt-2 border-t">
-                    <span>總金額</span>
-                    <span id="cart-total">$0</span>
-                </div>
+                <div class="flex justify-between text-lg font-bold text-brand-accent pt-2 border-t"><span>總金額</span><span id="cart-total">$0</span></div>
             </div>
-
             <div class="space-y-2 mb-4">
                 <input type="text" id="customer-name" placeholder="您的姓名" class="w-full p-2 border rounded text-sm">
                 <input type="tel" id="customer-phone" placeholder="聯絡電話" class="w-full p-2 border rounded text-sm">
                 <input type="text" id="customer-store" placeholder="取件門市名稱 / 郵寄地址" class="w-full p-2 border rounded text-sm">
             </div>
-
-            <button onclick="checkout()" class="w-full bg-brand-accent text-white py-3 rounded hover:bg-brand-dark transition font-bold tracking-widest">
-                LINE 傳送訂單
-            </button>
+            <button onclick="checkout()" class="w-full bg-brand-accent text-white py-3 rounded hover:bg-brand-dark transition font-bold tracking-widest">LINE 傳送訂單</button>
         </div>
     </div>
 
     <nav class="hidden md:flex fixed w-full z-40 bg-brand-bg/95 backdrop-blur-sm border-b border-brand-accent/20 py-5 justify-center items-center space-x-8 lg:space-x-12 text-brand-text font-medium shadow-sm transition-all">
         <a href="#rules" class="nav-btn hover:text-brand-accent transition">預約須知</a>
         <a href="#november" class="nav-btn hover:text-brand-accent transition text-brand-accent">✨ 本月限定</a>
-        <div class="text-center px-4">
-            <div class="font-serif text-2xl lg:text-3xl font-bold tracking-widest">CHLOE NAIL</div>
-            <div class="font-hand text-lg text-brand-accent">Chloe nail studio</div>
-        </div>
+        <div class="text-center px-4"><div class="font-serif text-2xl lg:text-3xl font-bold tracking-widest">CHLOE NAIL</div><div class="font-hand text-lg text-brand-accent">Chloe nail studio</div></div>
         <a href="#shop" class="nav-btn hover:text-brand-accent transition">穿戴甲商店</a>
         <a href="#menu" class="nav-btn hover:text-brand-accent transition">服務價目</a>
     </nav>
@@ -169,9 +210,7 @@
             <div class="absolute inset-0 flex flex-col items-center justify-center text-white drop-shadow-lg px-4 bg-black/20 rounded-lg">
                 <h1 class="text-4xl md:text-5xl lg:text-7xl font-serif tracking-widest mb-3 opacity-0 animate-[fadeIn_1s_ease-out_forwards]">Chloe Nail</h1>
                 <p class="font-hand text-2xl md:text-3xl lg:text-4xl mb-6 opacity-0 animate-[fadeIn_1s_ease-out_0.5s_forwards]">Press-on Nails & Design</p>
-                <a href="#shop" class="bg-white/20 backdrop-blur-sm border border-white text-white px-6 py-2 md:px-8 md:py-3 hover:bg-white hover:text-brand-text transition duration-300 text-sm tracking-widest uppercase opacity-0 animate-[fadeIn_1s_ease-out_1s_forwards]">
-                    SHOP NOW
-                </a>
+                <a href="#shop" class="bg-white/20 backdrop-blur-sm border border-white text-white px-6 py-2 md:px-8 md:py-3 hover:bg-white hover:text-brand-text transition duration-300 text-sm tracking-widest uppercase opacity-0 animate-[fadeIn_1s_ease-out_1s_forwards]">SHOP NOW</a>
             </div>
         </div>
     </header>
@@ -182,41 +221,25 @@
             <p class="font-hand text-xl text-brand-accent">預約須知</p>
             <p class="text-xs text-gray-400 mt-2">(點擊圖片可放大)</p>
         </div>
-        <div class="bg-white p-2 rounded shadow-sm">
-            <img src="rules.jpg" onclick="openLightbox(this.src)" alt="預約須知" class="w-full h-auto rounded-sm zoomable">
-        </div>
+        <div class="bg-white p-2 rounded shadow-sm"><img src="rules.jpg" onclick="openLightbox(this.src)" alt="預約須知" class="w-full h-auto rounded-sm zoomable"></div>
     </section>
 
     <section id="november" class="py-16 px-4 md:px-8 max-w-7xl mx-auto bg-brand-white rounded-xl my-8 shadow-sm">
         <div class="text-center mb-10">
             <span class="bg-brand-accent text-white px-4 py-1 text-xs tracking-widest uppercase rounded-full">Limited Time</span>
-            <h2 class="text-3xl md:text-4xl font-serif text-brand-text mt-4">November Specials</h2>
-            <p class="font-hand text-2xl text-brand-accent">11月限定款式</p>
+            <h2 class="text-3xl md:text-4xl font-serif text-brand-text mt-4" id="promo-title"></h2>
+            <p class="font-hand text-2xl text-brand-accent" id="promo-subtitle"></p>
         </div>
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
             <div class="lg:col-span-1">
                 <div class="bg-brand-bg p-2 rounded-lg shadow-md transform rotate-1 hover:rotate-0 transition duration-500">
-                    <img src="promo4.jpg" onclick="openLightbox(this.src)" alt="11月活動說明" class="w-full h-auto rounded zoomable">
+                    <img id="promo-info-img" onclick="openLightbox(this.src)" class="w-full h-auto rounded zoomable">
                 </div>
             </div>
-            <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="text-center group">
-                    <div class="overflow-hidden rounded-lg shadow-md mb-3">
-                        <img src="promo2.jpg" onclick="openLightbox(this.src)" alt="Chloe 款式" class="w-full h-64 md:h-80 object-cover zoomable">
-                    </div>
-                    <p class="font-serif text-lg text-brand-dark">By Chloe</p>
-                    <p class="text-brand-accent">$1099 / $999</p>
+            <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6" id="promo-items-container">
                 </div>
-                <div class="text-center group">
-                    <div class="overflow-hidden rounded-lg shadow-md mb-3">
-                        <img src="promo3.jpg" onclick="openLightbox(this.src)" alt="ChiChi 款式" class="w-full h-64 md:h-80 object-cover zoomable">
-                    </div>
-                    <p class="font-serif text-lg text-brand-dark">By ChiChi</p>
-                    <p class="text-brand-accent">$700 / $600</p>
-                </div>
-            </div>
         </div>
-        <div class="text-center mt-8 text-sm text-gray-400">*活動日期：即日起至 11/30 止</div>
+        <div class="text-center mt-8 text-sm text-gray-400" id="promo-date"></div>
     </section>
 
     <section id="shop" class="py-16 px-4 md:px-8 max-w-7xl mx-auto bg-white rounded-xl my-8 border border-brand-bg">
@@ -225,77 +248,9 @@
             <p class="font-hand text-2xl text-brand-accent">手工穿戴甲販售</p>
             <p class="text-sm text-gray-500 mt-2">全手工製作 • 獨家設計 • 可重複使用</p>
         </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            
-            <div class="group">
-                <div class="relative overflow-hidden rounded-lg shadow-sm mb-4">
-                    <img src="product1.jpg" class="w-full h-72 object-cover group-hover:scale-105 transition duration-500" onerror="this.src='promo2.jpg'"> 
-                    <div class="absolute top-2 right-2 bg-brand-dark text-white text-xs px-2 py-1 rounded">現貨</div>
-                </div>
-                <h3 class="text-lg font-bold text-brand-dark">No.01 琥珀暈染系</h3>
-                <p class="text-brand-accent font-serif text-xl mb-2">$890</p>
-                
-                <div class="flex gap-2">
-                    <select id="size-1" class="border border-gray-300 rounded px-2 py-2 text-sm bg-white w-1/3">
-                        <option value="XS">XS (14mm)</option>
-                        <option value="S">S (15mm)</option>
-                        <option value="M">M (16mm)</option>
-                        <option value="L">L (17mm)</option>
-                    </select>
-                    <button onclick="addToCart(1, 'No.01 琥珀暈染系', 890, 'size-1', 'product1.jpg')" 
-                            class="bg-brand-text text-white flex-1 py-2 rounded hover:bg-brand-accent transition text-sm">
-                        加入購物車
-                    </button>
-                </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="shop-container">
             </div>
-
-            <div class="group">
-                <div class="relative overflow-hidden rounded-lg shadow-sm mb-4">
-                    <img src="product2.jpg" class="w-full h-72 object-cover group-hover:scale-105 transition duration-500" onerror="this.src='promo3.jpg'">
-                </div>
-                <h3 class="text-lg font-bold text-brand-dark">No.02 韓系手繪小花</h3>
-                <p class="text-brand-accent font-serif text-xl mb-2">$790</p>
-                
-                <div class="flex gap-2">
-                    <select id="size-2" class="border border-gray-300 rounded px-2 py-2 text-sm bg-white w-1/3">
-                        <option value="XS">XS</option>
-                        <option value="S">S</option>
-                        <option value="M">M</option>
-                        <option value="L">L</option>
-                    </select>
-                    <button onclick="addToCart(2, 'No.02 韓系手繪小花', 790, 'size-2', 'product2.jpg')" 
-                            class="bg-brand-text text-white flex-1 py-2 rounded hover:bg-brand-accent transition text-sm">
-                        加入購物車
-                    </button>
-                </div>
-            </div>
-
-            <div class="group">
-                <div class="relative overflow-hidden rounded-lg shadow-sm mb-4">
-                     <img src="product3.jpg" class="w-full h-72 object-cover group-hover:scale-105 transition duration-500" onerror="this.src='promo2.jpg'">
-                    <div class="absolute top-2 right-2 bg-red-400 text-white text-xs px-2 py-1 rounded">熱銷</div>
-                </div>
-                <h3 class="text-lg font-bold text-brand-dark">No.03 極簡法式貓眼</h3>
-                <p class="text-brand-accent font-serif text-xl mb-2">$950</p>
-                
-                <div class="flex gap-2">
-                    <select id="size-3" class="border border-gray-300 rounded px-2 py-2 text-sm bg-white w-1/3">
-                        <option value="XS">XS</option>
-                        <option value="S">S</option>
-                        <option value="M">M</option>
-                        <option value="L">L</option>
-                    </select>
-                    <button onclick="addToCart(3, 'No.03 極簡法式貓眼', 950, 'size-3', 'product3.jpg')" 
-                            class="bg-brand-text text-white flex-1 py-2 rounded hover:bg-brand-accent transition text-sm">
-                        加入購物車
-                    </button>
-                </div>
-            </div>
-
-        </div>
     </section>
-
 
     <section id="menu" class="py-12 px-4 md:px-8 max-w-7xl mx-auto">
         <div class="text-center mb-10">
@@ -349,6 +304,51 @@
     </div>
 
     <script>
+        // 0. 初始化畫面 (渲染資料)
+        function renderSite() {
+            // 渲染優惠區
+            document.getElementById('promo-title').textContent = SITE_CONFIG.promo.title;
+            document.getElementById('promo-subtitle').textContent = SITE_CONFIG.promo.subtitle;
+            document.getElementById('promo-date').textContent = SITE_CONFIG.promo.dateText;
+            document.getElementById('promo-info-img').src = SITE_CONFIG.promo.infoImage;
+
+            const promoContainer = document.getElementById('promo-items-container');
+            promoContainer.innerHTML = SITE_CONFIG.promo.items.map(item => `
+                <div class="text-center group">
+                    <div class="overflow-hidden rounded-lg shadow-md mb-3">
+                        <img src="${item.image}" onclick="openLightbox(this.src)" class="w-full h-64 md:h-80 object-cover zoomable">
+                    </div>
+                    <p class="font-serif text-lg text-brand-dark">${item.artist}</p>
+                    <p class="text-brand-accent">${item.price}</p>
+                </div>
+            `).join('');
+
+            // 渲染商店區
+            const shopContainer = document.getElementById('shop-container');
+            shopContainer.innerHTML = SITE_CONFIG.products.map(product => `
+                <div class="group">
+                    <div class="relative overflow-hidden rounded-lg shadow-sm mb-4">
+                        <img src="${product.image}" class="w-full h-72 object-cover group-hover:scale-105 transition duration-500" onerror="this.src='${product.defaultImg}'">
+                        ${product.tag ? `<div class="absolute top-2 right-2 bg-brand-dark text-white text-xs px-2 py-1 rounded">${product.tag}</div>` : ''}
+                    </div>
+                    <h3 class="text-lg font-bold text-brand-dark">${product.name}</h3>
+                    <p class="text-brand-accent font-serif text-xl mb-2">$${product.price}</p>
+                    <div class="flex gap-2">
+                        <select id="size-${product.id}" class="border border-gray-300 rounded px-2 py-2 text-sm bg-white w-1/3">
+                            <option value="XS">XS</option>
+                            <option value="S">S</option>
+                            <option value="M">M</option>
+                            <option value="L">L</option>
+                        </select>
+                        <button onclick="addToCart(${product.id}, '${product.name}', ${product.price}, 'size-${product.id}', '${product.image}')" 
+                                class="bg-brand-text text-white flex-1 py-2 rounded hover:bg-brand-accent transition text-sm">
+                            加入購物車
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
         // 1. 燈箱功能
         function openLightbox(src) {
             document.getElementById('lightbox-img').src = src;
@@ -362,118 +362,77 @@
 
         // 2. 購物車邏輯
         let cart = [];
-
         function toggleCart() {
             document.getElementById('cart-modal').classList.toggle('open');
             document.getElementById('cart-overlay').classList.toggle('show');
         }
-
         function addToCart(id, name, price, sizeSelectId, img) {
             const size = document.getElementById(sizeSelectId).value;
-            const uniqueId = id + '-' + size; // 結合ID和尺寸作為唯一識別
-            
-            // 檢查是否已在購物車
+            const uniqueId = id + '-' + size;
             const existingItem = cart.find(item => item.uniqueId === uniqueId);
-            
-            if (existingItem) {
-                existingItem.qty += 1;
-            } else {
-                cart.push({ uniqueId, id, name, price, size, img, qty: 1 });
-            }
-            
+            if (existingItem) existingItem.qty += 1;
+            else cart.push({ uniqueId, id, name, price, size, img, qty: 1 });
             updateCartUI();
-            toggleCart(); // 自動打開購物車讓客人看
+            toggleCart();
         }
-
         function removeFromCart(uniqueId) {
             cart = cart.filter(item => item.uniqueId !== uniqueId);
             updateCartUI();
         }
-
         function updateCartUI() {
             const cartItemsContainer = document.getElementById('cart-items');
             const countBadge = document.getElementById('cart-count');
-            
-            // 更新數量徽章
             const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
             countBadge.innerText = totalQty;
-            if(totalQty === 0) countBadge.style.display = 'none';
-            else countBadge.style.display = 'flex';
-
-            // 更新列表
+            countBadge.style.display = totalQty === 0 ? 'none' : 'flex';
+            
             if (cart.length === 0) {
                 cartItemsContainer.innerHTML = '<div class="text-center text-gray-400 mt-10">購物車是空的<br>快去挑選喜歡的穿戴甲吧！</div>';
             } else {
                 cartItemsContainer.innerHTML = cart.map(item => `
                     <div class="flex gap-3 items-center bg-gray-50 p-2 rounded border">
-                        <img src="${item.img}" class="w-12 h-12 object-cover rounded">
+                        <img src="${item.image}" class="w-12 h-12 object-cover rounded">
                         <div class="flex-1">
                             <div class="text-sm font-bold text-brand-dark">${item.name}</div>
                             <div class="text-xs text-gray-500">尺寸: ${item.size}</div>
                             <div class="text-brand-accent">$${item.price} x ${item.qty}</div>
                         </div>
-                        <button onclick="removeFromCart('${item.uniqueId}')" class="text-gray-400 hover:text-red-500 p-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
-                                <path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z" clip-rule="evenodd" />
-                            </svg>
-                        </button>
+                        <button onclick="removeFromCart('${item.uniqueId}')" class="text-gray-400 hover:text-red-500 p-2">×</button>
                     </div>
                 `).join('');
             }
-            
             updateCartTotal();
         }
-
         function updateCartTotal() {
             const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
             const shippingFee = parseInt(document.querySelector('input[name="shipping"]:checked').value);
-            
             document.getElementById('cart-subtotal').innerText = '$' + subtotal;
             document.getElementById('cart-total').innerText = '$' + (subtotal + shippingFee);
         }
-
         function checkout() {
-            if (cart.length === 0) {
-                alert('購物車是空的喔！');
-                return;
-            }
-
+            if (cart.length === 0) { alert('購物車是空的喔！'); return; }
             const name = document.getElementById('customer-name').value.trim();
             const phone = document.getElementById('customer-phone').value.trim();
             const store = document.getElementById('customer-store').value.trim();
+            if (!name || !phone || !store) { alert('請填寫完整的 姓名、電話 與 取件資料'); return; }
 
-            if (!name || !phone || !store) {
-                alert('請填寫完整的 姓名、電話 與 取件資料');
-                return;
-            }
-
-            // 1. 準備訂單內容
             let message = `您好，我想訂購穿戴甲：\n`;
             cart.forEach((item, index) => {
                 message += `${index + 1}. ${item.name} (${item.size}) x${item.qty} - $${item.price * item.qty}\n`;
             });
-
             const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
             const shippingType = document.querySelector('input[name="shipping"]:checked').nextElementSibling.innerText;
             const shippingFee = parseInt(document.querySelector('input[name="shipping"]:checked').value);
             const total = subtotal + shippingFee;
-
-            message += `------------------\n`;
-            message += `商品小計：$${subtotal}\n`;
-            message += `運費 (${shippingType})：$${shippingFee}\n`;
-            message += `總金額：$${total}\n`;
-            message += `------------------\n`;
-            message += `【寄送資訊】\n`;
-            message += `姓名：${name}\n`;
-            message += `電話：${phone}\n`;
-            message += `門市/地址：${store}\n`;
-            message += `\n(請確認訂單內容無誤，並提供匯款帳號)`;
-
-            // 2. 轉址到 LINE (使用 oaMessage 格式以解決圖文選單問題)
+            message += `------------------\n商品小計：$${subtotal}\n運費 (${shippingType})：$${shippingFee}\n總金額：$${total}\n------------------\n【寄送資訊】\n姓名：${name}\n電話：${phone}\n門市/地址：${store}\n\n(請確認訂單內容無誤)`;
+            
+            // 使用 oaMessage 格式
             const lineUrl = `https://line.me/R/oaMessage/@866wnpdc/?${encodeURIComponent(message)}`;
             window.open(lineUrl, '_blank');
         }
-    </script>
 
+        // 啟動網站渲染
+        renderSite();
+    </script>
 </body>
 </html>
