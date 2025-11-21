@@ -30,19 +30,12 @@
                 ]
             },
 
-            // 2. 穿戴甲資訊圖片 (新功能)
-            pressonInfo: [
-                "presson_price.jpg",   // 價目表
-                "presson_custom.jpg",  // 客製說明
-                "presson_tools.jpg"    // 工具包
-            ],
-
-            // 3. 穿戴甲商店設定
+            // 2. 穿戴甲商店設定 (已更新價格)
             products: [
                 {
                     id: 250801,
                     name: "款式 No.250801",
-                    price: 890, // 您圖片寫造型款 $799 up，這裡我先設 $890，您可自行修改
+                    price: 899, // 更新價格
                     tag: "預購",
                     image: "product1.jpg",
                     defaultImg: "promo2.jpg"
@@ -50,7 +43,7 @@
                 {
                     id: 250802,
                     name: "款式 No.250802",
-                    price: 890,
+                    price: 799, // 更新價格
                     tag: "預購",
                     image: "product2.jpg",
                     defaultImg: "promo2.jpg"
@@ -58,7 +51,7 @@
                 {
                     id: 250803,
                     name: "款式 No.250803",
-                    price: 890,
+                    price: 899, // 更新價格
                     tag: "預購",
                     image: "product3.jpg",
                     defaultImg: "promo2.jpg"
@@ -66,7 +59,7 @@
                 {
                     id: 250804,
                     name: "款式 No.250804",
-                    price: 890,
+                    price: 899, // 更新價格
                     tag: "預購",
                     image: "product4.jpg",
                     defaultImg: "promo2.jpg"
@@ -87,6 +80,7 @@
                         'brand-accent': '#C5A086',
                         'brand-white': '#FFFFFF',
                         'brand-dark': '#5D534A',
+                        'brand-highlight': '#BFA094',
                     },
                     fontFamily: {
                         'serif': ['"Playfair Display"', 'serif'],
@@ -171,6 +165,7 @@
                     <span class="font-bold text-brand-dark">選擇運費：</span>
                     <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="shipping" value="60" checked onchange="updateCartTotal()"><span>7-11 店到店 (+$60)</span></label>
                     <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="shipping" value="40" onchange="updateCartTotal()"><span>郵寄掛號 (+$40)</span></label>
+                    <div class="text-xs text-brand-accent mt-1">* 滿 $3000 免運費 (結帳時請告知確認)</div>
                 </div>
                 <div class="flex justify-between text-lg font-bold text-brand-accent pt-2 border-t"><span>總金額</span><span id="cart-total">$0</span></div>
             </div>
@@ -236,23 +231,17 @@
 
     <section id="shop" class="py-16 px-4 md:px-8 max-w-7xl mx-auto bg-white rounded-xl my-8 border border-brand-bg">
         
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12 px-4">
-            <div class="cursor-pointer hover:opacity-90 transition">
-                <img src="presson_price.jpg" onclick="openLightbox(this.src)" class="w-full rounded shadow-sm zoomable" alt="價目表">
-            </div>
-            <div class="cursor-pointer hover:opacity-90 transition">
-                <img src="presson_custom.jpg" onclick="openLightbox(this.src)" class="w-full rounded shadow-sm zoomable" alt="客製化說明">
-            </div>
-            <div class="cursor-pointer hover:opacity-90 transition">
-                <img src="presson_tools.jpg" onclick="openLightbox(this.src)" class="w-full rounded shadow-sm zoomable" alt="工具包內容">
-            </div>
-        </div>
-
-        <div class="text-center mb-12 border-t border-brand-bg pt-12">
+        <div class="text-center mb-12">
             <h2 class="text-3xl md:text-4xl font-serif text-brand-text">Press-on Nails Shop</h2>
             <p class="font-hand text-2xl text-brand-accent">手工穿戴甲販售</p>
             <p class="text-sm text-gray-500 mt-2">全手工製作 • 獨家設計 • 可重複使用</p>
+
+            <div class="mt-6 inline-block bg-brand-bg/50 px-6 py-4 rounded-lg border border-brand-accent/20">
+                <p class="text-brand-dark font-bold text-lg mb-1">🎉 全館滿 $3000 免運費</p>
+                <p class="text-brand-highlight font-medium">🎁 購買 3 副穿戴甲即贈送「翻模」乙次</p>
+            </div>
         </div>
+
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="shop-container">
             </div>
     </section>
@@ -327,16 +316,15 @@
                 </div>
             `).join('');
 
-            // 渲染商店區 (含更新的選單)
+            // 渲染商店區
             const shopContainer = document.getElementById('shop-container');
             
-            // ★ 更新：尺寸選單增加 +$500 / +$150 的標示
+            // ★ 更新：尺寸選單 (已移除備註與客製選項)
             const sizeOptions = `
-                <option value="XS">XS (14mm)</option>
-                <option value="S">S (15mm)</option>
-                <option value="M">M (16mm)</option>
-                <option value="L">L (17mm)</option>
-                <option value="CustomSize">尺寸客製 (+$150)</option>
+                <option value="XS">XS</option>
+                <option value="S">S</option>
+                <option value="M">M</option>
+                <option value="L">L</option>
                 <option value="CustomMold">翻模量身訂製 (+$500)</option>
             `;
 
@@ -372,7 +360,7 @@
             document.body.style.overflow = 'auto';
         }
 
-        // 2. 購物車邏輯 (升級版：自動加價)
+        // 2. 購物車邏輯
         let cart = [];
         function toggleCart() {
             document.getElementById('cart-modal').classList.toggle('open');
@@ -384,18 +372,15 @@
             const sizeValue = selectElement.value;
             const sizeText = selectElement.options[selectElement.selectedIndex].text; 
 
-            // ★ 核心邏輯：根據選項加價
+            // 加價邏輯：只有翻模要加錢
             let finalPrice = basePrice;
             if (sizeValue === "CustomMold") {
-                finalPrice += 500; // 翻模 +500
-            } else if (sizeValue === "CustomSize") {
-                finalPrice += 150; // 客製尺寸 +150
+                finalPrice += 500;
             }
 
             const uniqueId = id + '-' + sizeValue;
             const existingItem = cart.find(item => item.uniqueId === uniqueId);
             
-            // 注意：這裡存的是 finalPrice
             if (existingItem) existingItem.qty += 1;
             else cart.push({ uniqueId, id, name, price: finalPrice, size: sizeText, img, qty: 1 });
             
