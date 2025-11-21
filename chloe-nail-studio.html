@@ -14,76 +14,69 @@
     <script>
         // =================================================================
         // 🔧 網站後台設定區 (CENTRAL CONTROL)
-        // 每個月只需要修改這裡的內容，網站就會自動更新！
         // =================================================================
         
         const SITE_CONFIG = {
             
-            // 1. 本月限定優惠設定 (November Specials)
+            // 1. 本月限定優惠設定
             promo: {
-                title: "November Specials",       // 英文標題
-                subtitle: "11月限定款式",         // 中文副標
-                dateText: "*活動日期：即日起至 11/30 止", // 底部日期說明
-                infoImage: "promo4.jpg",          // 左邊那張說明文字圖的檔名
-                
-                // 右邊的兩張優惠款式
+                title: "November Specials",
+                subtitle: "11月限定款式",
+                dateText: "*活動日期：即日起至 11/30 止", 
+                infoImage: "promo4.jpg",
                 items: [
                     {
-                        artist: "By Chloe",       // 美甲師名字
-                        price: "$1099 / $999",    // 價格文字
-                        image: "promo2.jpg"       // 圖片檔名
+                        artist: "By Chloe",
+                        price: "款式優惠價 $1099",
+                        image: "promo2.jpg"
                     },
                     {
-                        artist: "By ChiChi",      // 美甲師名字
-                        price: "$700 / $600",     // 價格文字
-                        image: "promo3.jpg"       // 圖片檔名
+                        artist: "By ChiChi",
+                        price: "款式優惠價 $700",
+                        image: "promo3.jpg"
                     }
                 ]
             },
 
-            // 2. 穿戴甲商店設定 (Shop Products)
-            // 想新增商品，就複製一段 { ... }, 貼在下面即可
+            // 2. 穿戴甲商店設定 (已更新為您的4款編號)
             products: [
                 {
-                    id: 1,                        // 商品編號 (不可重複)
-                    name: "No.01 琥珀暈染系",      // 商品名稱
-                    price: 890,                   // 價格 (純數字)
-                    tag: "現貨",                  // 標籤 (現貨/熱銷/新款)，留空 "" 就不會顯示
-                    image: "product1.jpg",        // 圖片檔名
-                    defaultImg: "promo2.jpg"      // 如果找不到圖片，要顯示哪張圖當替代
+                    id: 250801,                 // 為了對應編號
+                    name: "款式 No.250801",      // 顯示在網站和訂單的名字
+                    price: 890,                 // 價格 (可自行修改)
+                    tag: "預購",                 // 標籤
+                    image: "product1.jpg",      // 對應的圖片
+                    defaultImg: "promo2.jpg"
                 },
                 {
-                    id: 2,
-                    name: "No.02 韓系手繪小花",
-                    price: 790,
-                    tag: "",                      // 沒有標籤
+                    id: 250802,
+                    name: "款式 No.250802",
+                    price: 890,
+                    tag: "預購",
                     image: "product2.jpg",
-                    defaultImg: "promo3.jpg"
+                    defaultImg: "promo2.jpg"
                 },
                 {
-                    id: 3,
-                    name: "No.03 極簡法式貓眼",
-                    price: 950,
-                    tag: "熱銷",
+                    id: 250803,
+                    name: "款式 No.250803",
+                    price: 890,
+                    tag: "預購",
                     image: "product3.jpg",
                     defaultImg: "promo2.jpg"
                 },
-                // ★ 如果要新增商品，請從這裡複製到下面 ★
-                /*
                 {
-                    id: 4,
-                    name: "No.04 聖誕限定款",
-                    price: 1200,
-                    tag: "新款",
+                    id: 250804,
+                    name: "款式 No.250804",
+                    price: 890,
+                    tag: "預購",
                     image: "product4.jpg",
                     defaultImg: "promo2.jpg"
-                },
-                */
+                }
             ]
         };
 
         // =================================================================
-        // 🔧 設定結束 (以下是程式碼核心，非工程師建議不要更動)
+        // 🔧 設定結束
         // =================================================================
 
         tailwind.config = {
@@ -207,15 +200,15 @@
     <header class="pt-4 md:pt-32 pb-8 md:pb-12 px-4 text-center">
         <div class="max-w-6xl mx-auto relative">
             <img src="Title.jpg" alt="Chloe Nail Studio" class="w-full h-[350px] md:h-[550px] lg:h-[650px] object-cover rounded-lg shadow-md">
-            <div class="absolute inset-0 flex flex-col items-center justify-center text-white drop-shadow-lg px-4 bg-black/20 rounded-lg">
-                <h1 class="text-4xl md:text-5xl lg:text-7xl font-serif tracking-widest mb-3 opacity-0 animate-[fadeIn_1s_ease-out_forwards]">Chloe Nail</h1>
-                <p class="font-hand text-2xl md:text-3xl lg:text-4xl mb-6 opacity-0 animate-[fadeIn_1s_ease-out_0.5s_forwards]">Press-on Nails & Design</p>
-                <a href="#shop" class="bg-white/20 backdrop-blur-sm border border-white text-white px-6 py-2 md:px-8 md:py-3 hover:bg-white hover:text-brand-text transition duration-300 text-sm tracking-widest uppercase opacity-0 animate-[fadeIn_1s_ease-out_1s_forwards]">SHOP NOW</a>
+            <div class="absolute inset-0 flex flex-col items-center justify-center text-white px-4 rounded-lg">
+                <h1 class="text-4xl md:text-5xl lg:text-7xl font-serif tracking-widest mb-3 opacity-0 animate-[fadeIn_1s_ease-out_forwards] drop-shadow-xl">Chloe Nail</h1>
+                <p class="font-hand text-2xl md:text-3xl lg:text-4xl mb-6 opacity-0 animate-[fadeIn_1s_ease-out_0.5s_forwards] drop-shadow-xl">Press-on Nails & Design</p>
+                <a href="#shop" class="bg-white/30 backdrop-blur-sm border border-white text-white px-6 py-2 md:px-8 md:py-3 hover:bg-white hover:text-brand-text transition duration-300 text-sm tracking-widest uppercase opacity-0 animate-[fadeIn_1s_ease-out_1s_forwards] shadow-lg">SHOP NOW</a>
             </div>
         </div>
     </header>
 
-    <section id="rules" class="py-12 px-4 md:px-8 max-w-3xl mx-auto">
+    <section id="rules" class="py-12 px-4 md:px-8 max-w-5xl mx-auto">
         <div class="text-center mb-8">
             <h2 class="text-2xl md:text-3xl font-serif text-brand-text">Booking Rules</h2>
             <p class="font-hand text-xl text-brand-accent">預約須知</p>
@@ -257,7 +250,7 @@
             <h2 class="text-2xl md:text-3xl font-serif text-brand-text">Service Menu</h2>
             <p class="font-hand text-xl text-brand-accent">服務價目表</p>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
             <div class="bg-white p-1 rounded shadow-sm"><img src="menu_gel.jpg" onclick="openLightbox(this.src)" class="w-full h-auto zoomable"></div>
             <div class="bg-white p-1 rounded shadow-sm"><img src="menu_care.jpg" onclick="openLightbox(this.src)" class="w-full h-auto zoomable"></div>
             <div class="bg-white p-1 rounded shadow-sm"><img src="menu_winter.jpg" onclick="openLightbox(this.src)" class="w-full h-auto zoomable"></div>
@@ -325,6 +318,16 @@
 
             // 渲染商店區
             const shopContainer = document.getElementById('shop-container');
+            
+            // 定義標準尺寸選項
+            const sizeOptions = `
+                <option value="XS">XS (14mm)</option>
+                <option value="S">S (15mm)</option>
+                <option value="M">M (16mm)</option>
+                <option value="L">L (17mm)</option>
+                <option value="Custom">訂製翻模</option>
+            `;
+
             shopContainer.innerHTML = SITE_CONFIG.products.map(product => `
                 <div class="group">
                     <div class="relative overflow-hidden rounded-lg shadow-sm mb-4">
@@ -335,10 +338,7 @@
                     <p class="text-brand-accent font-serif text-xl mb-2">$${product.price}</p>
                     <div class="flex gap-2">
                         <select id="size-${product.id}" class="border border-gray-300 rounded px-2 py-2 text-sm bg-white w-1/3">
-                            <option value="XS">XS</option>
-                            <option value="S">S</option>
-                            <option value="M">M</option>
-                            <option value="L">L</option>
+                            ${sizeOptions}
                         </select>
                         <button onclick="addToCart(${product.id}, '${product.name}', ${product.price}, 'size-${product.id}', '${product.image}')" 
                                 class="bg-brand-text text-white flex-1 py-2 rounded hover:bg-brand-accent transition text-sm">
@@ -367,11 +367,14 @@
             document.getElementById('cart-overlay').classList.toggle('show');
         }
         function addToCart(id, name, price, sizeSelectId, img) {
-            const size = document.getElementById(sizeSelectId).value;
-            const uniqueId = id + '-' + size;
+            const selectElement = document.getElementById(sizeSelectId);
+            const sizeValue = selectElement.value;
+            const sizeText = selectElement.options[selectElement.selectedIndex].text; // 抓取完整文字如 XS (14mm)
+
+            const uniqueId = id + '-' + sizeValue;
             const existingItem = cart.find(item => item.uniqueId === uniqueId);
             if (existingItem) existingItem.qty += 1;
-            else cart.push({ uniqueId, id, name, price, size, img, qty: 1 });
+            else cart.push({ uniqueId, id, name, price, size: sizeText, img, qty: 1 });
             updateCartUI();
             toggleCart();
         }
@@ -414,25 +417,4 @@
             const name = document.getElementById('customer-name').value.trim();
             const phone = document.getElementById('customer-phone').value.trim();
             const store = document.getElementById('customer-store').value.trim();
-            if (!name || !phone || !store) { alert('請填寫完整的 姓名、電話 與 取件資料'); return; }
-
-            let message = `您好，我想訂購穿戴甲：\n`;
-            cart.forEach((item, index) => {
-                message += `${index + 1}. ${item.name} (${item.size}) x${item.qty} - $${item.price * item.qty}\n`;
-            });
-            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-            const shippingType = document.querySelector('input[name="shipping"]:checked').nextElementSibling.innerText;
-            const shippingFee = parseInt(document.querySelector('input[name="shipping"]:checked').value);
-            const total = subtotal + shippingFee;
-            message += `------------------\n商品小計：$${subtotal}\n運費 (${shippingType})：$${shippingFee}\n總金額：$${total}\n------------------\n【寄送資訊】\n姓名：${name}\n電話：${phone}\n門市/地址：${store}\n\n(請確認訂單內容無誤)`;
-            
-            // 使用 oaMessage 格式
-            const lineUrl = `https://line.me/R/oaMessage/@866wnpdc/?${encodeURIComponent(message)}`;
-            window.open(lineUrl, '_blank');
-        }
-
-        // 啟動網站渲染
-        renderSite();
-    </script>
-</body>
-</html>
+            if (!name || !phone || !store) { alert('請填寫
