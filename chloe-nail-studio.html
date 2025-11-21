@@ -80,7 +80,6 @@
                         'brand-dark': '#5D534A',
                     },
                     fontFamily: {
-                        // 強制圓體
                         'sans': ['"Zen Maru Gothic"', 'sans-serif'], 
                         'serif': ['"Zen Maru Gothic"', 'sans-serif'],
                         'hand': ['"Dancing Script"', 'cursive'],
@@ -91,7 +90,6 @@
     </script>
 
     <style>
-        /* 全站字體強制設定 */
         body { 
             background-color: #F5F0F0; 
             color: #8B7E74; 
@@ -113,12 +111,10 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* 導航按鈕特效 */
         .nav-btn { position: relative; padding-bottom: 4px; cursor: pointer; }
         .nav-btn::after { content: ''; position: absolute; width: 0; height: 2px; bottom: 0; left: 0; background-color: #C5A086; transition: width 0.3s; }
         .nav-btn:hover::after, .nav-btn.active::after { width: 100%; }
         
-        /* 其他樣式 */
         .zoomable { cursor: zoom-in; transition: transform 0.3s ease; }
         .zoomable:hover { transform: scale(1.02); }
         
@@ -336,7 +332,6 @@
     </div>
 
     <script>
-        // 0. 初始化畫面
         function renderSite() {
             document.getElementById('promo-title').textContent = SITE_CONFIG.promo.title;
             document.getElementById('promo-subtitle').textContent = SITE_CONFIG.promo.subtitle;
@@ -383,7 +378,6 @@
             `).join('');
         }
 
-        // 分頁切換
         function switchPage(pageId) {
             document.querySelectorAll('.page-section').forEach(page => {
                 page.classList.remove('active');
@@ -398,7 +392,6 @@
             if(activeBtn) activeBtn.classList.add('text-brand-accent', 'font-bold');
         }
 
-        // 燈箱
         function openLightbox(src) {
             document.getElementById('lightbox-img').src = src;
             document.getElementById('lightbox').classList.add('show');
@@ -409,7 +402,6 @@
             document.body.style.overflow = 'auto';
         }
 
-        // 購物車
         let cart = [];
         function toggleCart() {
             document.getElementById('cart-modal').classList.toggle('open');
@@ -446,7 +438,7 @@
             } else {
                 cartItemsContainer.innerHTML = cart.map(item => `
                     <div class="flex gap-3 items-center bg-gray-50 p-2 rounded border">
-                        <img src="${item.image}" class="w-12 h-12 object-cover rounded">
+                        <img src="${item.img}" class="w-12 h-12 object-cover rounded" onerror="this.src='promo2.jpg'">
                         <div class="flex-1">
                             <div class="text-sm font-bold text-brand-dark">${item.name}</div>
                             <div class="text-xs text-gray-500">尺寸: ${item.size}</div>
@@ -501,12 +493,23 @@
         }
 
         function checkout() {
+            // ★ 1. 檢查裝置
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            if (!isMobile) {
+                alert("⚠️ 電腦版無法使用此功能\n\n為了確保訂單格式正確，請使用手機瀏覽器開啟本網站，並點擊下單！");
+                return;
+            }
+
+            // 2. 檢查購物車
             if (cart.length === 0) { alert('購物車是空的喔！'); return; }
+            
+            // 3. 檢查表單
             const name = document.getElementById('customer-name').value.trim();
             const phone = document.getElementById('customer-phone').value.trim();
             const store = document.getElementById('customer-store').value.trim();
             if (!name || !phone || !store) { alert('請填寫完整的 姓名、電話 與 取件資料'); return; }
 
+            // 4. 生成訂單
             let message = `您好，我想訂購穿戴甲：\n`;
             cart.forEach((item, index) => {
                 message += `${index + 1}. ${item.name} (${item.size}) x${item.qty} - $${item.price * item.qty}\n`;
@@ -551,22 +554,8 @@
             message += `門市/地址：${store}\n`;
             message += `\n(請確認訂單內容無誤)`;
             
-            // ★ 智慧判斷裝置 ★
-            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-            
-            if (isMobile) {
-                // 手機版：直接打開 LINE 並帶入文字
-                window.location.href = `https://line.me/R/oaMessage/@866wnpdc/?${encodeURIComponent(message)}`;
-            } else {
-                // 電腦版：自動複製文字 + 打開聊天視窗
-                navigator.clipboard.writeText(message).then(() => {
-                    alert("✅ 訂單內容已自動複製！\n\n請在跳出的 LINE 視窗中，按下「貼上 (Ctrl+V)」傳送即可。");
-                    window.open('https://line.me/R/ti/p/@866wnpdc', '_blank');
-                }).catch(err => {
-                    alert("⚠️ 自動複製失敗，請手動複製以下內容傳送：\n\n" + message);
-                    window.open('https://line.me/R/ti/p/@866wnpdc', '_blank');
-                });
-            }
+            const lineUrl = `https://line.me/R/oaMessage/@866wnpdc/?${encodeURIComponent(message)}`;
+            window.open(lineUrl, '_blank');
         }
 
         renderSite();
