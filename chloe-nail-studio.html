@@ -417,4 +417,24 @@
             const name = document.getElementById('customer-name').value.trim();
             const phone = document.getElementById('customer-phone').value.trim();
             const store = document.getElementById('customer-store').value.trim();
-            if (!name || !phone || !store) { alert('請填寫
+            if (!name || !phone || !store) { alert('請填寫完整的 姓名、電話 與 取件資料'); return; }
+
+            let message = `您好，我想訂購穿戴甲：\n`;
+            cart.forEach((item, index) => {
+                message += `${index + 1}. ${item.name} (${item.size}) x${item.qty} - $${item.price * item.qty}\n`;
+            });
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            const shippingType = document.querySelector('input[name="shipping"]:checked').nextElementSibling.innerText;
+            const shippingFee = parseInt(document.querySelector('input[name="shipping"]:checked').value);
+            const total = subtotal + shippingFee;
+            message += `------------------\n商品小計：$${subtotal}\n運費 (${shippingType})：$${shippingFee}\n總金額：$${total}\n------------------\n【寄送資訊】\n姓名：${name}\n電話：${phone}\n門市/地址：${store}\n\n(請確認訂單內容無誤)`;
+            
+            const lineUrl = `https://line.me/R/oaMessage/@866wnpdc/?${encodeURIComponent(message)}`;
+            window.open(lineUrl, '_blank');
+        }
+
+        // 啟動網站渲染
+        renderSite();
+    </script>
+</body>
+</html>
