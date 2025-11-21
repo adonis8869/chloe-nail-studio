@@ -310,8 +310,20 @@
                     <p class="flex items-center gap-2"><span class="text-xl">📍</span> <strong>地址：</strong>高雄市三民區大豐一路163-2號1樓</p>
                     <p class="flex items-center gap-2"><span class="text-xl">📱</span> <strong>IG：</strong>@chloe_nail.studio_</p>
                     <p class="flex items-center gap-2"><span class="text-xl">💬</span> <strong>LINE：</strong>@866wnpdc</p>
-                    <div class="pt-4 flex flex-col sm:flex-row gap-4">
-                        <a href="https://line.me/R/ti/p/@866wnpdc?oat_content=url" target="_blank" class="flex-1 text-center bg-brand-accent text-white py-3 rounded hover:bg-brand-dark transition shadow-lg font-bold">LINE 立即預約</a>
+                    
+                    <div class="flex gap-6 justify-center py-4 border-t border-brand-bg mt-4">
+                        <div class="text-center">
+                            <img src="IGz.png" class="w-28 h-28 object-contain border border-gray-100 shadow-sm rounded-md mx-auto">
+                            <span class="text-xs text-gray-400 mt-2 block tracking-wider">Instagram</span>
+                        </div>
+                        <div class="text-center">
+                            <img src="L_866wnpdc_GW.png" class="w-28 h-28 object-contain border border-gray-100 shadow-sm rounded-md mx-auto">
+                            <span class="text-xs text-gray-400 mt-2 block tracking-wider">Line Official</span>
+                        </div>
+                    </div>
+
+                    <div class="pt-2 flex flex-col sm:flex-row gap-4">
+                        <a href="https://line.me/R/ti/p/@866wnpdc" target="_blank" class="flex-1 text-center bg-brand-accent text-white py-3 rounded hover:bg-brand-dark transition shadow-lg font-bold">LINE 立即預約</a>
                         <a href="https://www.instagram.com/chloe_nail.studio_/" target="_blank" class="flex-1 text-center border border-brand-accent text-brand-accent py-3 rounded hover:bg-brand-accent hover:text-white transition font-bold">追蹤 IG</a>
                     </div>
                 </div>
@@ -493,7 +505,7 @@
         }
 
         function checkout() {
-            // ★ 1. 檢查裝置
+            // 1. 檢查裝置
             const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
             if (!isMobile) {
                 alert("⚠️ 電腦版無法使用此功能\n\n為了確保訂單格式正確，請使用手機瀏覽器開啟本網站，並點擊下單！");
