@@ -24,46 +24,52 @@
                 subtitle: "11月限定款式",
                 dateText: "*活動日期：即日起至 11/30 止", 
                 infoImage: "promo4.jpg",
-                
-                // 這裡修改優惠內容
                 items: [
                     {
                         artist: "By Chloe",
-                        price: "款式優惠價 $1099",  // 已修改：只顯示款式優惠價
+                        price: "款式優惠價 $1099",
                         image: "promo2.jpg"
                     },
                     {
                         artist: "By ChiChi",
-                        price: "款式優惠價 $700",   // 已修改：只顯示款式優惠價
+                        price: "款式優惠價 $700",
                         image: "promo3.jpg"
                     }
                 ]
             },
 
-            // 2. 穿戴甲商店設定
+            // 2. 穿戴甲商店設定 (已更新為您的4款編號)
             products: [
                 {
-                    id: 1,
-                    name: "No.01 琥珀暈染系",
-                    price: 890,
-                    tag: "現貨",
-                    image: "product1.jpg",
+                    id: 250801,                 // 為了對應編號
+                    name: "款式 No.250801",      // 顯示在網站和訂單的名字
+                    price: 890,                 // 價格 (可自行修改)
+                    tag: "預購",                 // 標籤
+                    image: "product1.jpg",      // 對應的圖片
                     defaultImg: "promo2.jpg"
                 },
                 {
-                    id: 2,
-                    name: "No.02 韓系手繪小花",
-                    price: 790,
-                    tag: "",
+                    id: 250802,
+                    name: "款式 No.250802",
+                    price: 890,
+                    tag: "預購",
                     image: "product2.jpg",
-                    defaultImg: "promo3.jpg"
+                    defaultImg: "promo2.jpg"
                 },
                 {
-                    id: 3,
-                    name: "No.03 極簡法式貓眼",
-                    price: 950,
-                    tag: "熱銷",
+                    id: 250803,
+                    name: "款式 No.250803",
+                    price: 890,
+                    tag: "預購",
                     image: "product3.jpg",
+                    defaultImg: "promo2.jpg"
+                },
+                {
+                    id: 250804,
+                    name: "款式 No.250804",
+                    price: 890,
+                    tag: "預購",
+                    image: "product4.jpg",
                     defaultImg: "promo2.jpg"
                 }
             ]
@@ -202,7 +208,8 @@
         </div>
     </header>
 
-    <section id="rules" class="py-12 px-4 md:px-8 max-w-5xl mx-auto"> <div class="text-center mb-8">
+    <section id="rules" class="py-12 px-4 md:px-8 max-w-5xl mx-auto">
+        <div class="text-center mb-8">
             <h2 class="text-2xl md:text-3xl font-serif text-brand-text">Booking Rules</h2>
             <p class="font-hand text-xl text-brand-accent">預約須知</p>
             <p class="text-xs text-gray-400 mt-2">(點擊圖片可放大)</p>
@@ -309,7 +316,7 @@
                 </div>
             `).join('');
 
-            // 渲染商店區 (修改：自動生成統一的尺寸選單)
+            // 渲染商店區
             const shopContainer = document.getElementById('shop-container');
             
             // 定義標準尺寸選項
