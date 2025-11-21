@@ -105,7 +105,7 @@
     <div id="cart-modal">
         <div class="p-5 border-b flex justify-between items-center bg-brand-bg">
             <h3 class="text-xl font-serif font-bold text-brand-dark">Shopping Cart</h3>
-            <button onclick="toggleCart()" class="text-gray-500 hover:text-red-500 text-2xl">&times;</button>
+            <button onclick="toggleCart()" class="text-gray-500 hover:text-red-500 text-2xl">×</button>
         </div>
         
         <div class="flex-1 overflow-y-auto p-5 space-y-4" id="cart-items">
@@ -230,7 +230,7 @@
             
             <div class="group">
                 <div class="relative overflow-hidden rounded-lg shadow-sm mb-4">
-                    <img src="promo2.jpg" class="w-full h-72 object-cover group-hover:scale-105 transition duration-500">
+                    <img src="product1.jpg" class="w-full h-72 object-cover group-hover:scale-105 transition duration-500" onerror="this.src='promo2.jpg'"> 
                     <div class="absolute top-2 right-2 bg-brand-dark text-white text-xs px-2 py-1 rounded">現貨</div>
                 </div>
                 <h3 class="text-lg font-bold text-brand-dark">No.01 琥珀暈染系</h3>
@@ -243,7 +243,7 @@
                         <option value="M">M (16mm)</option>
                         <option value="L">L (17mm)</option>
                     </select>
-                    <button onclick="addToCart(1, 'No.01 琥珀暈染系', 890, 'size-1', 'promo2.jpg')" 
+                    <button onclick="addToCart(1, 'No.01 琥珀暈染系', 890, 'size-1', 'product1.jpg')" 
                             class="bg-brand-text text-white flex-1 py-2 rounded hover:bg-brand-accent transition text-sm">
                         加入購物車
                     </button>
@@ -252,7 +252,7 @@
 
             <div class="group">
                 <div class="relative overflow-hidden rounded-lg shadow-sm mb-4">
-                    <img src="promo3.jpg" class="w-full h-72 object-cover group-hover:scale-105 transition duration-500">
+                    <img src="product2.jpg" class="w-full h-72 object-cover group-hover:scale-105 transition duration-500" onerror="this.src='promo3.jpg'">
                 </div>
                 <h3 class="text-lg font-bold text-brand-dark">No.02 韓系手繪小花</h3>
                 <p class="text-brand-accent font-serif text-xl mb-2">$790</p>
@@ -264,7 +264,7 @@
                         <option value="M">M</option>
                         <option value="L">L</option>
                     </select>
-                    <button onclick="addToCart(2, 'No.02 韓系手繪小花', 790, 'size-2', 'promo3.jpg')" 
+                    <button onclick="addToCart(2, 'No.02 韓系手繪小花', 790, 'size-2', 'product2.jpg')" 
                             class="bg-brand-text text-white flex-1 py-2 rounded hover:bg-brand-accent transition text-sm">
                         加入購物車
                     </button>
@@ -273,7 +273,7 @@
 
             <div class="group">
                 <div class="relative overflow-hidden rounded-lg shadow-sm mb-4">
-                    <img src="promo2.jpg" class="w-full h-72 object-cover group-hover:scale-105 transition duration-500">
+                     <img src="product3.jpg" class="w-full h-72 object-cover group-hover:scale-105 transition duration-500" onerror="this.src='promo2.jpg'">
                     <div class="absolute top-2 right-2 bg-red-400 text-white text-xs px-2 py-1 rounded">熱銷</div>
                 </div>
                 <h3 class="text-lg font-bold text-brand-dark">No.03 極簡法式貓眼</h3>
@@ -286,7 +286,7 @@
                         <option value="M">M</option>
                         <option value="L">L</option>
                     </select>
-                    <button onclick="addToCart(3, 'No.03 極簡法式貓眼', 950, 'size-3', 'promo2.jpg')" 
+                    <button onclick="addToCart(3, 'No.03 極簡法式貓眼', 950, 'size-3', 'product3.jpg')" 
                             class="bg-brand-text text-white flex-1 py-2 rounded hover:bg-brand-accent transition text-sm">
                         加入購物車
                     </button>
@@ -469,9 +469,8 @@
             message += `門市/地址：${store}\n`;
             message += `\n(請確認訂單內容無誤，並提供匯款帳號)`;
 
-            // 2. 轉址到 LINE
-            // 使用 encodeURIComponent 處理特殊字符與換行
-            const lineUrl = `https://line.me/R/ti/p/@866wnpdc?oat_content=url&text=${encodeURIComponent(message)}`;
+            // 2. 轉址到 LINE (使用 oaMessage 格式以解決圖文選單問題)
+            const lineUrl = `https://line.me/R/oaMessage/@866wnpdc/?${encodeURIComponent(message)}`;
             window.open(lineUrl, '_blank');
         }
     </script>
