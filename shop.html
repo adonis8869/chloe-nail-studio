@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creative Beauty | 手工穿戴甲</title>
+    <link rel="icon" href="favicon.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600&family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { theme: { extend: { colors: { 'brand-bg': '#F5F0F0', 'brand-text': '#8B7E74', 'brand-accent': '#C5A086', 'brand-dark': '#5D534A' }, fontFamily: { 'sans': ['"Zen Maru Gothic"'], 'serif': ['"Zen Maru Gothic"'], 'hand': ['"Dancing Script"'] } } } }
+        
+        const SHOP_CONFIG = {
+            products: [
+                { id: 250801, name: "款式 No.250801", price: 899, tag: "預購", image: "product1.jpg", defaultImg: "promo2.jpg" },
+                { id: 250802, name: "款式 No.250802", price: 799, tag: "預購", image: "product2.jpg", defaultImg: "promo2.jpg" },
+                { id: 250803, name: "款式 No.250803", price: 899, tag: "預購", image: "product3.jpg", defaultImg: "promo2.jpg" },
+                { id: 250804, name: "款式 No.250804", price: 899, tag: "預購", image: "product4.jpg", defaultImg: "promo2.jpg" },
+                { id: 999999, name: "帶圖訂製 (私訊報價)", price: 0, tag: "客製", image: "product_custom.jpg", defaultImg: "promo4.jpg" }
+            ]
+        };
+    </script>
+    <style>
+        body { background-color: #F5F0F0; color: #8B7E74; font-family: "Zen Maru Gothic", sans-serif; }
+        .zoomable:hover { transform: scale(1.02); transition: 0.3s; cursor: zoom-in; }
+        #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; justify-content: center; align-items: center; }
+        #lightbox.show { display: flex; } #lightbox img { max-width: 100%; max-height: 95vh; }
+        .cart-float-btn { position: fixed; bottom: 90px; right: 20px; background: #C5A086; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2); cursor: pointer; z-index: 50; transition: 0.2s; }
+        .cart-count { position: absolute; top: -5px; right: -5px; background: #b91c1c; color: white; font-size: 12px; width: 24px; height: 24px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; }
+        #cart-modal { position: fixed; top: 0; right: -100%; width: 100%; max-width: 400px; height: 100%; background: white; z-index: 100; transition: right 0.3s; display: flex; flex-direction: column; box-shadow: -5px 0 25px rgba(0,0,0,0.1); }
+        #cart-modal.open { right: 0; } .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 90; display: none; } .overlay.show { display: block; }
+        @media (min-width: 768px) { .cart-float-btn { bottom: 30px; right: 30px; } }
+    </style>
+</head>
+<body class="pb-24 md:pb-0">
+    <div id="lightbox" onclick="this.classList.remove('show')"><img id="lightbox-img" src=""></div>
+    
+    <div class="cart-float-btn" onclick="toggleCart()">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" /></svg>
+        <div class="cart-count" id="cart-count" style="display:none">0</div>
+    </div>
+    <div class="overlay" id="cart-overlay" onclick="toggleCart()"></div>
+    <div id="cart-modal">
+        <div class="p-5 border-b flex justify-between items-center bg-brand-bg"><h3 class="text-xl font-bold text-brand-dark">Shopping Cart</h3><button onclick="toggleCart()" class="text-gray-500 text-2xl">×</button></div>
+        <div class="flex-1 overflow-y-auto p-5 space-y-4" id="cart-items"><div class="text-center text-gray-400 mt-10">購物車是空的</div></div>
+        <div class="p-5 border-t bg-gray-50">
+            <div class="space-y-3 mb-4 text-sm">
+                <div class="flex justify-between"><span>商品小計</span><span id="cart-subtotal">$0</span></div>
+                <div class="flex justify-between text-brand-dark bg-brand-bg/50 p-2 rounded" id="mold-fee-row" style="display:none"><span>翻模費用</span><span id="cart-mold-fee" class="font-bold">$0</span></div>
+                <div class="flex flex-col gap-2 border-b pb-2">
+                    <span class="font-bold text-brand-dark">選擇運費：</span>
+                    <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="shipping" value="60" checked onchange="updateCartTotal()"><span>7-11 店到店 (+$60)</span></label>
+                    <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="shipping" value="130" onchange="updateCartTotal()"><span>黑貓宅急便 (+$130)</span></label>
+                    <div class="flex justify-between text-gray-500 text-xs"><span>運費金額</span><span id="shipping-fee-display">$60</span></div>
+                </div>
+                <div class="flex justify-between text-lg font-bold text-brand-accent pt-2"><span>總金額</span><span id="cart-total">$0</span></div>
+            </div>
+            <div class="space-y-2 mb-4"><input type="text" id="c-name" placeholder="您的姓名" class="w-full p-2 border rounded text-sm"><input type="tel" id="c-phone" placeholder="聯絡電話" class="w-full p-2 border rounded text-sm"><input type="text" id="c-store" placeholder="取件門市名稱 / 宅配地址" class="w-full p-2 border rounded text-sm"></div>
+            <button onclick="checkout()" class="w-full bg-brand-accent text-white py-3 rounded hover:bg-brand-dark transition font-bold tracking-widest">LINE 傳送訂單</button>
+        </div>
+    </div>
+
+    <nav class="hidden md:flex fixed w-full z-40 bg-brand-bg/95 backdrop-blur-sm border-b border-brand-accent/20 py-5 justify-center items-center space-x-8 text-brand-text font-medium shadow-sm">
+        <a href="index.html" class="nav-btn">🏠 返回美甲首頁</a>
+        <div class="text-center px-4">
+            <div class="text-2xl font-bold tracking-widest font-serif">CREATIVE BEAUTY</div>
+            <div class="font-hand text-lg text-brand-accent">Press-on Nails</div>
+        </div>
+        <a href="#shop" class="nav-btn text-brand-accent font-bold">商品列表</a>
+        <a href="#info" class="nav-btn">訂購須知</a>
+    </nav>
+
+    <div class="md:hidden text-center py-4 bg-brand-bg border-b border-brand-accent/20 sticky top-0 z-40 shadow-sm/50 backdrop-blur-md bg-opacity-90">
+        <div class="text-xl font-bold text-brand-text tracking-widest font-serif">CREATIVE BEAUTY</div>
+        <div class="font-hand text-sm text-brand-accent">Press-on Nails</div>
+    </div>
+
+    <div class="pt-20 md:pt-32 pb-12 px-4 max-w-7xl mx-auto">
+        
+        <div id="info" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
+            <img src="presson_price.jpg" onclick="openLightbox(this.src)" class="w-full rounded shadow-sm zoomable">
+            <img src="presson_custom.jpg" onclick="openLightbox(this.src)" class="w-full rounded shadow-sm zoomable">
+            <img src="presson_tools.jpg" onclick="openLightbox(this.src)" class="w-full rounded shadow-sm zoomable">
+        </div>
+
+        <div id="shop" class="text-center mb-12 border-t border-brand-bg pt-12">
+            <h2 class="text-3xl md:text-4xl text-brand-text font-bold">Press-on Nails Shop</h2>
+            <p class="font-hand text-2xl text-brand-accent">手工穿戴甲販售</p>
+            <div class="mt-6 inline-block bg-brand-bg px-6 py-4 rounded-lg border border-brand-accent/20 shadow-sm">
+                <p class="text-brand-dark font-bold text-lg mb-1">🎉 全館滿 $3000 免運費</p>
+                <p class="text-brand-accent font-medium">🎁 購買 3 副穿戴甲即贈送「翻模」乙次 (自動折抵)</p>
+            </div>
+            
+            <div class="flex flex-col items-center gap-4 mt-8">
+                <div class="flex flex-col sm:flex-row gap-4 w-full justify-center">
+                    <a href="https://www.instagram.com/creativebeauty.studio/" target="_blank" class="flex items-center justify-center gap-2 border-2 border-brand-text text-brand-text px-8 py-3 rounded hover:bg-brand-text hover:text-white transition font-bold">📷 穿戴甲 IG 作品</a>
+                    <a href="https://line.me/R/ti/p/@504otiij" target="_blank" class="flex items-center justify-center gap-2 bg-brand-text text-white px-8 py-3 rounded hover:bg-brand-accent transition font-bold">💬 穿戴甲官方 LINE</a>
+                </div>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSfutyJhsUXfJS1vJBOSgUFhoSVR1Mw_O4hm0voZeXtMcpd3Qg/viewform" target="_blank" class="mt-2 text-brand-accent underline decoration-dotted hover:text-brand-dark text-sm">📝 習慣使用 Google 表單訂購請點此</a>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-12" id="shop-container"></div>
+    </div>
+
+    <div class="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-brand-accent/20 z-30 flex justify-around items-end py-2 px-2 text-[10px] text-brand-text shadow">
+        <a href="index.html" class="flex flex-col items-center p-2"><span class="text-lg mb-1">🏠</span><span>回美甲店</span></a>
+        <a href="#" class="flex flex-col items-center p-2 text-brand-accent font-bold"><span class="text-lg mb-1">🛍️</span><span>商店</span></a>
+        <a href="https://line.me/R/ti/p/@504otiij" target="_blank" class="flex flex-col items-center p-2"><span class="text-lg mb-1">💬</span><span>客服</span></a>
+    </div>
+
+    <script>
+        // 渲染商品
+        document.getElementById('shop-container').innerHTML = SHOP_CONFIG.products.map(p => `
+            <div class="group">
+                <div class="relative overflow-hidden rounded-lg shadow-sm mb-4"><img src="${p.image}" class="w-full h-72 object-cover group-hover:scale-105 transition duration-500" onerror="this.src='promo2.jpg'">${p.tag?`<div class="absolute top-2 right-2 bg-brand-dark text-white text-xs px-2 py-1 rounded">${p.tag}</div>`:''}</div>
+                <h3 class="text-lg font-bold text-brand-dark">${p.name}</h3>
+                <p class="text-brand-accent text-xl mb-2">${p.price===0?'私訊後報價':'$'+p.price}</p>
+                <div class="flex gap-2">
+                    <select id="size-${p.id}" class="border border-gray-300 rounded px-2 py-2 text-sm bg-white w-1/3 font-sans"><option value="XS">XS</option><option value="S">S</option><option value="M">M</option><option value="L">L</option><option value="CustomMold">翻模量身訂製</option></select>
+                    <button onclick="addToCart(${p.id}, '${p.name}', ${p.price}, 'size-${p.id}', '${p.image}')" class="bg-brand-text text-white flex-1 py-2 rounded hover:bg-brand-accent transition text-sm">加入購物車</button>
+                </div>
+            </div>`).join('');
+
+        function openLightbox(src){ document.getElementById('lightbox-img').src=src; document.getElementById('lightbox').classList.add('show'); }
+        
+        let cart = [];
+        function toggleCart(){ document.getElementById('cart-modal').classList.toggle('open'); document.getElementById('cart-overlay').classList.toggle('show'); }
+        
+        function addToCart(id, name, base, sizeId, img) {
+            const sv = document.getElementById(sizeId).value;
+            const st = document.getElementById(sizeId).options[document.getElementById(sizeId).selectedIndex].text;
+            const uid = id+'-'+sv;
+            const item = cart.find(i=>i.uid===uid);
+            if(item) item.qty++; else cart.push({uid, id, name, base, sv, size:st, img, qty:1});
+            updateCart(); toggleCart();
+        }
+        
+        function removeFromCart(uid){ cart = cart.filter(i=>i.uid!==uid); updateCart(); }
+        
+        function updateCart() {
+            const sub = cart.reduce((s,i)=>s+i.base*i.qty,0);
+            const qty = cart.reduce((s,i)=>s+i.qty,0);
+            const hasMold = cart.some(i=>i.sv==='CustomMold');
+            let mold = 0, mText = "$0";
+            if(hasMold){ if(qty>=3){ mText="活動贈送 ($0)"; } else { mold=500; mText="$500"; } }
+            document.getElementById('cart-mold-fee').innerText = mText;
+            document.getElementById('mold-fee-row').style.display = hasMold?'flex':'none';
+            
+            let ship = parseInt(document.querySelector('input[name="shipping"]:checked').value);
+            let sText = "$"+ship;
+            if((sub+mold)>=3000){ ship=0; sText="滿額免運 ($0)"; }
+            document.getElementById('shipping-fee-display').innerText = sText;
+            
+            document.getElementById('cart-subtotal').innerText = '$'+sub;
+            document.getElementById('cart-total').innerText = '$'+(sub+mold+ship);
+            document.getElementById('cart-count').innerText = qty;
+            document.getElementById('cart-count').style.display = qty?'flex':'none';
+            
+            document.getElementById('cart-items').innerHTML = cart.length ? cart.map(i=>`
+                <div class="flex gap-3 items-center bg-gray-50 p-2 rounded border">
+                    <img src="${i.img}" class="w-12 h-12 object-cover rounded" onerror="this.src='promo2.jpg'">
+                    <div class="flex-1"><div class="text-sm font-bold text-brand-dark">${i.name}</div><div class="text-xs text-gray-500">尺寸: ${i.size}</div><div class="text-brand-accent">${i.base===0?'私訊後報價':'$'+i.base+' x '+i.qty}</div></div>
+                    <button onclick="removeFromCart('${i.uid}')" class="text-gray-400 hover:text-red-500 p-2">×</button>
+                </div>`).join('') : '<div class="text-center text-gray-400 mt-10">購物車是空的</div>';
+        }
+
+        function checkout() {
+            if(!/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) { alert("⚠️ 請使用手機下單！"); return; }
+            if(cart.length===0) return alert('購物車是空的');
+            const n=document.getElementById('c-name').value, p=document.getElementById('c-phone').value, s=document.getElementById('c-store').value;
+            if(!n||!p||!s) return alert('請填寫完整資料');
+            
+            let msg = `您好，我想訂購穿戴甲：\n`;
+            cart.forEach((i,idx)=> msg += `${idx+1}. ${i.name} (${i.size}) x${i.qty} - ${i.base===0?'私訊':`$${i.base*i.qty}`}\n`);
+            
+            const sub = cart.reduce((s,i)=>s+i.base*i.qty,0);
+            const qty = cart.reduce((s,i)=>s+i.qty,0);
+            const hasMold = cart.some(i=>i.sv==='CustomMold');
+            let mold=0, mInfo="";
+            if(hasMold){ if(qty>=3){ mInfo=" (贈送翻模)"; } else { mold=500; } }
+            
+            let shipName = document.querySelector('input[name="shipping"]:checked').nextElementSibling.innerText;
+            let ship = parseInt(document.querySelector('input[name="shipping"]:checked').value);
+            if((sub+mold)>=3000){ ship=0; shipName+=" [免運]"; }
+            
+            msg += `------------------\n商品小計：$${sub}\n`;
+            if(hasMold) msg += `翻模費用：$${mold}${mInfo}\n`;
+            msg += `運費 (${shipName})：$${ship}\n總金額：$${sub+mold+ship}\n------------------\n【寄送資訊】\n姓名：${n}\n電話：${p}\n地址：${s}`;
+            
+            window.open(`https://line.me/R/oaMessage/@504otiij/?${encodeURIComponent(msg)}`, '_blank');
+        }
+    </script>
+</body>
+</html>
