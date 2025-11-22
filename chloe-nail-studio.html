@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chloe Nail Studio | 專屬美甲設計</title>
     
+    <link rel="icon" href="favicon.png" type="image/png">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600&family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
@@ -350,16 +352,16 @@
                         </div>
                     </div>
 
-                    <div class="bg-brand-bg/50 p-6 rounded-lg border border-brand-accent/20 text-brand-text">
-                        <h3 class="font-bold text-lg mb-4 flex items-center gap-2">
+                    <div class="bg-white p-8 rounded-lg border border-brand-accent/10 shadow-lg text-brand-text">
+                        <h3 class="font-bold text-lg mb-4 flex items-center gap-2 border-b pb-2 border-gray-100">
                             <span>🎨</span> 穿戴甲專屬客服 (Press-on)
                         </h3>
                         <p class="text-sm mb-4">購買穿戴甲、客製化尺寸、售後問題，請聯繫專屬帳號：</p>
                         <div class="flex flex-col sm:flex-row gap-3">
-                            <a href="https://line.me/R/ti/p/@504otiij" target="_blank" class="flex-1 text-center bg-white border border-gray-200 text-brand-dark py-2 rounded hover:border-brand-accent transition text-sm font-bold">
+                            <a href="https://line.me/R/ti/p/@504otiij" target="_blank" class="flex-1 text-center bg-white border border-gray-200 text-brand-dark py-3 rounded hover:border-brand-accent transition text-sm font-bold">
                                 💬 穿戴甲 LINE (@504otiij)
                             </a>
-                            <a href="https://www.instagram.com/creativebeauty.studio/" target="_blank" class="flex-1 text-center bg-white border border-gray-200 text-brand-dark py-2 rounded hover:border-brand-accent transition text-sm font-bold">
+                            <a href="https://www.instagram.com/creativebeauty.studio/" target="_blank" class="flex-1 text-center bg-white border border-gray-200 text-brand-dark py-3 rounded hover:border-brand-accent transition text-sm font-bold">
                                 📷 穿戴甲 IG 作品
                             </a>
                         </div>
@@ -392,7 +394,7 @@
             document.getElementById('promo-items-container').innerHTML = SITE_CONFIG.promo.items.map(item => `
                 <div class="text-center group">
                     <div class="overflow-hidden rounded-lg shadow-md mb-3">
-                        <img src="${item.image}" onclick="openLightbox(this.src)" class="w-full h-64 md:h-80 object-cover zoomable">
+                        <img src="${item.image}" onclick="openLightbox(this.src)" class="w-full h-auto rounded-lg shadow-sm zoomable">
                     </div>
                     <p class="text-lg text-brand-dark font-bold">${item.artist}</p>
                     <p class="text-brand-accent">${item.price}</p>
@@ -605,7 +607,7 @@
             message += `門市/地址：${store}\n`;
             message += `\n(請確認訂單內容無誤)`;
             
-            // ★ 使用穿戴甲專用 LINE ID
+            // ★ 使用穿戴甲專用 LINE ID (@504otiij)
             const lineUrl = `https://line.me/R/oaMessage/@504otiij/?${encodeURIComponent(message)}`;
             window.open(lineUrl, '_blank');
         }
