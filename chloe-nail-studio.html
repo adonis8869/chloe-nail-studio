@@ -19,17 +19,39 @@
         // =================================================================
         
         const SITE_CONFIG = {
-            // 1. 本月限定優惠
-            promo: {
-                title: "November Specials",
-                subtitle: "11月限定款式",
-                dateText: "*活動日期：即日起至 11/30 止", 
-                infoImage: "promo4.jpg",
-                items: [
-                    { artist: "By Chloe", price: "款式優惠價 $1099", image: "promo2.jpg" },
-                    { artist: "By ChiChi", price: "款式優惠價 $700", image: "promo3.jpg" }
-                ]
-            },
+            // 1. 限定優惠 (支援多月份不同排版)
+            promos: [
+                // --- 11月 (維持原樣：左圖右文) ---
+                {
+                    type: "standard", 
+                    title: "November Specials",
+                    subtitle: "11月限定款式",
+                    dateText: "*活動日期：即日起至 11/30 止", 
+                    infoImage: "promo4.jpg", 
+                    items: [
+                        { artist: "By Chloe", price: "款式優惠價 $1099", image: "promo2.jpg" },
+                        { artist: "By ChiChi", price: "款式優惠價 $700", image: "promo3.jpg" }
+                    ]
+                },
+                // --- 12月 (新排版：價格已更新) ---
+                {
+                    type: "gallery", 
+                    title: "December Specials",
+                    subtitle: "12月聖誕跨年限定",
+                    // 這裡放入圖片中的文案
+                    description: "Chloe美甲師為你準備 高質感日常款 × 精緻聖誕限定款\n從奶霧、琥珀暈染到聖誕蝴蝶結、冬季藍，全都在這裡。",
+                    // 這裡放入分級價格 (使用 <br> 換行)
+                    priceText: `
+                        <span class="block text-base font-normal mb-1">🔸 $1099 | 冬季基本款系列 (霧藍/莓紅/禮物包裝)</span>
+                        <span class="block text-base font-normal mb-1">🔸 $1199 | 聖誕花草 × 奶霧系列 (柔霧雪季色調)</span>
+                        <span class="block text-base font-normal">🔸 $1299 | 聖誕樹咖啡暈染 (聖誕限定/百搭顯白)</span>
+                    `,
+                    dateText: "*活動日期：12/01 - 12/31 (開放預約中)",
+                    // 請確認資料夾內有這三張圖片
+                    images: ["dec_2.jpg", "dec_1.jpg", "dec_3.jpg"] 
+                }
+            ],
+
             // 2. 穿戴甲商品
             products: [
                 {
@@ -64,14 +86,14 @@
                     image: "product4.jpg",
                     defaultImg: "promo2.jpg"
                 },
-                // ★ 新增：帶圖訂製 ★
+                // 帶圖訂製
                 {
-                    id: 999999,             // 特殊編號
+                    id: 999999,
                     name: "帶圖訂製 (私訊報價)",
-                    price: 0,               // 設定為 0，程式會自動判斷顯示「私訊後報價」
+                    price: 0,
                     tag: "客製",
-                    image: "product_custom.jpg", // 請準備這張圖，或它會顯示預設圖
-                    defaultImg: "promo4.jpg"     // 預設顯示那張手寫字卡
+                    image: "product_custom.jpg",
+                    defaultImg: "promo4.jpg"
                 }
             ]
         };
@@ -262,18 +284,11 @@
         <div class="max-w-7xl mx-auto px-6">
             <div class="text-center mb-10">
                 <span class="bg-brand-accent text-white px-4 py-1 text-xs tracking-widest uppercase rounded-full">Limited Time</span>
-                <h2 class="text-3xl md:text-4xl text-brand-text mt-4 font-bold" id="promo-title"></h2>
-                <p class="font-hand text-2xl text-brand-accent" id="promo-subtitle"></p>
+                <h2 class="text-3xl md:text-4xl text-brand-text mt-4 font-bold">Monthly Specials</h2>
+                <p class="font-hand text-2xl text-brand-accent">每月限定優惠</p>
             </div>
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-                <div class="lg:col-span-1">
-                    <div class="bg-brand-bg p-2 rounded-lg shadow-md transform rotate-1 hover:rotate-0 transition duration-500">
-                        <img id="promo-info-img" onclick="openLightbox(this.src)" class="w-full h-auto rounded zoomable">
-                    </div>
-                </div>
-                <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-8" id="promo-items-container"></div>
-            </div>
-            <div class="text-center mt-8 text-sm text-gray-400" id="promo-date"></div>
+            
+            <div id="promos-wrapper" class="space-y-24"></div>
         </div>
     </div>
 
@@ -337,11 +352,13 @@
                 </div>
                 
                 <div class="w-full lg:w-1/2 space-y-6">
+                    
                     <div class="bg-white p-8 rounded-lg border border-brand-accent/10 shadow-lg text-brand-text">
                         <h3 class="font-bold text-lg mb-4 border-b pb-2 border-gray-100">💅 美甲預約 (Salon)</h3>
                         <p class="flex items-center gap-2 mb-3"><span class="text-xl">📍</span> <strong>地址：</strong>高雄市三民區大豐一路163-2號1樓</p>
                         <p class="flex items-center gap-2 mb-3"><span class="text-xl">📱</span> <strong>IG：</strong>@chloe_nail.studio_</p>
                         <p class="flex items-center gap-2 mb-6"><span class="text-xl">💬</span> <strong>LINE：</strong>@866wnpdc</p>
+                        
                         <div class="flex gap-6 justify-center py-4 border-t border-brand-bg">
                             <div class="text-center">
                                 <img src="L_866wnpdc_GW.png" class="w-20 h-20 object-contain border border-gray-100 shadow-sm rounded-md mx-auto">
@@ -352,6 +369,7 @@
                                 <span class="text-xs text-gray-400 mt-1 block">Instagram</span>
                             </div>
                         </div>
+
                         <div class="pt-2 flex flex-col sm:flex-row gap-4">
                             <a href="https://line.me/R/ti/p/@866wnpdc" target="_blank" class="flex-1 text-center bg-brand-accent text-white py-3 rounded hover:bg-brand-dark transition shadow-lg font-bold">LINE 立即預約</a>
                             <a href="https://www.instagram.com/chloe_nail.studio_/" target="_blank" class="flex-1 text-center border border-brand-accent text-brand-accent py-3 rounded hover:bg-brand-accent hover:text-white transition font-bold">追蹤 IG</a>
@@ -372,6 +390,7 @@
                             </a>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -391,20 +410,66 @@
 
     <script>
         function renderSite() {
-            document.getElementById('promo-title').textContent = SITE_CONFIG.promo.title;
-            document.getElementById('promo-subtitle').textContent = SITE_CONFIG.promo.subtitle;
-            document.getElementById('promo-date').textContent = SITE_CONFIG.promo.dateText;
-            document.getElementById('promo-info-img').src = SITE_CONFIG.promo.infoImage;
+            const promosWrapper = document.getElementById('promos-wrapper');
+            let promosHTML = '';
 
-            document.getElementById('promo-items-container').innerHTML = SITE_CONFIG.promo.items.map((item, index) => `
-                <div class="text-center group flex flex-col items-center">
-                    <div class="bg-brand-bg p-2 rounded-lg shadow-md transform ${index % 2 === 0 ? '-rotate-1' : 'rotate-1'} hover:rotate-0 transition duration-500 mb-3">
-                        <img src="${item.image}" onclick="openLightbox(this.src)" class="w-full h-auto rounded zoomable">
+            SITE_CONFIG.promos.forEach((promo) => {
+                let contentHTML = '';
+
+                if (promo.type === "standard") {
+                    const itemsHTML = promo.items.map((item, i) => `
+                        <div class="text-center group flex flex-col items-center">
+                            <div class="bg-brand-bg p-2 rounded-lg shadow-md transform ${i % 2 === 0 ? '-rotate-1' : 'rotate-1'} hover:rotate-0 transition duration-500 mb-3">
+                                <img src="${item.image}" onclick="openLightbox(this.src)" class="w-full h-auto rounded zoomable" onerror="this.src='promo2.jpg'">
+                            </div>
+                            <p class="text-lg text-brand-dark font-bold">${item.artist}</p>
+                            <p class="text-brand-accent">${item.price}</p>
+                        </div>
+                    `).join('');
+
+                    contentHTML = `
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+                            <div class="lg:col-span-1">
+                                <div class="bg-brand-bg p-2 rounded-lg shadow-md transform -rotate-1 hover:rotate-0 transition duration-500">
+                                    <img src="${promo.infoImage}" onclick="openLightbox(this.src)" class="w-full h-auto rounded zoomable" onerror="this.src='promo4.jpg'">
+                                </div>
+                            </div>
+                            <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-8">
+                                ${itemsHTML}
+                            </div>
+                        </div>
+                    `;
+                } else if (promo.type === "gallery") {
+                    const imagesHTML = promo.images.map((img) => `
+                        <div class="overflow-hidden rounded-lg shadow-md">
+                            <img src="${img}" onclick="openLightbox(this.src)" class="w-full h-auto object-cover zoomable hover:scale-105 transition duration-500">
+                        </div>
+                    `).join('');
+
+                    contentHTML = `
+                        <div class="text-center mb-8">
+                            <p class="text-gray-600 whitespace-pre-line mb-2 leading-relaxed">${promo.description}</p>
+                            <div class="text-xl text-brand-dark font-bold inline-block text-left bg-white p-4 rounded shadow-sm border border-brand-bg">
+                                ${promo.priceText}
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            ${imagesHTML}
+                        </div>
+                    `;
+                }
+
+                promosHTML += `
+                    <div class="promo-block border-b border-gray-200 pb-16 last:border-0 last:pb-0">
+                        <h3 class="text-2xl md:text-3xl text-brand-dark font-serif text-center mb-2">${promo.title}</h3>
+                        <p class="text-xl text-brand-accent font-hand text-center mb-8">${promo.subtitle}</p>
+                        ${contentHTML}
+                        <div class="text-center mt-8 text-sm text-gray-400">${promo.dateText}</div>
                     </div>
-                    <p class="text-lg text-brand-dark font-bold">${item.artist}</p>
-                    <p class="text-brand-accent">${item.price}</p>
-                </div>
-            `).join('');
+                `;
+            });
+
+            promosWrapper.innerHTML = promosHTML;
 
             const shopContainer = document.getElementById('shop-container');
             const sizeOptions = `
@@ -570,7 +635,6 @@
             // 4. 生成訂單
             let message = `您好，我想訂購穿戴甲：\n`;
             cart.forEach((item, index) => {
-                // 這裡修正：如果價格是0，顯示"私訊後報價"，否則顯示金額
                 let priceText = item.price === 0 ? "私訊後報價" : `$${item.price * item.qty}`;
                 message += `${index + 1}. ${item.name} (${item.size}) x${item.qty} - ${priceText}\n`;
             });
