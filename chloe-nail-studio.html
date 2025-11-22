@@ -21,7 +21,7 @@
         const SITE_CONFIG = {
             // 1. 限定優惠 (支援多月份不同排版)
             promos: [
-                // --- 11月 (維持原樣：左圖右文) ---
+                // --- 11月 (標準排版) ---
                 {
                     type: "standard", 
                     title: "November Specials",
@@ -33,21 +33,18 @@
                         { artist: "By ChiChi", price: "款式優惠價 $700", image: "promo3.jpg" }
                     ]
                 },
-                // --- 12月 (新排版：價格已更新) ---
+                // --- 12月 (畫廊排版) ---
                 {
                     type: "gallery", 
                     title: "December Specials",
                     subtitle: "12月聖誕跨年限定",
-                    // 這裡放入圖片中的文案
                     description: "Chloe美甲師為你準備 高質感日常款 × 精緻聖誕限定款\n從奶霧、琥珀暈染到聖誕蝴蝶結、冬季藍，全都在這裡。",
-                    // 這裡放入分級價格 (使用 <br> 換行)
                     priceText: `
                         <span class="block text-base font-normal mb-1">🔸 $1099 | 冬季基本款系列 (霧藍/莓紅/禮物包裝)</span>
                         <span class="block text-base font-normal mb-1">🔸 $1199 | 聖誕花草 × 奶霧系列 (柔霧雪季色調)</span>
                         <span class="block text-base font-normal">🔸 $1299 | 聖誕樹咖啡暈染 (聖誕限定/百搭顯白)</span>
                     `,
                     dateText: "*活動日期：12/01 - 12/31 (開放預約中)",
-                    // 請確認資料夾內有這三張圖片
                     images: ["dec_2.jpg", "dec_1.jpg", "dec_3.jpg"] 
                 }
             ],
@@ -238,8 +235,7 @@
     <nav class="hidden md:flex fixed w-full z-40 bg-brand-bg/95 backdrop-blur-sm border-b border-brand-accent/20 py-5 justify-center items-center space-x-8 lg:space-x-12 text-brand-text font-medium shadow-sm transition-all">
         <div onclick="switchPage('page-home')" class="nav-btn active" id="nav-home">首頁</div>
         <div onclick="switchPage('page-rules')" class="nav-btn" id="nav-rules">預約須知</div>
-        <div onclick="switchPage('page-november')" class="nav-btn text-brand-accent" id="nav-november">✨ 本月限定</div>
-        <div class="text-center px-4 cursor-pointer" onclick="switchPage('page-home')">
+        <div onclick="switchPage('page-november')" class="nav-btn text-brand-accent" id="nav-november">✨ 限定優惠</div> <div class="text-center px-4 cursor-pointer" onclick="switchPage('page-home')">
             <div class="text-2xl lg:text-3xl font-bold tracking-widest font-serif">CHLOE NAIL</div>
             <div class="font-hand text-lg text-brand-accent">Chloe nail studio</div>
         </div>
@@ -263,7 +259,7 @@
                 <p class="font-hand text-3xl md:text-4xl mb-8">Press-on Nails & Design</p>
                 <div class="flex flex-col md:flex-row gap-4 justify-center">
                     <button onclick="switchPage('page-shop')" class="bg-white/80 text-brand-dark px-8 py-3 hover:bg-white transition rounded shadow-lg font-bold">穿戴甲商店</button>
-                    <button onclick="switchPage('page-november')" class="bg-brand-accent/90 text-white px-8 py-3 hover:bg-brand-accent transition rounded shadow-lg font-bold">本月限定款</button>
+                    <button onclick="switchPage('page-november')" class="bg-brand-accent/90 text-white px-8 py-3 hover:bg-brand-accent transition rounded shadow-lg font-bold">限定優惠款</button>
                 </div>
             </div>
         </header>
@@ -352,13 +348,11 @@
                 </div>
                 
                 <div class="w-full lg:w-1/2 space-y-6">
-                    
                     <div class="bg-white p-8 rounded-lg border border-brand-accent/10 shadow-lg text-brand-text">
                         <h3 class="font-bold text-lg mb-4 border-b pb-2 border-gray-100">💅 美甲預約 (Salon)</h3>
                         <p class="flex items-center gap-2 mb-3"><span class="text-xl">📍</span> <strong>地址：</strong>高雄市三民區大豐一路163-2號1樓</p>
                         <p class="flex items-center gap-2 mb-3"><span class="text-xl">📱</span> <strong>IG：</strong>@chloe_nail.studio_</p>
                         <p class="flex items-center gap-2 mb-6"><span class="text-xl">💬</span> <strong>LINE：</strong>@866wnpdc</p>
-                        
                         <div class="flex gap-6 justify-center py-4 border-t border-brand-bg">
                             <div class="text-center">
                                 <img src="L_866wnpdc_GW.png" class="w-20 h-20 object-contain border border-gray-100 shadow-sm rounded-md mx-auto">
@@ -369,7 +363,6 @@
                                 <span class="text-xs text-gray-400 mt-1 block">Instagram</span>
                             </div>
                         </div>
-
                         <div class="pt-2 flex flex-col sm:flex-row gap-4">
                             <a href="https://line.me/R/ti/p/@866wnpdc" target="_blank" class="flex-1 text-center bg-brand-accent text-white py-3 rounded hover:bg-brand-dark transition shadow-lg font-bold">LINE 立即預約</a>
                             <a href="https://www.instagram.com/chloe_nail.studio_/" target="_blank" class="flex-1 text-center border border-brand-accent text-brand-accent py-3 rounded hover:bg-brand-accent hover:text-white transition font-bold">追蹤 IG</a>
@@ -390,7 +383,6 @@
                             </a>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
