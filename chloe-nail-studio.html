@@ -65,10 +65,6 @@
             ]
         };
 
-        // =================================================================
-        // 🔧 設定結束
-        // =================================================================
-
         tailwind.config = {
             theme: {
                 extend: {
@@ -90,26 +86,14 @@
     </script>
 
     <style>
-        body { 
-            background-color: #F5F0F0; 
-            color: #8B7E74; 
-            font-family: "Zen Maru Gothic", sans-serif; 
-        }
+        body { background-color: #F5F0F0; color: #8B7E74; font-family: "Zen Maru Gothic", sans-serif; }
         
         /* 分頁切換邏輯 */
-        .page-section {
-            display: none;
-            animation: fadeIn 0.5s ease-in-out;
-            padding-top: 100px;
-            min-height: 80vh;
-        }
+        .page-section { display: none; animation: fadeIn 0.5s ease-in-out; padding-top: 100px; min-height: 80vh; }
         .page-section.active { display: block; }
         #page-home { padding-top: 0; }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .nav-btn { position: relative; padding-bottom: 4px; cursor: pointer; }
         .nav-btn::after { content: ''; position: absolute; width: 0; height: 2px; bottom: 0; left: 0; background-color: #C5A086; transition: width 0.3s; }
@@ -118,41 +102,19 @@
         .zoomable { cursor: zoom-in; transition: transform 0.3s ease; }
         .zoomable:hover { transform: scale(1.02); }
         
-        #lightbox {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.9); z-index: 9999;
-            justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease;
-        }
+        #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.9); z-index: 9999; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease; }
         #lightbox.show { display: flex; opacity: 1; }
         #lightbox img { max-width: 100%; max-height: 95vh; object-fit: contain; }
 
-        .cart-float-btn {
-            position: fixed; bottom: 90px; right: 20px;
-            background-color: #C5A086; color: white;
-            width: 60px; height: 60px; border-radius: 50%;
-            display: flex; justify-content: center; align-items: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2); cursor: pointer; z-index: 50;
-            transition: transform 0.2s;
-        }
+        .cart-float-btn { position: fixed; bottom: 90px; right: 20px; background-color: #C5A086; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2); cursor: pointer; z-index: 50; transition: transform 0.2s; }
         .cart-float-btn:hover { transform: scale(1.1); }
         @media (min-width: 768px) { .cart-float-btn { bottom: 30px; right: 30px; } }
         
-        .cart-count {
-            position: absolute; top: -5px; right: -5px; background-color: #b91c1c; color: white;
-            font-size: 12px; width: 24px; height: 24px; border-radius: 50%;
-            display: flex; justify-content: center; align-items: center; font-weight: bold;
-        }
+        .cart-count { position: absolute; top: -5px; right: -5px; background-color: #b91c1c; color: white; font-size: 12px; width: 24px; height: 24px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; }
 
-        #cart-modal {
-            position: fixed; top: 0; right: -100%; width: 100%; max-width: 400px; height: 100%;
-            background: white; z-index: 100; box-shadow: -5px 0 25px rgba(0,0,0,0.1);
-            transition: right 0.3s ease-in-out; display: flex; flex-direction: column;
-        }
+        #cart-modal { position: fixed; top: 0; right: -100%; width: 100%; max-width: 400px; height: 100%; background: white; z-index: 100; box-shadow: -5px 0 25px rgba(0,0,0,0.1); transition: right 0.3s ease-in-out; display: flex; flex-direction: column; }
         #cart-modal.open { right: 0; }
-        .overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); z-index: 90; display: none;
-        }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 90; display: none; }
         .overlay.show { display: block; }
     </style>
 </head>
@@ -273,9 +235,22 @@
                 <p class="font-hand text-2xl text-brand-accent">手工穿戴甲販售</p>
                 <p class="text-sm text-gray-500 mt-2">全手工製作 • 獨家設計 • 可重複使用</p>
 
-                <div class="mt-6 inline-block bg-brand-bg px-6 py-4 rounded-lg border border-brand-accent/20 shadow-sm">
-                    <p class="text-brand-dark font-bold text-lg mb-1">🎉 全館滿 $3000 免運費</p>
-                    <p class="text-brand-accent font-medium">🎁 購買 3 副穿戴甲即贈送「翻模」乙次 (自動折抵)</p>
+                <div class="flex flex-col items-center gap-4 mt-6">
+                    <div class="inline-block bg-brand-bg px-6 py-4 rounded-lg border border-brand-accent/20 shadow-sm w-full md:w-auto">
+                        <p class="text-brand-dark font-bold text-lg mb-1">🎉 全館滿 $3000 免運費</p>
+                        <p class="text-brand-accent font-medium">🎁 購買 3 副穿戴甲即贈送「翻模」乙次 (自動折抵)</p>
+                    </div>
+
+                    <div class="flex flex-wrap justify-center gap-3 text-sm text-brand-text">
+                        <a href="https://www.instagram.com/creativebeauty.studio/" target="_blank" class="flex items-center gap-1 hover:text-brand-accent underline decoration-dotted"><span class="text-lg">📷</span> 穿戴甲 IG 作品</a>
+                        <span class="text-gray-300">|</span>
+                        <a href="https://line.me/R/ti/p/@504otiij" target="_blank" class="flex items-center gap-1 hover:text-brand-accent underline decoration-dotted"><span class="text-lg">💬</span> 穿戴甲官方 LINE</a>
+                    </div>
+                    
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSfutyJhsUXfJS1vJBOSgUFhoSVR1Mw_O4hm0voZeXtMcpd3Qg/viewform" target="_blank" 
+                       class="mt-2 inline-block border border-brand-accent text-brand-accent px-6 py-2 rounded-full hover:bg-brand-accent hover:text-white transition text-sm">
+                        📝 習慣使用 Google 表單訂購請點此
+                    </a>
                 </div>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-12" id="shop-container"></div>
@@ -313,12 +288,12 @@
                     
                     <div class="flex gap-6 justify-center py-4 border-t border-brand-bg mt-4">
                         <div class="text-center">
-                            <img src="IGz.png" class="w-28 h-28 object-contain border border-gray-100 shadow-sm rounded-md mx-auto">
-                            <span class="text-xs text-gray-400 mt-2 block tracking-wider">Instagram</span>
-                        </div>
-                        <div class="text-center">
                             <img src="L_866wnpdc_GW.png" class="w-28 h-28 object-contain border border-gray-100 shadow-sm rounded-md mx-auto">
                             <span class="text-xs text-gray-400 mt-2 block tracking-wider">Line Official</span>
+                        </div>
+                        <div class="text-center">
+                            <img src="IGz.png" class="w-28 h-28 object-contain border border-gray-100 shadow-sm rounded-md mx-auto">
+                            <span class="text-xs text-gray-400 mt-2 block tracking-wider">Instagram</span>
                         </div>
                     </div>
 
@@ -566,7 +541,8 @@
             message += `門市/地址：${store}\n`;
             message += `\n(請確認訂單內容無誤)`;
             
-            const lineUrl = `https://line.me/R/oaMessage/@866wnpdc/?${encodeURIComponent(message)}`;
+            // ★ 注意：這裡使用穿戴甲專用 LINE ID
+            const lineUrl = `https://line.me/R/oaMessage/@504otiij/?${encodeURIComponent(message)}`;
             window.open(lineUrl, '_blank');
         }
 
