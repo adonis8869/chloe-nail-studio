@@ -256,13 +256,13 @@
                 <h2 class="text-3xl md:text-4xl text-brand-text mt-4 font-bold" id="promo-title"></h2>
                 <p class="font-hand text-2xl text-brand-accent" id="promo-subtitle"></p>
             </div>
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
                 <div class="lg:col-span-1">
                     <div class="bg-brand-bg p-2 rounded-lg shadow-md transform rotate-1 hover:rotate-0 transition duration-500">
                         <img id="promo-info-img" onclick="openLightbox(this.src)" class="w-full h-auto rounded zoomable">
                     </div>
                 </div>
-                <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6" id="promo-items-container"></div>
+                <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-8" id="promo-items-container"></div>
             </div>
             <div class="text-center mt-8 text-sm text-gray-400" id="promo-date"></div>
         </div>
@@ -391,10 +391,11 @@
             document.getElementById('promo-date').textContent = SITE_CONFIG.promo.dateText;
             document.getElementById('promo-info-img').src = SITE_CONFIG.promo.infoImage;
 
-            document.getElementById('promo-items-container').innerHTML = SITE_CONFIG.promo.items.map(item => `
-                <div class="text-center group">
-                    <div class="overflow-hidden rounded-lg shadow-md mb-3">
-                        <img src="${item.image}" onclick="openLightbox(this.src)" class="w-full h-auto rounded-lg shadow-sm zoomable">
+            // ★ 修改：讓右側商品圖也套用左側的「卡片+旋轉」樣式 ★
+            document.getElementById('promo-items-container').innerHTML = SITE_CONFIG.promo.items.map((item, index) => `
+                <div class="text-center group flex flex-col items-center">
+                    <div class="bg-brand-bg p-2 rounded-lg shadow-md transform ${index % 2 === 0 ? '-rotate-1' : 'rotate-1'} hover:rotate-0 transition duration-500 mb-3">
+                        <img src="${item.image}" onclick="openLightbox(this.src)" class="w-full h-auto rounded zoomable">
                     </div>
                     <p class="text-lg text-brand-dark font-bold">${item.artist}</p>
                     <p class="text-brand-accent">${item.price}</p>
