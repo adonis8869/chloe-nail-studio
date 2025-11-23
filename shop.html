@@ -10,42 +10,113 @@
     <script>
         tailwind.config = { theme: { extend: { colors: { 'brand-bg': '#F5F0F0', 'brand-text': '#8B7E74', 'brand-accent': '#C5A086', 'brand-dark': '#5D534A' }, fontFamily: { 'sans': ['"Zen Maru Gothic"'], 'serif': ['"Zen Maru Gothic"'], 'hand': ['"Dancing Script"'] } } } }
         
+        // 商品資料
         const SHOP_CONFIG = {
             products: [
-                { id: 250801, name: "款式 No.250801", price: 899, tag: "預購", image: "product1.jpg", defaultImg: "promo2.jpg" },
-                { id: 250802, name: "款式 No.250802", price: 799, tag: "預購", image: "product2.jpg", defaultImg: "promo2.jpg" },
-                { id: 250803, name: "款式 No.250803", price: 899, tag: "預購", image: "product3.jpg", defaultImg: "promo2.jpg" },
-                { id: 250804, name: "款式 No.250804", price: 899, tag: "預購", image: "product4.jpg", defaultImg: "promo2.jpg" },
-                { id: 999999, name: "帶圖訂製 (私訊報價)", price: 0, tag: "客製", image: "product_custom.jpg", defaultImg: "promo4.jpg" }
+                { id: 250801, name: "款式 No.250801", price: 899, tag: "預購", image: "product1.jpg" },
+                { id: 250802, name: "款式 No.250802", price: 799, tag: "預購", image: "product2.jpg" },
+                { id: 250803, name: "款式 No.250803", price: 899, tag: "預購", image: "product3.jpg" },
+                { id: 250804, name: "款式 No.250804", price: 899, tag: "預購", image: "product4.jpg" },
+                { id: 999999, name: "帶圖訂製 (私訊報價)", price: 0, tag: "客製", image: "product_custom.jpg" }
             ]
         };
+
+        // 甲型與對應圖片 (請確認檔名正確)
+        const SHAPES = {
+            "短圓形": "size_short_oval.jpg",
+            "短方圓": "size_short_square.jpg",
+            "短梯形": "size_short_coffin.jpg",
+            "中橢圓": "size_medium_oval.jpg",
+            "長橢圓": "size_long_oval.jpg",
+            "長梯形": "size_long_coffin.jpg"
+        };
+
+        // 尺寸選項
+        const SIZES = [
+            { val: "XS", text: "XS" },
+            { val: "S", text: "S" },
+            { val: "M", text: "M" },
+            { val: "L", text: "L" },
+            { val: "CustomMold", text: "翻模量身訂製 (+$500)" }
+        ];
     </script>
     <style>
         body { background-color: #F5F0F0; color: #8B7E74; font-family: "Zen Maru Gothic", sans-serif; }
         .zoomable:hover { transform: scale(1.02); transition: 0.3s; cursor: zoom-in; }
-        #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; justify-content: center; align-items: center; }
-        #lightbox.show { display: flex; } #lightbox img { max-width: 100%; max-height: 95vh; }
         
+        /* 購物車 & 詳情頁 Modal 共用樣式 */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 90; display: none; backdrop-filter: blur(2px); }
+        .modal-overlay.show { display: block; }
+        
+        /* 側邊購物車 */
+        #cart-panel { position: fixed; top: 0; right: -100%; width: 100%; max-width: 400px; height: 100%; background: white; z-index: 100; transition: right 0.3s; display: flex; flex-direction: column; box-shadow: -5px 0 25px rgba(0,0,0,0.1); }
+        #cart-panel.open { right: 0; }
+
+        /* 商品詳情 Modal (置中彈窗) */
+        #product-modal { 
+            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+            width: 95%; max-width: 900px; max-height: 90vh; background: white; z-index: 100; 
+            border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden;
+            flex-direction: column; /* Mobile First */
+        }
+        #product-modal.open { display: flex; }
+        @media (min-width: 768px) { #product-modal { flex-direction: row; } }
+
+        /* 懸浮按鈕 */
         .cart-float-btn { position: fixed; bottom: 90px; right: 20px; background: #C5A086; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2); cursor: pointer; z-index: 50; transition: 0.2s; }
         .cart-count { position: absolute; top: -5px; right: -5px; background: #b91c1c; color: white; font-size: 12px; width: 24px; height: 24px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; }
-        
-        #cart-modal { position: fixed; top: 0; right: -100%; width: 100%; max-width: 400px; height: 100%; background: white; z-index: 100; transition: right 0.3s; display: flex; flex-direction: column; box-shadow: -5px 0 25px rgba(0,0,0,0.1); }
-        #cart-modal.open { right: 0; } .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 90; display: none; } .overlay.show { display: block; }
         
         @media (min-width: 768px) { .cart-float-btn { bottom: 30px; right: 30px; } }
     </style>
 </head>
 <body class="pb-24 md:pb-0">
-    <div id="lightbox" onclick="this.classList.remove('show')"><img id="lightbox-img" src=""></div>
     
-    <div class="cart-float-btn" onclick="toggleCart()">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" /></svg>
-        <div class="cart-count" id="cart-count" style="display:none">0</div>
+    <div id="overlay" class="modal-overlay" onclick="closeAllModals()"></div>
+
+    <div id="product-modal">
+        <button onclick="closeAllModals()" class="absolute top-4 right-4 z-20 bg-black/10 hover:bg-black/20 rounded-full p-2 text-gray-600 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+        </button>
+
+        <div class="w-full md:w-1/2 bg-gray-50 p-6 flex flex-col items-center justify-center overflow-y-auto border-b md:border-b-0 md:border-r border-gray-100">
+            <img id="pm-image" src="" class="w-full max-h-[300px] md:max-h-[400px] object-contain rounded-lg shadow-sm mb-4">
+            
+            <div class="w-full bg-white p-3 rounded-lg border border-brand-accent/30 text-center">
+                <p class="text-xs text-brand-accent mb-2 font-bold">📏 對應甲型尺寸表 (點擊可放大)</p>
+                <img id="pm-chart" src="size_short_square.jpg" onclick="window.open(this.src, '_blank')" class="w-full max-h-[200px] object-contain cursor-zoom-in hover:opacity-90 transition">
+            </div>
+        </div>
+
+        <div class="w-full md:w-1/2 p-6 md:p-10 flex flex-col h-full overflow-y-auto relative">
+            <div class="flex-1">
+                <div id="pm-tag" class="inline-block bg-brand-dark text-white text-xs px-2 py-1 rounded mb-2">預購</div>
+                <h2 id="pm-title" class="text-2xl md:text-3xl font-bold text-brand-dark mb-2">商品名稱</h2>
+                <p id="pm-price" class="text-xl md:text-2xl text-brand-accent font-bold mb-6">$0</p>
+
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-bold text-gray-600 mb-2">選擇甲型 (Shape)</label>
+                        <select id="pm-shape" onchange="updateChartImage()" class="w-full p-3 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-brand-accent outline-none transition">
+                            </select>
+                        <p class="text-xs text-gray-400 mt-1">*上方圖片會自動切換為您選擇的甲型尺寸表</p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-gray-600 mb-2">選擇尺寸 (Size)</label>
+                        <div class="grid grid-cols-3 gap-2" id="pm-size-container">
+                            </div>
+                        <input type="hidden" id="pm-size-value"> </div>
+                </div>
+            </div>
+
+            <button onclick="confirmAddToCart()" class="w-full bg-brand-text text-white py-4 rounded-lg hover:bg-brand-accent transition font-bold text-lg shadow-lg mt-8">
+                加入購物車
+            </button>
+        </div>
     </div>
-    
-    <div class="overlay" id="cart-overlay" onclick="toggleCart()"></div>
-    <div id="cart-modal">
-        <div class="p-5 border-b flex justify-between items-center bg-brand-bg"><h3 class="text-xl font-bold text-brand-dark">Shopping Cart</h3><button onclick="toggleCart()" class="text-gray-500 text-2xl">×</button></div>
+
+    <div id="cart-panel">
+        <div class="p-5 border-b flex justify-between items-center bg-brand-bg"><h3 class="text-xl font-bold text-brand-dark">Shopping Cart</h3><button onclick="closeAllModals()" class="text-gray-500 text-2xl">×</button></div>
         <div class="flex-1 overflow-y-auto p-5 space-y-4" id="cart-items"><div class="text-center text-gray-400 mt-10">購物車是空的</div></div>
         <div class="p-5 border-t bg-gray-50">
             <div class="space-y-3 mb-4 text-sm">
@@ -64,95 +135,41 @@
         </div>
     </div>
 
+    <div class="cart-float-btn" onclick="openCart()">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" /></svg>
+        <div class="cart-count" id="cart-count" style="display:none">0</div>
+    </div>
+
     <nav class="hidden md:flex fixed w-full z-40 bg-brand-bg/95 backdrop-blur-sm border-b border-brand-accent/20 py-5 justify-center items-center text-brand-text font-medium shadow-sm">
         <div class="text-center px-4">
             <div class="text-2xl font-bold tracking-widest font-serif">CREATIVE BEAUTY</div>
             <div class="font-hand text-lg text-brand-accent">Press-on Nails</div>
         </div>
-        <div class="absolute right-10 flex gap-6 text-sm">
-            <a href="#size-guide" class="hover:text-brand-accent transition">📏 尺寸測量</a>
-            <a href="#shop" class="hover:text-brand-accent transition">🛍️ 商品列表</a>
-        </div>
     </nav>
-
     <div class="md:hidden text-center py-4 bg-brand-bg border-b border-brand-accent/20 sticky top-0 z-40 shadow-sm/50 backdrop-blur-md bg-opacity-90">
         <div class="text-xl font-bold text-brand-text tracking-widest font-serif">CREATIVE BEAUTY</div>
         <div class="font-hand text-sm text-brand-accent">Press-on Nails</div>
     </div>
 
     <div class="pt-20 md:pt-32 pb-12 px-4 max-w-7xl mx-auto">
-        
         <div class="text-center mb-12">
             <h2 class="text-3xl md:text-4xl text-brand-text font-bold">Press-on Nails Shop</h2>
             <p class="font-hand text-2xl text-brand-accent">手工穿戴甲販售</p>
-            
             <div class="mt-6 inline-block bg-brand-bg px-6 py-4 rounded-lg border border-brand-accent/20 shadow-sm mb-8">
                 <p class="text-brand-dark font-bold text-lg mb-1">🎉 全館滿 $3000 免運費</p>
                 <p class="text-brand-accent font-medium">🎁 購買 3 副穿戴甲即贈送「翻模」乙次 (自動折抵)</p>
             </div>
-            
             <div class="flex justify-center mt-4">
-                <a href="https://line.me/R/ti/p/@504otiij" target="_blank" 
-                   class="flex items-center justify-center gap-2 bg-brand-text text-white px-10 py-3 rounded hover:bg-brand-accent transition font-bold shadow-md">
-                   💬 穿戴甲官方 LINE 諮詢
-                </a>
+                <a href="https://line.me/R/ti/p/@504otiij" target="_blank" class="flex items-center justify-center gap-2 bg-brand-text text-white px-10 py-3 rounded hover:bg-brand-accent transition font-bold shadow-md">💬 穿戴甲官方 LINE 諮詢</a>
             </div>
         </div>
 
-        <section id="size-guide" class="mb-16 scroll-mt-32">
-            <div class="text-center mb-8">
-                <h3 class="text-2xl text-brand-dark font-bold border-b-2 border-brand-accent inline-block pb-1">📏 尺寸測量 & 甲型選擇</h3>
-                <p class="text-gray-500 text-sm mt-2">點擊圖片可放大查看詳細數據</p>
-            </div>
-            
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                <div class="text-center group cursor-pointer" onclick="openLightbox('size_short_square.jpg')">
-                    <div class="overflow-hidden rounded-lg shadow-sm mb-2 border border-gray-100">
-                        <img src="size_short_square.jpg" class="w-full h-auto hover:scale-105 transition duration-300" onerror="this.src='https://placehold.co/400x400?text=Size+Chart'">
-                    </div>
-                    <p class="text-sm text-brand-dark font-bold">短方圓形</p>
-                </div>
-                <div class="text-center group cursor-pointer" onclick="openLightbox('size_short_oval.jpg')">
-                    <div class="overflow-hidden rounded-lg shadow-sm mb-2 border border-gray-100">
-                        <img src="size_short_oval.jpg" class="w-full h-auto hover:scale-105 transition duration-300" onerror="this.src='https://placehold.co/400x400?text=Size+Chart'">
-                    </div>
-                    <p class="text-sm text-brand-dark font-bold">短圓形</p>
-                </div>
-                <div class="text-center group cursor-pointer" onclick="openLightbox('size_medium_oval.jpg')">
-                    <div class="overflow-hidden rounded-lg shadow-sm mb-2 border border-gray-100">
-                        <img src="size_medium_oval.jpg" class="w-full h-auto hover:scale-105 transition duration-300" onerror="this.src='https://placehold.co/400x400?text=Size+Chart'">
-                    </div>
-                    <p class="text-sm text-brand-dark font-bold">中橢圓形</p>
-                </div>
-                <div class="text-center group cursor-pointer" onclick="openLightbox('size_long_oval.jpg')">
-                    <div class="overflow-hidden rounded-lg shadow-sm mb-2 border border-gray-100">
-                        <img src="size_long_oval.jpg" class="w-full h-auto hover:scale-105 transition duration-300" onerror="this.src='https://placehold.co/400x400?text=Size+Chart'">
-                    </div>
-                    <p class="text-sm text-brand-dark font-bold">長橢圓形</p>
-                </div>
-                <div class="text-center group cursor-pointer" onclick="openLightbox('size_short_coffin.jpg')">
-                    <div class="overflow-hidden rounded-lg shadow-sm mb-2 border border-gray-100">
-                        <img src="size_short_coffin.jpg" class="w-full h-auto hover:scale-105 transition duration-300" onerror="this.src='https://placehold.co/400x400?text=Size+Chart'">
-                    </div>
-                    <p class="text-sm text-brand-dark font-bold">短梯形</p>
-                </div>
-                <div class="text-center group cursor-pointer" onclick="openLightbox('size_long_coffin.jpg')">
-                    <div class="overflow-hidden rounded-lg shadow-sm mb-2 border border-gray-100">
-                        <img src="size_long_coffin.jpg" class="w-full h-auto hover:scale-105 transition duration-300" onerror="this.src='https://placehold.co/400x400?text=Size+Chart'">
-                    </div>
-                    <p class="text-sm text-brand-dark font-bold">長梯形</p>
-                </div>
-            </div>
-        </section>
-
-        <div id="shop" class="border-t border-brand-bg pt-12">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-12" id="shop-container"></div>
-        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-12" id="shop-container"></div>
     </div>
 
     <div class="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-brand-accent/20 z-30 flex justify-around items-end py-2 px-2 text-[10px] text-brand-text shadow">
-        <a href="#size-guide" class="flex flex-col items-center p-2"><span class="text-lg mb-1">📏</span><span>尺寸表</span></a>
-        <div class="relative flex flex-col items-center -top-5 cursor-pointer" onclick="toggleCart()">
+        <a href="#" class="flex flex-col items-center p-2 text-brand-accent font-bold"><span class="text-lg mb-1">🛍️</span><span>所有商品</span></a>
+        <div class="relative flex flex-col items-center -top-5 cursor-pointer" onclick="openCart()">
             <div class="bg-brand-accent text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg shadow-brand-accent/40"><span class="text-2xl">🛒</span></div>
             <span class="font-bold text-brand-accent mt-1">購物車</span>
         </div>
@@ -160,35 +177,123 @@
     </div>
 
     <script>
-        // 渲染商品
+        // 1. 渲染商品列表
         document.getElementById('shop-container').innerHTML = SHOP_CONFIG.products.map(p => `
-            <div class="group">
+            <div class="group cursor-pointer" onclick="openProductModal(${p.id})">
                 <div class="relative overflow-hidden rounded-lg shadow-sm mb-4">
                     <img src="${p.image}" class="w-full h-72 object-cover group-hover:scale-105 transition duration-500" onerror="this.src='promo2.jpg'">
                     ${p.tag?`<div class="absolute top-2 right-2 bg-brand-dark text-white text-xs px-2 py-1 rounded">${p.tag}</div>`:''}
+                    <div class="absolute bottom-0 left-0 w-full bg-black/50 text-white text-center py-2 opacity-0 group-hover:opacity-100 transition">點擊選購規格</div>
                 </div>
                 <h3 class="text-lg font-bold text-brand-dark">${p.name}</h3>
-                <p class="text-brand-accent text-xl mb-2">${p.price===0?'私訊後報價':'$'+p.price}</p>
-                <div class="flex gap-2">
-                    <select id="size-${p.id}" class="border border-gray-300 rounded px-2 py-2 text-sm bg-white w-1/3 font-sans">
-                        <option value="XS">XS</option><option value="S">S</option><option value="M">M</option><option value="L">L</option><option value="CustomMold">翻模量身訂製 (+$500)</option>
-                    </select>
-                    <button onclick="addToCart(${p.id}, '${p.name}', ${p.price}, 'size-${p.id}', '${p.image}')" class="bg-brand-text text-white flex-1 py-2 rounded hover:bg-brand-accent transition text-sm">加入購物車</button>
-                </div>
+                <p class="text-brand-accent text-xl">${p.price===0?'私訊後報價':'$'+p.price}</p>
             </div>`).join('');
 
-        function openLightbox(src){ document.getElementById('lightbox-img').src=src; document.getElementById('lightbox').classList.add('show'); }
-        
+        // 2. 詳情頁 Modal 邏輯
+        let currentProduct = null;
+
+        function openProductModal(pid) {
+            currentProduct = SHOP_CONFIG.products.find(p => p.id === pid);
+            if(!currentProduct) return;
+
+            document.getElementById('pm-image').src = currentProduct.image;
+            document.getElementById('pm-image').onerror = function() { this.src='promo2.jpg'; };
+            document.getElementById('pm-title').innerText = currentProduct.name;
+            document.getElementById('pm-price').innerText = currentProduct.price === 0 ? '私訊後報價' : '$' + currentProduct.price;
+            document.getElementById('pm-tag').innerText = currentProduct.tag || '熱銷';
+
+            // 生成甲型選項
+            const shapeSelect = document.getElementById('pm-shape');
+            shapeSelect.innerHTML = Object.keys(SHAPES).map(s => `<option value="${s}">${s}</option>`).join('');
+            updateChartImage(); // 初始化圖片
+
+            // 生成尺寸按鈕
+            const sizeContainer = document.getElementById('pm-size-container');
+            sizeContainer.innerHTML = SIZES.map(s => 
+                `<div class="size-option border border-gray-300 rounded p-2 text-center cursor-pointer hover:border-brand-accent transition text-sm" 
+                      onclick="selectSize(this, '${s.val}')">${s.text}</div>`
+            ).join('');
+            
+            document.getElementById('pm-size-value').value = ""; // 重置尺寸選擇
+
+            document.getElementById('overlay').classList.add('show');
+            document.getElementById('product-modal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function updateChartImage() {
+            const selectedShape = document.getElementById('pm-shape').value;
+            const chartImg = SHAPES[selectedShape] || 'size_short_square.jpg';
+            document.getElementById('pm-chart').src = chartImg;
+        }
+
+        function selectSize(el, val) {
+            // 清除其他選中狀態
+            document.querySelectorAll('.size-option').forEach(d => {
+                d.classList.remove('bg-brand-accent', 'text-white', 'border-brand-accent');
+                d.classList.add('border-gray-300');
+            });
+            // 設定當前選中
+            el.classList.remove('border-gray-300');
+            el.classList.add('bg-brand-accent', 'text-white', 'border-brand-accent');
+            document.getElementById('pm-size-value').value = val;
+        }
+
+        function closeAllModals() {
+            document.getElementById('overlay').classList.remove('show');
+            document.getElementById('product-modal').classList.remove('open');
+            document.getElementById('cart-panel').classList.remove('open');
+            document.body.style.overflow = 'auto';
+        }
+
+        // 3. 購物車邏輯
         let cart = [];
-        function toggleCart(){ document.getElementById('cart-modal').classList.toggle('open'); document.getElementById('cart-overlay').classList.toggle('show'); }
-        
-        function addToCart(id, name, base, sizeId, img) {
-            const sv = document.getElementById(sizeId).value;
-            const st = document.getElementById(sizeId).options[document.getElementById(sizeId).selectedIndex].text;
-            const uid = id+'-'+sv;
-            const item = cart.find(i=>i.uid===uid);
-            if(item) item.qty++; else cart.push({uid, id, name, base, sv, size:st, img, qty:1});
-            updateCart(); toggleCart();
+        function openCart() {
+            document.getElementById('overlay').classList.add('show');
+            document.getElementById('cart-panel').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+        function toggleCart() { // 兼容舊按鈕
+            openCart();
+        }
+
+        function confirmAddToCart() {
+            if(!currentProduct) return;
+            
+            const shape = document.getElementById('pm-shape').value;
+            const sizeVal = document.getElementById('pm-size-value').value;
+            
+            if(!sizeVal) { alert("請選擇尺寸"); return; }
+
+            // 找到對應的尺寸文字顯示
+            const sizeObj = SIZES.find(s => s.val === sizeVal);
+            const sizeText = sizeObj ? sizeObj.text : sizeVal;
+
+            // 產生唯一ID (ID + 甲型 + 尺寸)
+            const uid = `${currentProduct.id}-${shape}-${sizeVal}`;
+            const item = cart.find(i => i.uid === uid);
+
+            let finalPrice = currentProduct.price; // 基礎價格
+
+            if(item) {
+                item.qty++;
+            } else {
+                cart.push({
+                    uid: uid,
+                    id: currentProduct.id,
+                    name: currentProduct.name,
+                    base: finalPrice,
+                    shape: shape,
+                    sizeVal: sizeVal, // 用於判斷翻模
+                    sizeText: sizeText, // 用於顯示
+                    img: currentProduct.image,
+                    qty: 1
+                });
+            }
+
+            closeAllModals();
+            updateCart();
+            openCart(); // 加入後直接打開購物車
         }
         
         function removeFromCart(uid){ cart = cart.filter(i=>i.uid!==uid); updateCart(); }
@@ -196,9 +301,13 @@
         function updateCart() {
             const sub = cart.reduce((s,i)=>s+i.base*i.qty,0);
             const qty = cart.reduce((s,i)=>s+i.qty,0);
-            const hasMold = cart.some(i=>i.sv==='CustomMold');
+            const hasMold = cart.some(i=>i.sizeVal==='CustomMold'); // 檢查是否有選翻模
             let mold = 0, mText = "$0";
-            if(hasMold){ if(qty>=3){ mText="活動贈送 ($0)"; } else { mold=500; mText="$500"; } }
+            
+            if(hasMold){ 
+                if(qty >= 3){ mText="活動贈送 ($0)"; } 
+                else { mold=500; mText="$500"; } 
+            }
             document.getElementById('cart-mold-fee').innerText = mText;
             document.getElementById('mold-fee-row').style.display = hasMold?'flex':'none';
             
@@ -214,37 +323,20 @@
             
             document.getElementById('cart-items').innerHTML = cart.length ? cart.map(i=>`
                 <div class="flex gap-3 items-center bg-gray-50 p-2 rounded border">
-                    <img src="${i.img}" class="w-12 h-12 object-cover rounded" onerror="this.src='promo2.jpg'">
-                    <div class="flex-1"><div class="text-sm font-bold text-brand-dark">${i.name}</div><div class="text-xs text-gray-500">尺寸: ${i.size}</div><div class="text-brand-accent">${i.base===0?'私訊後報價':'$'+i.base+' x '+i.qty}</div></div>
+                    <img src="${i.img}" class="w-14 h-14 object-cover rounded" onerror="this.src='promo2.jpg'">
+                    <div class="flex-1">
+                        <div class="text-sm font-bold text-brand-dark">${i.name}</div>
+                        <div class="text-xs text-gray-500">${i.shape} / ${i.sizeText}</div> <div class="text-brand-accent">${i.base===0?'私訊後報價':'$'+i.base+' x '+i.qty}</div>
+                    </div>
                     <button onclick="removeFromCart('${i.uid}')" class="text-gray-400 hover:text-red-500 p-2">×</button>
                 </div>`).join('') : '<div class="text-center text-gray-400 mt-10">購物車是空的</div>';
         }
 
         function checkout() {
-            if(!/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) { alert("⚠️ 電腦版無法使用此功能\n\n為了確保訂單格式正確，請使用手機瀏覽器開啟本網站，並點擊下單！"); return; }
+            if(!/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) { alert("⚠️ 請使用手機下單！"); return; }
             if(cart.length===0) return alert('購物車是空的');
             const n=document.getElementById('c-name').value, p=document.getElementById('c-phone').value, s=document.getElementById('c-store').value;
             if(!n||!p||!s) return alert('請填寫完整資料');
             
             let msg = `您好，我想訂購穿戴甲：\n`;
-            cart.forEach((i,idx)=> msg += `${idx+1}. ${i.name} (${i.size}) x${i.qty} - ${i.base===0?'私訊':`$${i.base*i.qty}`}\n`);
-            
-            const sub = cart.reduce((s,i)=>s+i.base*i.qty,0);
-            const qty = cart.reduce((s,i)=>s+i.qty,0);
-            const hasMold = cart.some(i=>i.sv==='CustomMold');
-            let mold=0, mInfo="";
-            if(hasMold){ if(qty>=3){ mInfo=" (贈送翻模)"; } else { mold=500; } }
-            
-            let shipName = document.querySelector('input[name="shipping"]:checked').nextElementSibling.innerText;
-            let ship = parseInt(document.querySelector('input[name="shipping"]:checked').value);
-            if((sub+mold)>=3000){ ship=0; shipName+=" [免運]"; }
-            
-            msg += `------------------\n商品小計：$${sub}\n`;
-            if(hasMold) msg += `翻模費用：$${mold}${mInfo}\n`;
-            msg += `運費 (${shipName})：$${ship}\n總金額：$${sub+mold+ship}\n------------------\n【寄送資訊】\n姓名：${n}\n電話：${p}\n地址：${s}`;
-            
-            window.open(`https://line.me/R/oaMessage/@504otiij/?${encodeURIComponent(msg)}`, '_blank');
-        }
-    </script>
-</body>
-</html>
+            cart.forEach((i,idx)=> msg += `${idx+1}. ${i.
