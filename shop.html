@@ -19,92 +19,43 @@
                 { id: 999999, name: "帶圖訂製 (私訊報價)", price: 0, tag: "客製", image: "product_custom.jpg", defaultImg: "promo4.jpg" }
             ]
         };
-        
-        // 甲型與圖片對應
-        const SHAPES = {
-            "短圓形": "size_short_oval.jpg", "短方圓": "size_short_square.jpg",
-            "短梯形": "size_short_coffin.jpg", "中橢圓": "size_medium_oval.jpg",
-            "長橢圓": "size_long_oval.jpg", "長梯形": "size_long_coffin.jpg"
-        };
     </script>
     <style>
         body { background-color: #F5F0F0; color: #8B7E74; font-family: "Zen Maru Gothic", sans-serif; }
         .zoomable:hover { transform: scale(1.02); transition: 0.3s; cursor: zoom-in; }
+        #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; justify-content: center; align-items: center; }
+        #lightbox.show { display: flex; } #lightbox img { max-width: 100%; max-height: 95vh; }
         
-        /* 燈箱與 Modal 樣式 */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 90; display: none; backdrop-filter: blur(2px); }
-        .modal-overlay.show { display: block; }
-        
-        #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9999; justify-content: center; align-items: center; }
-        #lightbox.show { display: flex; } 
-        #lightbox img { max-width: 100%; max-height: 95vh; object-fit: contain; }
-
-        /* 商品詳情 Modal (手機優化) */
-        #product-modal { 
-            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); 
-            width: 95%; max-width: 900px; max-height: 90vh; background: white; z-index: 100; 
-            border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); overflow-y: auto; /* 讓整個視窗可捲動 */
-            flex-direction: column; 
-        }
-        #product-modal.open { display: flex; }
-        @media (min-width: 768px) { 
-            #product-modal { flex-direction: row; overflow: hidden; } /* 電腦版不捲動整個視窗，分欄捲動 */
-        }
-
-        /* 購物車面板 */
-        #cart-panel { position: fixed; top: 0; right: -100%; width: 100%; max-width: 400px; height: 100%; background: white; z-index: 100; transition: right 0.3s; display: flex; flex-direction: column; box-shadow: -5px 0 25px rgba(0,0,0,0.1); }
-        #cart-panel.open { right: 0; }
-
-        /* 懸浮按鈕 */
         .cart-float-btn { position: fixed; bottom: 90px; right: 20px; background: #C5A086; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2); cursor: pointer; z-index: 50; transition: 0.2s; }
         .cart-count { position: absolute; top: -5px; right: -5px; background: #b91c1c; color: white; font-size: 12px; width: 24px; height: 24px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; }
         
+        #cart-modal { position: fixed; top: 0; right: -100%; width: 100%; max-width: 400px; height: 100%; background: white; z-index: 100; transition: right 0.3s; display: flex; flex-direction: column; box-shadow: -5px 0 25px rgba(0,0,0,0.1); }
+        #cart-modal.open { right: 0; } .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 90; display: none; } .overlay.show { display: block; }
+        
         @media (min-width: 768px) { .cart-float-btn { bottom: 30px; right: 30px; } }
+        
+        /* Modal 樣式 */
+        #product-modal { 
+            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+            width: 95%; max-width: 900px; max-height: 90vh; background: white; z-index: 100; 
+            border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); overflow: hidden;
+            flex-direction: column; 
+        }
+        #product-modal.open { display: flex; }
+        @media (min-width: 768px) { #product-modal { flex-direction: row; } }
     </style>
 </head>
 <body class="pb-24 md:pb-0">
-    
-    <div id="overlay" class="modal-overlay" onclick="closeAllModals()"></div>
-    
     <div id="lightbox" onclick="this.classList.remove('show')"><img id="lightbox-img" src=""></div>
-
-    <div id="product-modal">
-        <button onclick="closeAllModals()" class="absolute top-4 right-4 z-20 bg-black/20 hover:bg-black/40 rounded-full p-2 text-white transition">✕</button>
-        
-        <div class="w-full md:w-1/2 bg-gray-50 p-6 flex flex-col items-center overflow-y-auto md:h-full">
-            <img id="pm-image" src="" class="w-full h-auto max-h-[400px] object-contain rounded-lg shadow-sm mb-4">
-            
-            <div class="w-full bg-white p-3 rounded-lg border border-brand-accent/30 text-center shadow-sm">
-                <p class="text-xs text-brand-accent mb-2 font-bold">📏 對應甲型尺寸表 (點擊放大)</p>
-                <img id="pm-chart" src="size_short_square.jpg" class="w-full h-auto max-h-[250px] object-contain cursor-zoom-in hover:opacity-90 transition rounded">
-            </div>
-        </div>
-
-        <div class="w-full md:w-1/2 p-6 md:p-10 flex flex-col md:h-full md:overflow-y-auto bg-white">
-            <div class="flex-1">
-                <div id="pm-tag" class="inline-block bg-brand-dark text-white text-xs px-2 py-1 rounded mb-2">預購</div>
-                <h2 id="pm-title" class="text-2xl md:text-3xl font-bold text-brand-dark mb-2">商品名稱</h2>
-                <p id="pm-price" class="text-xl md:text-2xl text-brand-accent font-bold mb-6">$0</p>
-                
-                <div class="space-y-6">
-                    <div>
-                        <label class="block text-sm font-bold text-gray-600 mb-2">1. 選擇甲型 (Shape)</label>
-                        <select id="pm-shape" onchange="updateChartImage()" class="w-full p-3 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-brand-accent outline-none transition text-brand-text font-bold"></select>
-                        <p class="text-xs text-brand-accent mt-1">Tip: 選擇上方甲型，左側尺寸表會自動切換哦！</p>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-bold text-gray-600 mb-2">2. 選擇尺寸 (Size)</label>
-                        <div class="grid grid-cols-3 gap-2" id="pm-size-container"></div>
-                        <input type="hidden" id="pm-size-value">
-                    </div>
-                </div>
-            </div>
-            <button onclick="confirmAddToCart()" class="w-full bg-brand-text text-white py-4 rounded-lg hover:bg-brand-accent transition font-bold text-lg shadow-lg mt-8">加入購物車</button>
-        </div>
+    
+    <div class="cart-float-btn" onclick="toggleCart()">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" /></svg>
+        <div class="cart-count" id="cart-count" style="display:none">0</div>
     </div>
-
-    <div id="cart-panel">
-        <div class="p-5 border-b flex justify-between items-center bg-brand-bg"><h3 class="text-xl font-bold text-brand-dark">Shopping Cart</h3><button onclick="closeAllModals()" class="text-gray-500 text-2xl">×</button></div>
+    <div class="overlay" id="cart-overlay" onclick="toggleCart()"></div>
+    
+    <div id="cart-modal">
+        <div class="p-5 border-b flex justify-between items-center bg-brand-bg"><h3 class="text-xl font-bold text-brand-dark">Shopping Cart</h3><button onclick="toggleCart()" class="text-gray-500 text-2xl">×</button></div>
         <div class="flex-1 overflow-y-auto p-5 space-y-4" id="cart-items"><div class="text-center text-gray-400 mt-10">購物車是空的</div></div>
         <div class="p-5 border-t bg-gray-50">
             <div class="space-y-3 mb-4 text-sm">
@@ -123,18 +74,52 @@
         </div>
     </div>
 
-    <div class="cart-float-btn" onclick="openCart()">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" /></svg>
-        <div class="cart-count" id="cart-count" style="display:none">0</div>
+    <div id="overlay" class="modal-overlay" onclick="closeAllModals()"></div>
+
+    <div id="product-modal">
+        <button onclick="closeAllModals()" class="absolute top-2 right-2 md:top-4 md:right-4 z-20 bg-black/20 hover:bg-black/40 rounded-full p-2 text-white transition">✕</button>
+        
+        <div class="w-full md:w-1/2 bg-gray-50 p-4 md:p-6 flex flex-row md:flex-col gap-2 md:gap-4 items-start md:items-center overflow-hidden md:overflow-y-auto border-b md:border-b-0 md:border-r border-gray-100 h-auto md:h-full shrink-0">
+            
+            <div class="w-1/2 md:w-full h-48 md:h-auto md:max-h-[400px] bg-white rounded-lg shadow-sm flex items-center justify-center overflow-hidden">
+                <img id="pm-image" src="" class="w-full h-full object-contain cursor-zoom-in" onclick="openLightbox(this.src)">
+            </div>
+            
+            <div class="w-1/2 md:w-full h-48 md:h-auto bg-white rounded-lg border border-brand-accent/30 p-1 flex flex-col relative">
+                <p class="text-[10px] text-center text-brand-accent font-bold bg-brand-bg py-1 mb-1 rounded">對應尺寸表 (可放大)</p>
+                <div class="flex-1 flex items-center justify-center overflow-hidden">
+                    <img id="pm-chart" src="size_short_square.jpg" class="w-full h-full object-contain cursor-zoom-in" onclick="openLightbox(this.src)">
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full md:w-1/2 p-5 md:p-10 flex flex-col h-full overflow-y-auto bg-white">
+            <div class="flex-1">
+                <div id="pm-tag" class="inline-block bg-brand-dark text-white text-xs px-2 py-1 rounded mb-2">預購</div>
+                <h2 id="pm-title" class="text-2xl font-bold text-brand-dark mb-1">商品名稱</h2>
+                <p id="pm-price" class="text-xl text-brand-accent font-bold mb-4">$0</p>
+                
+                <div class="space-y-4">
+                    <div class="bg-brand-bg/30 p-3 rounded-lg border border-brand-bg">
+                        <label class="block text-sm font-bold text-gray-600 mb-2">1. 選擇甲型 (上方圖片會變換)</label>
+                        <select id="pm-shape" onchange="updateChartImage()" class="w-full p-2 border border-gray-300 rounded bg-white focus:ring-2 focus:ring-brand-accent outline-none transition text-brand-dark font-bold"></select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-gray-600 mb-2">2. 選擇尺寸</label>
+                        <div class="grid grid-cols-3 gap-2" id="pm-size-container"></div>
+                        <input type="hidden" id="pm-size-value">
+                    </div>
+                </div>
+            </div>
+            <button onclick="confirmAddToCart()" class="w-full bg-brand-text text-white py-3 rounded-lg hover:bg-brand-accent transition font-bold text-lg shadow-lg mt-6 mb-8 md:mb-0">加入購物車</button>
+        </div>
     </div>
 
     <nav class="hidden md:flex fixed w-full z-40 bg-brand-bg/95 backdrop-blur-sm border-b border-brand-accent/20 py-5 justify-center items-center text-brand-text font-medium shadow-sm">
         <div class="text-center px-4">
             <div class="text-2xl font-bold tracking-widest font-serif">CREATIVE BEAUTY</div>
             <div class="font-hand text-lg text-brand-accent">Press-on Nails</div>
-        </div>
-        <div class="absolute right-10 flex gap-6 text-sm">
-            <a href="#" onclick="openCart(); return false;" class="hover:text-brand-accent transition">🛒 購物車</a>
         </div>
     </nav>
 
@@ -144,21 +129,15 @@
     </div>
 
     <div class="pt-20 md:pt-32 pb-12 px-4 max-w-7xl mx-auto">
-        
         <div id="shop" class="text-center mb-12">
             <h2 class="text-3xl md:text-4xl text-brand-text font-bold">Press-on Nails Shop</h2>
             <p class="font-hand text-2xl text-brand-accent">手工穿戴甲販售</p>
-            
             <div class="mt-6 inline-block bg-brand-bg px-6 py-4 rounded-lg border border-brand-accent/20 shadow-sm mb-8">
                 <p class="text-brand-dark font-bold text-lg mb-1">🎉 全館滿 $3000 免運費</p>
                 <p class="text-brand-accent font-medium">🎁 購買 3 副穿戴甲即贈送「翻模」乙次 (自動折抵)</p>
             </div>
-            
             <div class="flex justify-center mt-4">
-                <a href="https://line.me/R/ti/p/@504otiij" target="_blank" 
-                   class="flex items-center justify-center gap-2 bg-brand-text text-white px-10 py-3 rounded hover:bg-brand-accent transition font-bold shadow-md">
-                   💬 穿戴甲官方 LINE 諮詢
-                </a>
+                <a href="https://line.me/R/ti/p/@504otiij" target="_blank" class="flex items-center justify-center gap-2 bg-brand-text text-white px-10 py-3 rounded hover:bg-brand-accent transition font-bold shadow-md">💬 穿戴甲官方 LINE 諮詢</a>
             </div>
         </div>
 
@@ -176,6 +155,11 @@
 
     <script>
         // 尺寸與甲型資料
+        const SHAPES = {
+            "短圓形": "size_short_oval.jpg", "短方圓": "size_short_square.jpg",
+            "短梯形": "size_short_coffin.jpg", "中橢圓": "size_medium_oval.jpg",
+            "長橢圓": "size_long_oval.jpg", "長梯形": "size_long_coffin.jpg"
+        };
         const SIZES = [
             { val: "XS", text: "XS" }, { val: "S", text: "S" },
             { val: "M", text: "M" }, { val: "L", text: "L" },
@@ -194,7 +178,7 @@
                 <p class="text-brand-accent text-xl">${p.price===0?'私訊後報價':'$'+p.price}</p>
             </div>`).join('');
 
-        // 2. 詳情頁 Modal 邏輯
+        // 2. 詳情頁 Modal 邏輯 (手機版並排優化)
         let currentProduct = null;
 
         function openProductModal(pid) {
@@ -229,10 +213,7 @@
         function updateChartImage() {
             const selectedShape = document.getElementById('pm-shape').value;
             const chartImg = SHAPES[selectedShape] || 'size_short_square.jpg';
-            // 更新圖片並加入點擊放大事件
-            const chartEl = document.getElementById('pm-chart');
-            chartEl.src = chartImg;
-            chartEl.onclick = function() { openLightbox(this.src); };
+            document.getElementById('pm-chart').src = chartImg;
         }
 
         function selectSize(el, val) {
@@ -248,11 +229,11 @@
         function closeAllModals() {
             document.getElementById('overlay').classList.remove('show');
             document.getElementById('product-modal').classList.remove('open');
-            document.getElementById('cart-panel').classList.remove('open');
+            document.getElementById('cart-panel').classList.remove('open'); // 修正這裡 id 錯誤
+            document.getElementById('cart-modal').classList.remove('open'); // 確保關閉購物車
             document.body.style.overflow = 'auto';
         }
 
-        // 3. 燈箱功能 (LightBox)
         function openLightbox(src) {
             document.getElementById('lightbox-img').src = src;
             document.getElementById('lightbox').classList.add('show');
@@ -262,7 +243,7 @@
         let cart = [];
         function openCart() {
             document.getElementById('overlay').classList.add('show');
-            document.getElementById('cart-panel').classList.add('open');
+            document.getElementById('cart-modal').classList.add('open'); // 修正 id
             document.body.style.overflow = 'hidden';
         }
         function toggleCart() { openCart(); }
@@ -271,9 +252,7 @@
             if(!currentProduct) return;
             const shape = document.getElementById('pm-shape').value;
             const sizeVal = document.getElementById('pm-size-value').value;
-            
             if(!sizeVal) { alert("請選擇尺寸"); return; }
-
             const sizeText = SIZES.find(s => s.val === sizeVal).text;
             const uid = `${currentProduct.id}-${shape}-${sizeVal}`;
             const item = cart.find(i => i.uid === uid);
