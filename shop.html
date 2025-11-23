@@ -61,10 +61,13 @@
     </div>
 
     <nav class="hidden md:flex fixed w-full z-40 bg-brand-bg/95 backdrop-blur-sm border-b border-brand-accent/20 py-5 justify-center items-center space-x-8 text-brand-text font-medium shadow-sm">
+        <a href="index.html" class="nav-btn">🏠 返回美甲首頁</a>
         <div class="text-center px-4">
             <div class="text-2xl font-bold tracking-widest font-serif">CREATIVE BEAUTY</div>
             <div class="font-hand text-lg text-brand-accent">Press-on Nails</div>
         </div>
+        <a href="#shop" class="nav-btn text-brand-accent font-bold">商品列表</a>
+        <a href="#info" class="nav-btn">訂購須知</a>
     </nav>
 
     <div class="md:hidden text-center py-4 bg-brand-bg border-b border-brand-accent/20 sticky top-0 z-40 shadow-sm/50 backdrop-blur-md bg-opacity-90">
@@ -74,7 +77,13 @@
 
     <div class="pt-20 md:pt-32 pb-12 px-4 max-w-7xl mx-auto">
         
-        <div id="shop" class="text-center mb-12">
+        <div id="info" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
+            <img src="presson_price.jpg" onclick="openLightbox(this.src)" class="w-full rounded shadow-sm zoomable">
+            <img src="presson_custom.jpg" onclick="openLightbox(this.src)" class="w-full rounded shadow-sm zoomable">
+            <img src="presson_tools.jpg" onclick="openLightbox(this.src)" class="w-full rounded shadow-sm zoomable">
+        </div>
+
+        <div id="shop" class="text-center mb-12 border-t border-brand-bg pt-12">
             <h2 class="text-3xl md:text-4xl text-brand-text font-bold">Press-on Nails Shop</h2>
             <p class="font-hand text-2xl text-brand-accent">手工穿戴甲販售</p>
             
@@ -83,18 +92,11 @@
                 <p class="text-brand-accent font-medium">🎁 購買 3 副穿戴甲即贈送「翻模」乙次 (自動折抵)</p>
             </div>
             
-            <div class="flex flex-col items-center gap-4 mt-8">
-                <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto justify-center">
-                    <a href="https://www.instagram.com/creativebeauty.studio/" target="_blank" 
-                       class="flex items-center justify-center gap-2 border-2 border-brand-text text-brand-text px-8 py-3 rounded hover:bg-brand-text hover:text-white transition font-bold min-w-[200px]">
-                       📷 追蹤 IG 作品
-                    </a>
-                    <a href="https://line.me/R/ti/p/@504otiij" target="_blank" 
-                       class="flex items-center justify-center gap-2 bg-brand-text text-white px-8 py-3 rounded hover:bg-brand-accent transition font-bold min-w-[200px]">
-                       💬 官方 LINE 諮詢
-                    </a>
-                </div>
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSfutyJhsUXfJS1vJBOSgUFhoSVR1Mw_O4hm0voZeXtMcpd3Qg/viewform" target="_blank" class="mt-2 text-brand-accent underline decoration-dotted hover:text-brand-dark text-sm">📝 習慣使用 Google 表單訂購請點此</a>
+            <div class="flex justify-center mt-8">
+                <a href="https://line.me/R/ti/p/@504otiij" target="_blank" 
+                   class="flex items-center justify-center gap-2 bg-brand-text text-white px-10 py-3 rounded hover:bg-brand-accent transition font-bold shadow-md">
+                   💬 穿戴甲官方 LINE
+                </a>
             </div>
         </div>
 
@@ -102,28 +104,20 @@
     </div>
 
     <div class="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-brand-accent/20 z-30 flex justify-around items-end py-2 px-2 text-[10px] text-brand-text shadow">
+        <a href="index.html" class="flex flex-col items-center p-2"><span class="text-lg mb-1">🏠</span><span>回美甲店</span></a>
         <a href="#" class="flex flex-col items-center p-2 text-brand-accent font-bold"><span class="text-lg mb-1">🛍️</span><span>所有商品</span></a>
-        <div class="relative flex flex-col items-center -top-5 cursor-pointer" onclick="toggleCart()">
-            <div class="bg-brand-accent text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg shadow-brand-accent/40"><span class="text-2xl">🛒</span></div>
-            <span class="font-bold text-brand-accent mt-1">購物車</span>
-        </div>
-        <a href="https://line.me/R/ti/p/@504otiij" target="_blank" class="flex flex-col items-center p-2"><span class="text-lg mb-1">💬</span><span>客服諮詢</span></a>
+        <a href="https://line.me/R/ti/p/@504otiij" target="_blank" class="flex flex-col items-center p-2"><span class="text-lg mb-1">💬</span><span>客服</span></a>
     </div>
 
     <script>
         // 渲染商品
         document.getElementById('shop-container').innerHTML = SHOP_CONFIG.products.map(p => `
             <div class="group">
-                <div class="relative overflow-hidden rounded-lg shadow-sm mb-4">
-                    <img src="${p.image}" class="w-full h-72 object-cover group-hover:scale-105 transition duration-500" onerror="this.src='promo2.jpg'">
-                    ${p.tag?`<div class="absolute top-2 right-2 bg-brand-dark text-white text-xs px-2 py-1 rounded">${p.tag}</div>`:''}
-                </div>
+                <div class="relative overflow-hidden rounded-lg shadow-sm mb-4"><img src="${p.image}" class="w-full h-72 object-cover group-hover:scale-105 transition duration-500" onerror="this.src='promo2.jpg'">${p.tag?`<div class="absolute top-2 right-2 bg-brand-dark text-white text-xs px-2 py-1 rounded">${p.tag}</div>`:''}</div>
                 <h3 class="text-lg font-bold text-brand-dark">${p.name}</h3>
                 <p class="text-brand-accent text-xl mb-2">${p.price===0?'私訊後報價':'$'+p.price}</p>
                 <div class="flex gap-2">
-                    <select id="size-${p.id}" class="border border-gray-300 rounded px-2 py-2 text-sm bg-white w-1/3 font-sans">
-                        <option value="XS">XS</option><option value="S">S</option><option value="M">M</option><option value="L">L</option><option value="CustomMold">翻模量身訂製</option>
-                    </select>
+                    <select id="size-${p.id}" class="border border-gray-300 rounded px-2 py-2 text-sm bg-white w-1/3 font-sans"><option value="XS">XS</option><option value="S">S</option><option value="M">M</option><option value="L">L</option><option value="CustomMold">翻模量身訂製</option></select>
                     <button onclick="addToCart(${p.id}, '${p.name}', ${p.price}, 'size-${p.id}', '${p.image}')" class="bg-brand-text text-white flex-1 py-2 rounded hover:bg-brand-accent transition text-sm">加入購物車</button>
                 </div>
             </div>`).join('');
@@ -172,7 +166,7 @@
         }
 
         function checkout() {
-            if(!/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) { alert("⚠️ 電腦版無法使用此功能\n\n為了確保訂單格式正確，請使用手機瀏覽器開啟本網站，並點擊下單！"); return; }
+            if(!/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) { alert("⚠️ 請使用手機下單！"); return; }
             if(cart.length===0) return alert('購物車是空的');
             const n=document.getElementById('c-name').value, p=document.getElementById('c-phone').value, s=document.getElementById('c-store').value;
             if(!n||!p||!s) return alert('請填寫完整資料');
@@ -194,7 +188,6 @@
             if(hasMold) msg += `翻模費用：$${mold}${mInfo}\n`;
             msg += `運費 (${shipName})：$${ship}\n總金額：$${sub+mold+ship}\n------------------\n【寄送資訊】\n姓名：${n}\n電話：${p}\n地址：${s}`;
             
-            // ★ 使用穿戴甲專用 LINE ID
             window.open(`https://line.me/R/oaMessage/@504otiij/?${encodeURIComponent(msg)}`, '_blank');
         }
     </script>
