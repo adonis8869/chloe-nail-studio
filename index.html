@@ -23,8 +23,8 @@
         const SITE_CONFIG = {
             promos: [
                 {
-                    id: "nov", // 識別碼 (不可重複)
-                    tabName: "11月限定", // 按鈕顯示文字
+                    id: "nov",
+                    tabName: "11月限定",
                     type: "standard", 
                     title: "November Specials", 
                     subtitle: "11月限定款式",
@@ -33,8 +33,8 @@
                     items: [ { artist: "By Chloe", price: "款式優惠價 $1099", image: "promo2.jpg" }, { artist: "By ChiChi", price: "款式優惠價 $700", image: "promo3.jpg" } ]
                 },
                 {
-                    id: "dec", // 識別碼
-                    tabName: "12月聖誕款", // 按鈕顯示文字
+                    id: "dec",
+                    tabName: "12月聖誕款",
                     type: "gallery", 
                     title: "December Specials", 
                     subtitle: "12月聖誕跨年限定",
@@ -70,9 +70,30 @@
         @keyframes modalFadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
         .modal-content { animation: modalFadeIn 0.3s ease-out; }
 
-        /* 月份切換按鈕樣式 */
-        .promo-tab-btn { @apply px-6 py-2 rounded-full border border-brand-accent text-brand-accent transition font-bold; }
-        .promo-tab-btn.active { @apply bg-brand-accent text-white; }
+        /* ★ 月份切換按鈕優化 (更明顯、更大顆) ★ */
+        .promo-tab-btn { 
+            padding: 12px 36px; /* 增加內距，變大顆 */
+            border-radius: 9999px; /* 橢圓形 */
+            border: 2px solid #C5A086; /* 邊框加粗 */
+            color: #8B7E74; /* 預設深灰字 */
+            background-color: white; /* 預設白底 */
+            font-size: 1.1rem; /* 字體加大 */
+            font-weight: 700; /* 粗體 */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); /* 預設有陰影 */
+        }
+        .promo-tab-btn:hover {
+            transform: translateY(-3px); /* 滑鼠移上去浮起來 */
+            box-shadow: 0 10px 15px rgba(197, 160, 134, 0.3); /* 陰影加深 */
+            color: #C5A086;
+        }
+        .promo-tab-btn.active { 
+            background-color: #C5A086; /* 選中變實心色 */
+            color: white; /* 選中變白字 */
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); /* 內部陰影 */
+            transform: none;
+        }
     </style>
 </head>
 <body class="pb-24 md:pb-0">
@@ -134,7 +155,7 @@
                 <h2 class="text-3xl md:text-4xl text-brand-text font-bold">Monthly Specials <span class="block text-2xl font-hand text-brand-accent font-normal mt-2">每月限定優惠</span></h2>
             </div>
             
-            <div class="flex justify-center gap-4 mb-12" id="promo-tabs">
+            <div class="flex flex-wrap justify-center gap-4 md:gap-8 mb-12" id="promo-tabs">
                 </div>
 
             <div id="promos-container">
@@ -208,10 +229,10 @@
             let contentHTML = '';
 
             SITE_CONFIG.promos.forEach((promo, index) => {
-                // 1. 建立按鈕
-                tabsHTML += `<button onclick="switchTab('${promo.id}')" id="tab-btn-${promo.id}" class="promo-tab-btn hover:bg-brand-accent hover:text-white">${promo.tabName}</button>`;
+                // 按鈕
+                tabsHTML += `<button onclick="switchTab('${promo.id}')" id="tab-btn-${promo.id}" class="promo-tab-btn">${promo.tabName}</button>`;
 
-                // 2. 建立內容區塊 (預設隱藏)
+                // 內容
                 let innerContent = '';
                 if (promo.type === "standard") {
                     const items = promo.items.map((item, i) => `<div class="text-center group flex flex-col items-center"><div class="bg-brand-bg p-2 rounded-lg shadow-md transform ${i%2===0?'-rotate-1':'rotate-1'} hover:rotate-0 transition duration-500 mb-3"><img src="${item.image}" onclick="openLightbox(this.src)" class="w-full h-auto rounded zoomable" onerror="this.src='promo2.jpg'"></div><p class="text-lg text-brand-dark font-bold">${item.artist}</p><p class="text-brand-accent">${item.price}</p></div>`).join('');
@@ -233,23 +254,18 @@
             tabsContainer.innerHTML = tabsHTML;
             contentContainer.innerHTML = contentHTML;
 
-            // 預設顯示最後一個月份 (最新的)
+            // 預設顯示最後一個月份
             if (SITE_CONFIG.promos.length > 0) {
                 switchTab(SITE_CONFIG.promos[SITE_CONFIG.promos.length - 1].id);
             }
         }
 
         function switchTab(id) {
-            // 隱藏所有內容
             document.querySelectorAll('.promo-content').forEach(el => el.classList.add('hidden'));
-            // 移除所有按鈕活性
-            document.querySelectorAll('.promo-tab-btn').forEach(btn => btn.classList.remove('active', 'bg-brand-accent', 'text-white'));
+            document.querySelectorAll('.promo-tab-btn').forEach(btn => btn.classList.remove('active'));
             
-            // 顯示目標內容
             document.getElementById(`tab-content-${id}`).classList.remove('hidden');
-            // 啟用目標按鈕
-            const activeBtn = document.getElementById(`tab-btn-${id}`);
-            activeBtn.classList.add('active', 'bg-brand-accent', 'text-white');
+            document.getElementById(`tab-btn-${id}`).classList.add('active');
         }
 
         function switchPage(id){ document.querySelectorAll('.page-section').forEach(p=>p.classList.remove('active')); document.getElementById(id).classList.add('active'); window.scrollTo(0,0); document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('text-brand-accent','font-bold')); const btn = document.getElementById('nav-'+id.replace('page-','')); if(btn) btn.classList.add('text-brand-accent','font-bold'); }
