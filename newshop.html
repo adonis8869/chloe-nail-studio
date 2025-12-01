@@ -25,7 +25,6 @@
         @media (min-width: 768px) { .cart-float-btn { bottom: 30px; right: 30px; } }
         #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9999; justify-content: center; align-items: center; }
         #lightbox.show { display: flex; } #lightbox img { max-width: 100%; max-height: 95vh; object-fit: contain; }
-        /* 縮圖樣式 */
         .thumb-img { border: 2px solid transparent; transition: all 0.2s; opacity: 0.6; }
         .thumb-img:hover, .thumb-img.active { border-color: #C5A086; opacity: 1; }
     </style>
@@ -34,29 +33,28 @@
 
     <script>
         const SHOP_CONFIG = {
-            // 請確認這是您美甲店的 LINE ID
             lineID: "866wnpdc", 
 
-            // 商品清單 (共9個)
+            // price: 現在賣的價格
+            // originalPrice: 畫掉的原價
             products: [
-                // images: ["檔名"] -> 如果有多張圖，就用逗號隔開，如 ["p01_1.jpg", "p01_2.jpg"]
-                { id: 1, name: "團購好物 01", price: 390, tag: "熱銷", images: ["p01.jpg"] },
-                { id: 2, name: "團購好物 02", price: 450, tag: "推薦", images: ["p02.jpg"] },
+                { id: 1, name: "團購好物 01", price: 390, originalPrice: 590, tag: "推薦", images: ["p01.jpg"] },
+                { id: 2, name: "團購好物 02", price: 450, originalPrice: 650, tag: "", images: ["p02.jpg"] },
                 { id: 3, name: "團購好物 03", price: 280, tag: "", images: ["p03.jpg"] },
-                { id: 4, name: "團購好物 04", price: 590, tag: "", images: ["p04.jpg"] },
+                { id: 4, name: "團購好物 04", price: 590, originalPrice: 880, tag: "", images: ["p04.jpg"] },
                 { id: 5, name: "團購好物 05", price: 350, tag: "", images: ["p05.jpg"] },
-                { id: 6, name: "團購好物 06", price: 420, tag: "", images: ["p06.jpg"] },
+                { id: 6, name: "團購好物 06", price: 420, originalPrice: 500, tag: "", images: ["p06.jpg"] },
                 { id: 7, name: "團購好物 07", price: 390, tag: "現貨", images: ["p07.jpg"] },
-                { id: 8, name: "團購好物 08", price: 890, tag: "精選", images: ["p08.jpg"] },
+                { id: 8, name: "團購好物 08", price: 890, originalPrice: 1280, tag: "精選", images: ["p08.jpg"] },
                 
-                // ★ 第 9 個商品設定為兩張圖片 (範例)
-                { 
-                    id: 9, 
-                    name: "雙圖商品範例", 
-                    price: 250, 
-                    tag: "多圖", 
-                    images: ["p09_1.jpg", "p09_2.jpg"] 
-                }
+                // 第 9 個商品 (雙圖範例)
+                { id: 9, name: "團購好物 09", price: 250, originalPrice: 390, tag: "多圖", images: ["p09_1.jpg", "p09_2.jpg"] },
+
+                // ★ 新增的第 10 個商品
+                { id: 10, name: "團購好物 10", price: 299, originalPrice: 450, tag: "新品", images: ["p10.jpg"] },
+
+                // ★ 新增的第 11 個商品
+                { id: 11, name: "團購好物 11", price: 520, tag: "", images: ["p11.jpg"] }
             ]
         };
     </script>
@@ -77,7 +75,7 @@
             <div class="flex-1 flex flex-col justify-center">
                 <div id="pm-tag" class="inline-block bg-brand-dark text-white text-xs px-2 py-1 rounded mb-2 w-fit" style="display:none">預購</div>
                 <h2 id="pm-title" class="text-3xl font-bold text-brand-dark mb-2">商品名稱</h2>
-                <p id="pm-price" class="text-2xl text-brand-accent font-bold mb-6">$0</p>
+                <div id="pm-price-container" class="mb-6 flex items-baseline gap-2"></div>
                 
                 <div class="bg-brand-bg/30 p-4 rounded-lg border border-brand-bg">
                     <label class="block text-sm font-bold text-gray-600 mb-3">購買數量</label>
@@ -147,7 +145,6 @@
                 <a href="#" onclick="openLine()" class="flex items-center justify-center gap-2 bg-brand-text text-white px-10 py-3 rounded hover:bg-brand-accent transition font-bold shadow-md">💬 官方 LINE 諮詢</a>
             </div>
         </div>
-        
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-12" id="shop-container"></div>
     </div>
 
@@ -161,7 +158,14 @@
     </div>
 
     <script>
-        // 1. 渲染商品列表
+        function formatPriceHTML(price, originalPrice) {
+            if (price === 0) return '私訊後報價';
+            if (originalPrice && originalPrice > price) {
+                return `<span class="line-through text-gray-400 text-sm mr-1">原價$${originalPrice}</span><span class="text-brand-accent">$${price}</span>`;
+            }
+            return `<span class="text-brand-accent">$${price}</span>`;
+        }
+
         document.getElementById('shop-container').innerHTML = SHOP_CONFIG.products.map(p => `
             <div class="group cursor-pointer" onclick="openProductModal(${p.id})">
                 <div class="relative overflow-hidden rounded-lg shadow-sm mb-4">
@@ -170,20 +174,17 @@
                     ${p.images.length > 1 ? `<div class="absolute bottom-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded">多張圖片</div>` : ''}
                 </div>
                 <h3 class="text-lg font-bold text-brand-dark">${p.name}</h3>
-                <p class="text-brand-accent text-xl">${p.price===0?'私訊後報價':'$'+p.price}</p>
+                <p class="text-xl font-bold">${formatPriceHTML(p.price, p.originalPrice)}</p>
             </div>`).join('');
 
-        // 2. 詳情頁 Modal 邏輯
         let currentProduct = null;
 
         function openProductModal(pid) {
             currentProduct = SHOP_CONFIG.products.find(p => p.id === pid);
             if(!currentProduct) return;
 
-            // 顯示第一張圖
             changeMainImage(currentProduct.images[0]);
             
-            // 渲染縮圖 (如果有多張)
             const thumbContainer = document.getElementById('pm-thumbs');
             if(currentProduct.images.length > 1) {
                 thumbContainer.innerHTML = currentProduct.images.map(img => 
@@ -195,7 +196,7 @@
             }
 
             document.getElementById('pm-title').innerText = currentProduct.name;
-            document.getElementById('pm-price').innerText = currentProduct.price === 0 ? '私訊後報價' : '$' + currentProduct.price;
+            document.getElementById('pm-price-container').innerHTML = formatPriceHTML(currentProduct.price, currentProduct.originalPrice).replace('text-sm', 'text-lg').replace('text-brand-accent', 'text-brand-accent text-3xl');
             
             const tagEl = document.getElementById('pm-tag');
             if(currentProduct.tag) {
@@ -215,8 +216,6 @@
             const mainImg = document.getElementById('pm-image');
             mainImg.src = src;
             mainImg.onerror = function() { this.src='default.jpg'; };
-            
-            // 更新縮圖選中狀態
             document.querySelectorAll('.thumb-img').forEach(img => {
                 img.classList.remove('active', 'border-brand-accent', 'opacity-100');
                 if(img.src.includes(src)) {
@@ -246,7 +245,6 @@
             document.getElementById('lightbox').classList.add('show');
         }
 
-        // 3. 購物車邏輯
         let cart = [];
         function openCart() {
             document.getElementById('overlay').classList.add('show');
@@ -267,8 +265,8 @@
                     uid: uid,
                     id: currentProduct.id,
                     name: currentProduct.name,
-                    base: currentProduct.price,
-                    img: currentProduct.images[0], // 購物車用第一張圖
+                    base: currentProduct.price, 
+                    img: currentProduct.images[0],
                     qty: qtyVal
                 });
             }
@@ -283,7 +281,6 @@
             const sub = cart.reduce((s,i)=>s+i.base*i.qty,0);
             const qty = cart.reduce((s,i)=>s+i.qty,0);
             
-            // 運費邏輯：直接讀取 Radio 值
             let ship = parseInt(document.querySelector('input[name="shipping"]:checked').value);
             let sText = "$"+ship;
             
@@ -326,7 +323,6 @@
             msg += `------------------\n商品小計：$${sub}\n`;
             msg += `運費 (${shipName})：$${ship}\n總金額：$${sub+ship}\n------------------\n【訂購資訊】\n姓名：${n}\n電話：${p}\n備註/門市：${s}`;
             
-            // 使用美甲店官方LINE ID
             window.open(`https://line.me/R/oaMessage/@${SHOP_CONFIG.lineID}/?${encodeURIComponent(msg)}`, '_blank');
         }
     </script>
