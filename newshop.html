@@ -9,70 +9,68 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = { theme: { extend: { colors: { 'brand-bg': '#F5F0F0', 'brand-text': '#8B7E74', 'brand-accent': '#C5A086', 'brand-dark': '#5D534A' }, fontFamily: { 'sans': ['"Zen Maru Gothic"'], 'serif': ['"Zen Maru Gothic"'], 'hand': ['"Dancing Script"'] } } } }
-        
-        // ▼▼▼▼▼ 商品設定區 (請修改名稱與價格) ▼▼▼▼▼
-        const SHOP_CONFIG = {
-            // 請將LINE ID換成您美甲店的正確ID (不含@)
-            lineID: "866wnpdc", 
-            
-            products: [
-                { id: 1, name: "團購好物 01", price: 390, tag: "熱銷", image: "p01.jpg" },
-                { id: 2, name: "團購好物 02", price: 450, tag: "推薦", image: "p02.jpg" },
-                { id: 3, name: "團購好物 03", price: 280, tag: "", image: "p03.jpg" },
-                { id: 4, name: "團購好物 04", price: 590, tag: "", image: "p04.jpg" },
-                { id: 5, name: "團購好物 05", price: 350, tag: "", image: "p05.jpg" },
-                { id: 6, name: "團購好物 06", price: 420, tag: "", image: "p06.jpg" },
-                { id: 7, name: "團購好物 07", price: 390, tag: "現貨", image: "p07.jpg" },
-                { id: 8, name: "團購好物 08", price: 890, tag: "精選", image: "p08.jpg" },
-                { id: 9, name: "團購好物 09", price: 250, tag: "", image: "p09.jpg" },
-                { id: 10, name: "團購好物 10", price: 300, tag: "", image: "p10.jpg" },
-                { id: 11, name: "團購好物 11", price: 480, tag: "限定", image: "p11.jpg" }
-            ]
-        };
-        // ▲▲▲▲▲ 設定結束 ▲▲▲▲▲
     </script>
     <style>
         body { background-color: #F5F0F0; color: #8B7E74; font-family: "Zen Maru Gothic", sans-serif; }
         .zoomable:hover { transform: scale(1.02); transition: 0.3s; cursor: zoom-in; }
-        
-        /* Modal & Overlay */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 90; display: none; }
         .modal-overlay.show { display: block; }
-        
-        /* Cart Sidebar */
         #cart-sidebar { position: fixed; top: 0; right: 0; width: 100%; max-width: 400px; height: 100%; background: white; z-index: 100; transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; box-shadow: -5px 0 25px rgba(0,0,0,0.1); }
         #cart-sidebar.open { transform: translateX(0); }
-
-        /* Product Modal */
-        #product-modal { 
-            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); 
-            width: 90%; max-width: 800px; max-height: 90vh; background: white; z-index: 100; 
-            border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); overflow: hidden;
-            flex-direction: column; 
-        }
+        #product-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 800px; max-height: 90vh; background: white; z-index: 100; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); overflow: hidden; flex-direction: column; }
         #product-modal.open { display: flex; }
         @media (min-width: 768px) { #product-modal { flex-direction: row; } }
-
-        /* Floating Button */
         .cart-float-btn { position: fixed; bottom: 90px; right: 20px; background: #C5A086; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2); cursor: pointer; z-index: 50; transition: 0.2s; }
         .cart-count { position: absolute; top: -5px; right: -5px; background: #b91c1c; color: white; font-size: 12px; width: 24px; height: 24px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; }
         @media (min-width: 768px) { .cart-float-btn { bottom: 30px; right: 30px; } }
-        
-        /* Lightbox */
         #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9999; justify-content: center; align-items: center; }
         #lightbox.show { display: flex; } #lightbox img { max-width: 100%; max-height: 95vh; object-fit: contain; }
+        /* 縮圖樣式 */
+        .thumb-img { border: 2px solid transparent; transition: all 0.2s; opacity: 0.6; }
+        .thumb-img:hover, .thumb-img.active { border-color: #C5A086; opacity: 1; }
     </style>
 </head>
 <body class="pb-24 md:pb-0">
-    
+
+    <script>
+        const SHOP_CONFIG = {
+            // 請確認這是您美甲店的 LINE ID
+            lineID: "866wnpdc", 
+
+            // 商品清單 (共9個)
+            products: [
+                // images: ["檔名"] -> 如果有多張圖，就用逗號隔開，如 ["p01_1.jpg", "p01_2.jpg"]
+                { id: 1, name: "團購好物 01", price: 390, tag: "熱銷", images: ["p01.jpg"] },
+                { id: 2, name: "團購好物 02", price: 450, tag: "推薦", images: ["p02.jpg"] },
+                { id: 3, name: "團購好物 03", price: 280, tag: "", images: ["p03.jpg"] },
+                { id: 4, name: "團購好物 04", price: 590, tag: "", images: ["p04.jpg"] },
+                { id: 5, name: "團購好物 05", price: 350, tag: "", images: ["p05.jpg"] },
+                { id: 6, name: "團購好物 06", price: 420, tag: "", images: ["p06.jpg"] },
+                { id: 7, name: "團購好物 07", price: 390, tag: "現貨", images: ["p07.jpg"] },
+                { id: 8, name: "團購好物 08", price: 890, tag: "精選", images: ["p08.jpg"] },
+                
+                // ★ 第 9 個商品設定為兩張圖片 (範例)
+                { 
+                    id: 9, 
+                    name: "雙圖商品範例", 
+                    price: 250, 
+                    tag: "多圖", 
+                    images: ["p09_1.jpg", "p09_2.jpg"] 
+                }
+            ]
+        };
+    </script>
     <div id="overlay" class="modal-overlay" onclick="closeAllModals()"></div>
     <div id="lightbox" onclick="this.classList.remove('show')"><img id="lightbox-img" src=""></div>
 
     <div id="product-modal">
         <button onclick="closeAllModals()" class="absolute top-2 right-2 md:top-4 md:right-4 z-20 bg-black/20 hover:bg-black/40 rounded-full p-2 text-white transition">✕</button>
         
-        <div class="w-full md:w-1/2 bg-gray-50 p-4 md:p-6 flex items-center justify-center overflow-hidden h-64 md:h-full shrink-0 border-b md:border-b-0 md:border-r border-gray-100">
-            <img id="pm-image" src="" class="max-w-full max-h-full object-contain cursor-zoom-in rounded-lg shadow-sm" onclick="openLightbox(this.src)">
+        <div class="w-full md:w-1/2 bg-gray-50 p-4 md:p-6 flex flex-col items-center justify-center overflow-hidden h-auto md:h-full shrink-0 border-b md:border-b-0 md:border-r border-gray-100">
+            <div class="w-full h-64 md:h-80 flex items-center justify-center mb-4 bg-white rounded-lg shadow-sm">
+                <img id="pm-image" src="" class="max-w-full max-h-full object-contain cursor-zoom-in" onclick="openLightbox(this.src)">
+            </div>
+            <div id="pm-thumbs" class="flex gap-2 justify-center w-full overflow-x-auto p-1"></div>
         </div>
 
         <div class="w-full md:w-1/2 p-6 md:p-10 flex flex-col h-full overflow-y-auto bg-white justify-center">
@@ -81,14 +79,12 @@
                 <h2 id="pm-title" class="text-3xl font-bold text-brand-dark mb-2">商品名稱</h2>
                 <p id="pm-price" class="text-2xl text-brand-accent font-bold mb-6">$0</p>
                 
-                <div class="space-y-6">
-                    <div class="bg-brand-bg/30 p-4 rounded-lg border border-brand-bg">
-                        <label class="block text-sm font-bold text-gray-600 mb-3">購買數量</label>
-                        <div class="flex items-center">
-                            <button onclick="adjustQty(-1)" class="w-12 h-12 bg-white border border-gray-300 rounded-l hover:bg-gray-100 text-xl font-bold text-gray-500 transition">-</button>
-                            <input type="number" id="pm-qty" value="1" readonly class="w-20 h-12 text-center text-xl text-brand-dark font-bold border-t border-b border-gray-300 outline-none bg-white">
-                            <button onclick="adjustQty(1)" class="w-12 h-12 bg-white border border-gray-300 rounded-r hover:bg-gray-100 text-xl font-bold text-brand-accent transition">+</button>
-                        </div>
+                <div class="bg-brand-bg/30 p-4 rounded-lg border border-brand-bg">
+                    <label class="block text-sm font-bold text-gray-600 mb-3">購買數量</label>
+                    <div class="flex items-center">
+                        <button onclick="adjustQty(-1)" class="w-12 h-12 bg-white border border-gray-300 rounded-l hover:bg-gray-100 text-xl font-bold text-gray-500 transition">-</button>
+                        <input type="number" id="pm-qty" value="1" readonly class="w-20 h-12 text-center text-xl text-brand-dark font-bold border-t border-b border-gray-300 outline-none bg-white">
+                        <button onclick="adjustQty(1)" class="w-12 h-12 bg-white border border-gray-300 rounded-r hover:bg-gray-100 text-xl font-bold text-brand-accent transition">+</button>
                     </div>
                 </div>
             </div>
@@ -102,15 +98,27 @@
         <div class="p-5 border-t bg-gray-50">
             <div class="space-y-3 mb-4 text-sm">
                 <div class="flex justify-between"><span>商品小計</span><span id="cart-subtotal">$0</span></div>
+                
                 <div class="flex flex-col gap-2 border-b pb-2">
-                    <span class="font-bold text-brand-dark">選擇運費：</span>
-                    <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="shipping" value="60" checked onchange="updateCartTotal()"><span>7-11 店到店 (+$60)</span></label>
-                    <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="shipping" value="130" onchange="updateCartTotal()"><span>黑貓宅急便 (+$130)</span></label>
-                    <div class="flex justify-between text-gray-500 text-xs"><span>運費金額</span><span id="shipping-fee-display">$60</span></div>
+                    <span class="font-bold text-brand-dark">取貨方式：</span>
+                    <label class="flex items-center gap-2 cursor-pointer bg-white p-2 border rounded hover:border-brand-accent">
+                        <input type="radio" name="shipping" value="60" checked onchange="updateCartTotal()">
+                        <span>7-11 店到店 (+$60)</span>
+                    </label>
+                    <label class="flex items-center gap-2 cursor-pointer bg-white p-2 border rounded hover:border-brand-accent">
+                        <input type="radio" name="shipping" value="0" onchange="updateCartTotal()">
+                        <span class="text-brand-accent font-bold">店取 (LINE@約時間) (+$0)</span>
+                    </label>
+                    <div class="flex justify-between text-gray-500 text-xs mt-1"><span>運費金額</span><span id="shipping-fee-display">$60</span></div>
                 </div>
+
                 <div class="flex justify-between text-lg font-bold text-brand-accent pt-2"><span>總金額</span><span id="cart-total">$0</span></div>
             </div>
-            <div class="space-y-2 mb-4"><input type="text" id="c-name" placeholder="您的姓名" class="w-full p-2 border rounded text-sm"><input type="tel" id="c-phone" placeholder="聯絡電話" class="w-full p-2 border rounded text-sm"><input type="text" id="c-store" placeholder="取件門市名稱 / 宅配地址" class="w-full p-2 border rounded text-sm"></div>
+            <div class="space-y-2 mb-4">
+                <input type="text" id="c-name" placeholder="您的姓名" class="w-full p-2 border rounded text-sm">
+                <input type="tel" id="c-phone" placeholder="聯絡電話" class="w-full p-2 border rounded text-sm">
+                <input type="text" id="c-store" placeholder="取件門市名稱 / 備註" class="w-full p-2 border rounded text-sm">
+            </div>
             <button onclick="checkout()" class="w-full bg-brand-accent text-white py-3 rounded hover:bg-brand-dark transition font-bold tracking-widest">LINE 傳送訂單</button>
         </div>
     </div>
@@ -135,10 +143,7 @@
         <div id="shop" class="text-center mb-12">
             <h2 class="text-3xl md:text-4xl text-brand-text font-bold">Group Buy</h2>
             <p class="font-hand text-2xl text-brand-accent">Chloe 嚴選團購</p>
-            <div class="mt-6 inline-block bg-brand-bg px-6 py-4 rounded-lg border border-brand-accent/20 shadow-sm mb-8">
-                <p class="text-brand-dark font-bold text-lg mb-1">🎉 全館滿 $3000 免運費</p>
-            </div>
-            <div class="flex justify-center mt-4">
+            <div class="flex justify-center mt-6">
                 <a href="#" onclick="openLine()" class="flex items-center justify-center gap-2 bg-brand-text text-white px-10 py-3 rounded hover:bg-brand-accent transition font-bold shadow-md">💬 官方 LINE 諮詢</a>
             </div>
         </div>
@@ -156,13 +161,13 @@
     </div>
 
     <script>
-        // 1. 渲染商品
+        // 1. 渲染商品列表
         document.getElementById('shop-container').innerHTML = SHOP_CONFIG.products.map(p => `
             <div class="group cursor-pointer" onclick="openProductModal(${p.id})">
                 <div class="relative overflow-hidden rounded-lg shadow-sm mb-4">
-                    <img src="${p.image}" class="w-full h-72 object-cover group-hover:scale-105 transition duration-500" onerror="this.src='default.jpg'">
+                    <img src="${p.images[0]}" class="w-full h-72 object-cover group-hover:scale-105 transition duration-500" onerror="this.src='default.jpg'">
                     ${p.tag?`<div class="absolute top-2 right-2 bg-brand-dark text-white text-xs px-2 py-1 rounded">${p.tag}</div>`:''}
-                    <div class="absolute bottom-0 left-0 w-full bg-black/50 text-white text-center py-2 opacity-0 group-hover:opacity-100 transition">點擊查看詳情</div>
+                    ${p.images.length > 1 ? `<div class="absolute bottom-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded">多張圖片</div>` : ''}
                 </div>
                 <h3 class="text-lg font-bold text-brand-dark">${p.name}</h3>
                 <p class="text-brand-accent text-xl">${p.price===0?'私訊後報價':'$'+p.price}</p>
@@ -175,8 +180,20 @@
             currentProduct = SHOP_CONFIG.products.find(p => p.id === pid);
             if(!currentProduct) return;
 
-            document.getElementById('pm-image').src = currentProduct.image;
-            document.getElementById('pm-image').onerror = function() { this.src='default.jpg'; };
+            // 顯示第一張圖
+            changeMainImage(currentProduct.images[0]);
+            
+            // 渲染縮圖 (如果有多張)
+            const thumbContainer = document.getElementById('pm-thumbs');
+            if(currentProduct.images.length > 1) {
+                thumbContainer.innerHTML = currentProduct.images.map(img => 
+                    `<img src="${img}" class="thumb-img w-16 h-16 object-cover rounded cursor-pointer" onclick="changeMainImage('${img}')" onerror="this.src='default.jpg'">`
+                ).join('');
+                thumbContainer.style.display = 'flex';
+            } else {
+                thumbContainer.style.display = 'none';
+            }
+
             document.getElementById('pm-title').innerText = currentProduct.name;
             document.getElementById('pm-price').innerText = currentProduct.price === 0 ? '私訊後報價' : '$' + currentProduct.price;
             
@@ -188,15 +205,26 @@
                 tagEl.style.display = 'none';
             }
 
-            // 重置數量
             document.getElementById('pm-qty').value = 1;
-            
             document.getElementById('overlay').classList.add('show');
             document.getElementById('product-modal').classList.add('open');
             document.body.style.overflow = 'hidden';
         }
 
-        // 調整數量
+        function changeMainImage(src) {
+            const mainImg = document.getElementById('pm-image');
+            mainImg.src = src;
+            mainImg.onerror = function() { this.src='default.jpg'; };
+            
+            // 更新縮圖選中狀態
+            document.querySelectorAll('.thumb-img').forEach(img => {
+                img.classList.remove('active', 'border-brand-accent', 'opacity-100');
+                if(img.src.includes(src)) {
+                    img.classList.add('active', 'border-brand-accent', 'opacity-100');
+                }
+            });
+        }
+
         function adjustQty(delta) {
             const input = document.getElementById('pm-qty');
             let val = parseInt(input.value) + delta;
@@ -229,8 +257,7 @@
         function confirmAddToCart() {
             if(!currentProduct) return;
             const qtyVal = parseInt(document.getElementById('pm-qty').value);
-            
-            const uid = currentProduct.id; // 不分尺寸，直接用ID當key
+            const uid = currentProduct.id;
             const item = cart.find(i => i.id === uid);
 
             if(item) {
@@ -241,11 +268,10 @@
                     id: currentProduct.id,
                     name: currentProduct.name,
                     base: currentProduct.price,
-                    img: currentProduct.image,
+                    img: currentProduct.images[0], // 購物車用第一張圖
                     qty: qtyVal
                 });
             }
-
             closeAllModals();
             updateCart();
             openCart();
@@ -257,11 +283,11 @@
             const sub = cart.reduce((s,i)=>s+i.base*i.qty,0);
             const qty = cart.reduce((s,i)=>s+i.qty,0);
             
+            // 運費邏輯：直接讀取 Radio 值
             let ship = parseInt(document.querySelector('input[name="shipping"]:checked').value);
             let sText = "$"+ship;
-            if(sub >= 3000){ ship=0; sText="滿額免運 ($0)"; }
-            document.getElementById('shipping-fee-display').innerText = sText;
             
+            document.getElementById('shipping-fee-display').innerText = sText;
             document.getElementById('cart-subtotal').innerText = '$'+sub;
             document.getElementById('cart-total').innerText = '$'+(sub+ship);
             document.getElementById('cart-count').innerText = qty;
@@ -294,12 +320,11 @@
             cart.forEach((i,idx)=> msg += `${idx+1}. ${i.name}\n   數量：${i.qty} (單價${i.base===0?'私訊':i.base})\n`);
             const sub = cart.reduce((s,i)=>s+i.base*i.qty,0);
             
-            let shipName = document.querySelector('input[name="shipping"]:checked').nextElementSibling.innerText;
+            let shipName = document.querySelector('input[name="shipping"]:checked').nextElementSibling.innerText.trim();
             let ship = parseInt(document.querySelector('input[name="shipping"]:checked').value);
-            if(sub >= 3000){ ship=0; shipName+=" [免運]"; }
             
             msg += `------------------\n商品小計：$${sub}\n`;
-            msg += `運費 (${shipName})：$${ship}\n總金額：$${sub+ship}\n------------------\n【寄送資訊】\n姓名：${n}\n電話：${p}\n地址：${s}`;
+            msg += `運費 (${shipName})：$${ship}\n總金額：$${sub+ship}\n------------------\n【訂購資訊】\n姓名：${n}\n電話：${p}\n備註/門市：${s}`;
             
             // 使用美甲店官方LINE ID
             window.open(`https://line.me/R/oaMessage/@${SHOP_CONFIG.lineID}/?${encodeURIComponent(msg)}`, '_blank');
