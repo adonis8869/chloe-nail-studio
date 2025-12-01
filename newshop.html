@@ -35,26 +35,46 @@
         const SHOP_CONFIG = {
             lineID: "866wnpdc", 
 
-            // price: 現在賣的價格
-            // originalPrice: 畫掉的原價
+            // description: 商品說明 (支援換行)
             products: [
-                { id: 1, name: "柔嫩保養組(LIPEXEL™指緣油10ml*1&植萃賦活露10ml*1)", price: 650, originalPrice: 960, tag: "推薦", images: ["p01.jpg"] },
-                { id: 2, name: "精緻完美保養 三入禮盒組", price: 450, originalPrice: 650, tag: "", images: ["p02.jpg"] },
-                { id: 3, name: "團購好物 03", price: 280, tag: "", images: ["p03.jpg"] },
-                { id: 4, name: "團購好物 04", price: 590, originalPrice: 880, tag: "", images: ["p04.jpg"] },
-                { id: 5, name: "團購好物 05", price: 350, tag: "", images: ["p05.jpg"] },
-                { id: 6, name: "團購好物 06", price: 420, originalPrice: 500, tag: "", images: ["p06.jpg"] },
-                { id: 7, name: "團購好物 07", price: 390, tag: "現貨", images: ["p07.jpg"] },
-                { id: 8, name: "團購好物 08", price: 890, originalPrice: 1280, tag: "精選", images: ["p08.jpg"] },
+                { 
+                    id: 1, 
+                    name: "柔嫩保養組", 
+                    price: 650, 
+                    originalPrice: 960, 
+                    description: "LIPEXEL™指緣油10ml*1&植萃賦活露10ml*1", 
+                    tag: "推薦", 
+                    images: ["p01.jpg"] 
+                },
+                { 
+                    id: 2, 
+                    name: "精緻完美保養 三入禮盒組", 
+                    price: 1000, 
+                    originalPrice: 1460, 
+                    description: "網友好評推薦款。\n現在買最划算，囤貨首選！", 
+                    tag: "", 
+                    images: ["p02.jpg"] 
+                },
+                { id: 3, name: "植萃賦活露3入組禮盒", price: 1000, originalPrice: 1500, description: "小資族最愛，高CP值好物。", tag: "", images: ["p03.jpg"] },
+                { id: 4, name: "美白潤澤護手乳3入組禮盒", price: 1000, originalPrice: 1470, description: "限量發售，售完不補。", tag: "", images: ["p04.jpg"] },
+                { id: 5, name: "指緣油保養3入組禮盒", price: 950, originalPrice: 1380, description: "居家必備良品。", tag: "", images: ["p05.jpg"] },
+                { id: 6, name: "植萃賦活露10ml", price: 350, originalPrice: 500, description: "送禮自用兩相宜。", tag: "", images: ["p06.jpg"] },
+                { id: 7, name: "LIPEXEL™指緣油10ml", price: 330, originalPrice: 460, description: "現貨不用等，下單後火速出貨。", tag: "", images: ["p07.jpg"] },
+                { id: 8, name: "潤澤修護霜30ml", price: 345, originalPrice: 490, description: "精選禮盒組，包含三樣明星商品。", tag: "", images: ["p08.jpg"] },
                 
-                // 第 9 個商品 (雙圖範例)
-                { id: 9, name: "團購好物 09", price: 250, originalPrice: 390, tag: "多圖", images: ["p09_1.jpg", "p09_2.jpg"] },
+                // 第 9 個商品 (雙圖)
+                { 
+                    id: 9, 
+                    name: "Q10植萃光采身體乳-300ml", 
+                    price: 990, 
+                    originalPrice: 1780, 
+                    description: "此商品有多張圖片可以參考細節。\n點擊下方小圖切換。", 
+                    tag: "", 
+                    images: ["p09_1.jpg", "p09_2.jpg"] 
+                },
 
-                // ★ 新增的第 10 個商品
-                { id: 10, name: "團購好物 10", price: 299, originalPrice: 450, tag: "新品", images: ["p10.jpg"] },
-
-                // ★ 新增的第 11 個商品
-                { id: 11, name: "團購好物 11", price: 520, tag: "", images: ["p11.jpg"] }
+                { id: 10, name: "浴鹽光采呵護組", price: 1700, originalPrice: 3080, description: "本月新品上市。", tag: "", images: ["p10.jpg"] },
+                { id: 11, name: "天然醇香SPA浴鹽300g", price: 750, originalPrice: 1300, description: "最後數量倒數中。", tag: "", images: ["p11.jpg"] }
             ]
         };
     </script>
@@ -75,7 +95,9 @@
             <div class="flex-1 flex flex-col justify-center">
                 <div id="pm-tag" class="inline-block bg-brand-dark text-white text-xs px-2 py-1 rounded mb-2 w-fit" style="display:none">預購</div>
                 <h2 id="pm-title" class="text-3xl font-bold text-brand-dark mb-2">商品名稱</h2>
-                <div id="pm-price-container" class="mb-6 flex items-baseline gap-2"></div>
+                <div id="pm-price-container" class="mb-4 flex items-baseline gap-2"></div>
+                
+                <div id="pm-desc" class="text-gray-600 text-sm leading-relaxed mb-6 whitespace-pre-line border-l-4 border-brand-accent pl-3"></div>
                 
                 <div class="bg-brand-bg/30 p-4 rounded-lg border border-brand-bg">
                     <label class="block text-sm font-bold text-gray-600 mb-3">購買數量</label>
@@ -198,6 +220,9 @@
             document.getElementById('pm-title').innerText = currentProduct.name;
             document.getElementById('pm-price-container').innerHTML = formatPriceHTML(currentProduct.price, currentProduct.originalPrice).replace('text-sm', 'text-lg').replace('text-brand-accent', 'text-brand-accent text-3xl');
             
+            // 填入說明文字
+            document.getElementById('pm-desc').innerText = currentProduct.description || "暫無說明";
+
             const tagEl = document.getElementById('pm-tag');
             if(currentProduct.tag) {
                 tagEl.innerText = currentProduct.tag;
