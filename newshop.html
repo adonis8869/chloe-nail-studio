@@ -35,46 +35,81 @@
         const SHOP_CONFIG = {
             lineID: "866wnpdc", 
 
-            // description: 商品說明 (支援換行)
+            // 請注意：我把 description 用 ` (反引號) 包起來，這樣您可以直接在裡面換行
             products: [
                 { 
                     id: 1, 
                     name: "柔嫩保養組", 
                     price: 650, 
-                    originalPrice: 960, 
-                    description: "🏆 產品四大特色✅臉部級奢華成分 富含天然角鯊烷，擁有極佳的親膚性，能快速修護乾燥裂痕，改善指緣粗糙問題。✅清爽質地．秒吸收 專為怕油膩的妳設計！吸收速度極快，擦完後滑手機、打電腦、摸書本都不沾指紋，隨時隨地都能保養。✅延緩硬皮增生 混合荷荷芭油、維他命E等多種滋潤成分，長期使用能軟化角質，讓指緣維持嫩嫩的狀態，減少倒刺產生。✅方便攜帶設計 10ml 精巧容量，放在包包、化妝包不佔空間，想擦就擦。", 
+                    originalPrice: 960,  
                     tag: "推薦", 
-                    images: ["p01.jpg"] 
+                    images: ["p01.jpg"], // 記得放照片
+                    description: `
+【商品介紹】
+添加頂級角鯊烷．清爽秒吸收｜5款精油香氛
+
+✨ 產品四大特色 ✨
+
+1️⃣ 臉部級奢華成分
+富含天然角鯊烷，擁有極佳的親膚性，能快速修護乾燥裂痕，改善指緣粗糙問題。
+
+2️⃣ 清爽質地．秒吸收
+專為怕油膩的妳設計！吸收速度極快，擦完後滑手機、打電腦、摸書本都不沾指紋，隨時隨地都能保養。
+
+3️⃣ 延緩硬皮增生
+混合荷荷芭油、維他命E等多種滋潤成分，長期使用能軟化角質，讓指緣維持嫩嫩的狀態，減少倒刺產生。
+
+4️⃣ 方便攜帶設計
+10ml 精巧容量，放在包包、化妝包不佔空間，想擦就擦。
+
+------------------------------------
+
+🌿 5 款精油香氛介紹 🌿
+
+🌹 綻放 (Bloom) #工作室御用
+香調：保加利亞玫瑰｜紫檀｜鼠尾草｜迷迭香
+充滿層次的高級玫瑰花香，不像市面上的化學玫瑰味，搭配紫檀的木質尾韻，優雅又迷人。
+
+🍊 愉悅 (Joy) #工作室御用
+香調：摩洛哥橙花｜甜橙｜葡萄柚｜巴拉圭苦橙葉
+彷彿剝開新鮮橘子的清爽感！充滿活力的果香調，心情低落時聞到它會覺得很被療癒。
+
+🌲 謐靜 (Serenity)
+香調：檀香｜伊蘭｜大西洋雪松｜絲柏｜苦橙葉
+喜歡木質調必收！就像走進高級 SPA 館的沈穩香氣，非常適合睡前保養，放鬆緊繃神經。
+
+🌼 永恆 (Eternal)
+香調：茉莉｜橙花
+經典的白花香調，氣質小姐姐首選，清新脫俗的淡雅花香。
+
+🌿 抗菌花草 (Herbal)
+香調：玫瑰｜甜橙｜檸檬尤加利｜苦橙｜馬鞭草
+帶有草本植物的清爽氣息，馬鞭草與檸檬尤加利的結合，給人一種乾淨、衛生的舒爽感。
+
+------------------------------------
+
+【詳細規格與成分】
+🔸 容量：10ml
+🔸 全成分：天然角鯊烷、荷荷芭油、葡萄籽油、橄欖油、向日葵油、維他命E、精油
+🔸 用途：滋潤指緣肌膚，改善乾燥龜裂。
+🔸 用法：取適量塗抹於指甲周圍肌膚，輕輕按摩至吸收即可。
+🔸 保存方式：請置於陰涼處，避免陽光直射。`
                 },
-                { 
-                    id: 2, 
+                
+                // 其他商品維持原樣 (您之後可以照上面的格式修改它們)
+                { id: 2, 
                     name: "精緻完美保養 三入禮盒組", 
                     price: 1000, 
-                    originalPrice: 1460, 
-                    description: "網友好評推薦款。\n現在買最划算，囤貨首選！", 
-                    tag: "", 
-                    images: ["p02.jpg"] 
-                },
-                { id: 3, name: "植萃賦活露3入組禮盒", price: 1000, originalPrice: 1500, description: "小資族最愛，高CP值好物。", tag: "", images: ["p03.jpg"] },
-                { id: 4, name: "美白潤澤護手乳3入組禮盒", price: 1000, originalPrice: 1470, description: "限量發售，售完不補。", tag: "", images: ["p04.jpg"] },
-                { id: 5, name: "指緣油保養3入組禮盒", price: 950, originalPrice: 1380, description: "居家必備良品。", tag: "", images: ["p05.jpg"] },
-                { id: 6, name: "植萃賦活露10ml", price: 350, originalPrice: 500, description: "送禮自用兩相宜。", tag: "", images: ["p06.jpg"] },
-                { id: 7, name: "LIPEXEL™指緣油10ml", price: 330, originalPrice: 460, description: "現貨不用等，下單後火速出貨。", tag: "", images: ["p07.jpg"] },
-                { id: 8, name: "潤澤修護霜30ml", price: 345, originalPrice: 490, description: "精選禮盒組，包含三樣明星商品。", tag: "", images: ["p08.jpg"] },
-                
-                // 第 9 個商品 (雙圖)
-                { 
-                    id: 9, 
-                    name: "Q10植萃光采身體乳-300ml", 
-                    price: 990, 
-                    originalPrice: 1780, 
-                    description: "此商品有多張圖片可以參考細節。\n點擊下方小圖切換。", 
-                    tag: "", 
-                    images: ["p09_1.jpg", "p09_2.jpg"] 
-                },
-
-                { id: 10, name: "浴鹽光采呵護組", price: 1700, originalPrice: 3080, description: "本月新品上市。", tag: "", images: ["p10.jpg"] },
-                { id: 11, name: "天然醇香SPA浴鹽300g", price: 750, originalPrice: 1300, description: "最後數量倒數中。", tag: "", images: ["p11.jpg"] }
+                    originalPrice: 1460,, description: "網友好評推薦款。", tag: "推薦", images: ["p02.jpg"] },
+                { id: 3, name: "團購好物 03", price: 280, description: "小資族最愛，高CP值好物。", tag: "", images: ["p03.jpg"] },
+                { id: 4, name: "團購好物 04", price: 590, originalPrice: 880, description: "限量發售，售完不補。", tag: "", images: ["p04.jpg"] },
+                { id: 5, name: "團購好物 05", price: 350, description: "居家必備良品。", tag: "", images: ["p05.jpg"] },
+                { id: 6, name: "團購好物 06", price: 420, originalPrice: 500, description: "送禮自用兩相宜。", tag: "", images: ["p06.jpg"] },
+                { id: 7, name: "團購好物 07", price: 390, description: "現貨不用等，下單後火速出貨。", tag: "現貨", images: ["p07.jpg"] },
+                { id: 8, name: "團購好物 08", price: 890, originalPrice: 1280, description: "精選禮盒組。", tag: "精選", images: ["p08.jpg"] },
+                { id: 9, name: "雙圖商品範例", price: 250, originalPrice: 390, description: "多圖測試商品。", tag: "多圖", images: ["p09_1.jpg", "p09_2.jpg"] },
+                { id: 10, name: "團購好物 10", price: 299, originalPrice: 450, description: "本月新品上市。", tag: "新品", images: ["p10.jpg"] },
+                { id: 11, name: "團購好物 11", price: 520, description: "最後數量倒數中。", tag: "", images: ["p11.jpg"] }
             ]
         };
     </script>
@@ -220,7 +255,7 @@
             document.getElementById('pm-title').innerText = currentProduct.name;
             document.getElementById('pm-price-container').innerHTML = formatPriceHTML(currentProduct.price, currentProduct.originalPrice).replace('text-sm', 'text-lg').replace('text-brand-accent', 'text-brand-accent text-3xl');
             
-            // 填入說明文字
+            // 填入說明文字 (預設為暫無說明)
             document.getElementById('pm-desc').innerText = currentProduct.description || "暫無說明";
 
             const tagEl = document.getElementById('pm-tag');
