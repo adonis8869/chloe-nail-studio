@@ -19,7 +19,7 @@
             }
         }
         
-        // 🔧 後台設定 (美甲服務)
+        // 🔧 後台設定
         const SITE_CONFIG = {
             promos: [
                 {
@@ -215,11 +215,30 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // 檢查是否看過須知
             if (!localStorage.getItem('hasReadRules')) {
                 document.getElementById('rules-modal').classList.add('active');
                 document.body.style.overflow = 'hidden';
             }
-            renderSite();
+            
+            // ★ 新增功能：載入時檢查網址 Hash，並自動跳轉
+            const hash = window.location.hash.replace('#', '');
+            if (hash && document.getElementById(hash)) {
+                switchPage(hash);
+            } else {
+                renderSite(); // 預設首頁
+            }
+            
+            // ★ 新增功能：監聽瀏覽器「上一頁/下一頁」按鈕
+            window.addEventListener('hashchange', function() {
+                const newHash = window.location.hash.replace('#', '');
+                if (newHash && document.getElementById(newHash)) {
+                    // 這裡不呼叫 switchPage 避免無限迴圈，直接做 UI 更新
+                    updateView(newHash);
+                } else {
+                    updateView('page-home');
+                }
+            });
         });
 
         function closeRulesModal() {
@@ -259,10 +278,27 @@
             document.getElementById(`tab-btn-${id}`).classList.add('active');
         }
 
+        // ★ 修改：切換頁面時，同時更新網址 Hash
         function switchPage(id){ 
+            window.location.hash = id; // 這會觸發 hashchange 事件，或者直接改變網址
+            updateView(id);
+        }
+
+        // ★ 新增：純粹更新畫面 (不改網址，避免循環)
+        function updateView(id) {
             document.querySelectorAll('.page-section').forEach(p=>p.classList.remove('active')); 
-            document.getElementById(id).classList.add('active'); 
+            
+            // 防呆機制：如果 id 找不到，預設回首頁
+            const target = document.getElementById(id);
+            if (target) {
+                target.classList.add('active'); 
+            } else {
+                document.getElementById('page-home').classList.add('active');
+            }
+
             window.scrollTo(0,0); 
+            
+            // 更新按鈕狀態
             document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('text-brand-accent','font-bold')); 
             const navId = 'nav-' + id.replace('page-','');
             const btn = document.getElementById(navId);
