@@ -19,7 +19,7 @@
             }
         }
         
-        // 🔧 後台設定 (美甲服務 - 這裡保留您原本的設定)
+        // 🔧 後台設定 (美甲服務)
         const SITE_CONFIG = {
             promos: [
                 {
@@ -29,7 +29,6 @@
                     title: "November Specials", 
                     subtitle: "11月限定款式",
                     dateText: "*活動日期：即日起至 11/30 止", 
-                    // 請確保有這些假圖，或替換成真圖
                     infoImage: "promo4.jpg",
                     items: [ { artist: "By Chloe", price: "款式優惠價 $1099", image: "promo2.jpg" }, { artist: "By ChiChi", price: "款式優惠價 $700", image: "promo3.jpg" } ]
                 },
@@ -42,7 +41,6 @@
                     description: "Chloe美甲師為你準備 高質感日常款 × 精緻聖誕限定款\n從奶霧、琥珀暈染到聖誕蝴蝶結、冬季藍，全都在這裡。",
                     priceText: `<span class="block text-base font-normal mb-1">🔸 $1099 | 冬季基本款系列 (霧藍/莓紅/禮物包裝)</span><span class="block text-base font-normal mb-1">🔸 $1199 | 聖誕花草 × 奶霧系列 (柔霧雪季色調)</span><span class="block text-base font-normal">🔸 $1299 | 聖誕樹咖啡暈染 (聖誕限定/百搭顯白)</span>`,
                     dateText: "*活動日期：12/01 - 12/31 (開放預約中)",
-                    // 請確保有這些假圖
                     images: ["dec_2.jpg", "dec_1.jpg", "dec_3.jpg"]
                 }
             ]
@@ -55,24 +53,20 @@
         #page-home { padding-top: 0; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* 導航按鈕特效 */
         .nav-btn { position: relative; padding-bottom: 4px; cursor: pointer; }
         .nav-btn::after { content: ''; position: absolute; width: 0; height: 2px; bottom: 0; left: 0; background-color: #C5A086; transition: width 0.3s; }
         .nav-btn:hover::after, .nav-btn.active::after { width: 100%; }
         
         .zoomable { cursor: zoom-in; transition: transform 0.3s ease; } .zoomable:hover { transform: scale(1.02); }
         
-        /* 燈箱樣式 */
         #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); z-index: 9999; justify-content: center; align-items: center; }
         #lightbox.show { display: flex; } #lightbox img { max-width: 100%; max-height: 95vh; }
 
-        /* 強制彈窗樣式 */
         #rules-modal { display: none; }
         #rules-modal.active { display: flex; }
         @keyframes modalFadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
         .modal-content { animation: modalFadeIn 0.3s ease-out; }
 
-        /* 月份切換按鈕優化 */
         .promo-tab-btn { padding: 12px 36px; border-radius: 9999px; border: 2px solid #C5A086; color: #8B7E74; background-color: white; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
         .promo-tab-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 15px rgba(197, 160, 134, 0.3); color: #C5A086; }
         .promo-tab-btn.active { background-color: #C5A086; color: white; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); transform: none; }
@@ -147,28 +141,32 @@
             <h2 class="text-3xl text-brand-text font-bold mb-10">Latest News & Events <span class="block text-xl font-hand text-brand-accent font-normal mt-2">最新活動及訊息</span></h2>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="bg-white p-2 rounded shadow-sm hover:shadow-md transition">
-                    <img src="news_winter.jpg" onclick="openLightbox(this.src)" class="w-full h-auto rounded zoomable" alt="冬季深層保養">
-                </div>
-                <div class="bg-white p-2 rounded shadow-sm hover:shadow-md transition">
-                    <img src="news_promo.jpg" onclick="openLightbox(this.src)" class="w-full h-auto rounded zoomable" alt="優惠活動">
-                </div>
-                 <div class="bg-white p-2 rounded shadow-sm hover:shadow-md transition">
-                    <img src="news_value.jpg" onclick="openLightbox(this.src)" class="w-full h-auto rounded zoomable" alt="加值服務">
-                </div>
-                <div class="bg-white p-2 rounded shadow-sm hover:shadow-md transition">
-                    <img src="news_gel.jpg" onclick="openLightbox(this.src)" class="w-full h-auto rounded zoomable" alt="手足凝膠服務">
-                </div>
-                <div class="bg-white p-2 rounded shadow-sm hover:shadow-md transition">
-                    <img src="news_care.jpg" onclick="openLightbox(this.src)" class="w-full h-auto rounded zoomable" alt="凝膠加購保養服務">
-                </div>
-
                 <div class="bg-white p-2 rounded shadow-sm hover:shadow-md transition relative group overflow-hidden">
                     <img src="news_pedicure.jpg" onclick="openLightbox(this.src)" class="w-full h-auto rounded zoomable" alt="新增足部專區">
                      <div class="absolute bottom-0 left-0 right-0 bg-brand-bg/95 p-4 text-brand-dark font-bold text-xl rounded-b border-t-2 border-brand-accent">
                         🎉 新增足部專區
                         <span class="block text-sm font-normal text-brand-accent mt-1">提供更舒適專業的足部保養體驗</span>
                     </div>
+                </div>
+
+                <div class="bg-white p-2 rounded shadow-sm hover:shadow-md transition">
+                    <img src="news_gel.jpg" onclick="openLightbox(this.src)" class="w-full h-auto rounded zoomable" alt="手足凝膠服務">
+                </div>
+
+                <div class="bg-white p-2 rounded shadow-sm hover:shadow-md transition">
+                    <img src="news_care.jpg" onclick="openLightbox(this.src)" class="w-full h-auto rounded zoomable" alt="凝膠加購保養服務">
+                </div>
+
+                <div class="bg-white p-2 rounded shadow-sm hover:shadow-md transition">
+                    <img src="news_winter.jpg" onclick="openLightbox(this.src)" class="w-full h-auto rounded zoomable" alt="冬季深層保養">
+                </div>
+                
+                <div class="bg-white p-2 rounded shadow-sm hover:shadow-md transition">
+                    <img src="news_value.jpg" onclick="openLightbox(this.src)" class="w-full h-auto rounded zoomable" alt="加值服務">
+                </div>
+
+                <div class="bg-white p-2 rounded shadow-sm hover:shadow-md transition">
+                    <img src="news_promo.jpg" onclick="openLightbox(this.src)" class="w-full h-auto rounded zoomable" alt="優惠活動">
                 </div>
             </div>
         </div>
@@ -189,7 +187,7 @@
             <h2 class="text-3xl mb-10 font-bold">Location & Contact <span class="block text-xl font-hand text-brand-accent font-normal mt-2">預約資訊</span></h2>
             <div class="flex flex-col lg:flex-row gap-8 items-start text-left">
                 <div class="w-full lg:w-1/2 h-64 md:h-80 rounded-lg overflow-hidden shadow-2xl border-4 border-white/20 bg-gray-100 relative">
-                    <iframe width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=zh-TW&amp;q=%E9%AB%98%E9%9B%84%E5%B8%82%E4%B8%89%E6%B0%91%E5%8D%80%E5%A4%A7%E8%B1%90%E4%B8%80%E8%B7%AF163-2%E8%99%9F1%E6%A8%93+(Chloe%20Nail%20Studio)&amp;t=&amp;z=17&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe>
+                    <iframe width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=100%25&height=600&hl=zh-TW&q=%E9%AB%98%E9%9B%84%E5%B8%82%E4%B8%89%E6%B0%91%E5%8D%80%E5%A4%A7%E8%B1%90%E4%B8%80%E8%B7%AF163-2%E8%99%9F1%E6%A8%93+(Chloe%20Nail%20Studio)&t=&z=17&ie=UTF8&iwloc=B&output=embed"></iframe>
                 </div>
                 <div class="w-full lg:w-1/2 bg-white p-8 rounded-lg border border-brand-accent/10 shadow-lg text-brand-text">
                     <h3 class="font-bold text-lg mb-4 border-b pb-2 border-gray-100">💅 美甲預約 (Salon)</h3>
@@ -217,7 +215,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // 檢查是否看過須知
             if (!localStorage.getItem('hasReadRules')) {
                 document.getElementById('rules-modal').classList.add('active');
                 document.body.style.overflow = 'hidden';
@@ -231,7 +228,6 @@
             document.body.style.overflow = 'auto';
         }
 
-        // 渲染邏輯：分頁籤 (Tabs)
         function renderSite() {
             const tabsContainer = document.getElementById('promo-tabs');
             const contentContainer = document.getElementById('promos-container');
@@ -263,18 +259,15 @@
             document.getElementById(`tab-btn-${id}`).classList.add('active');
         }
 
-        // 切換頁面函數
         function switchPage(id){ 
             document.querySelectorAll('.page-section').forEach(p=>p.classList.remove('active')); 
             document.getElementById(id).classList.add('active'); 
             window.scrollTo(0,0); 
             document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('text-brand-accent','font-bold')); 
-            // 處理導航按鈕 active 狀態
             const navId = 'nav-' + id.replace('page-','');
             const btn = document.getElementById(navId);
             if(btn) btn.classList.add('text-brand-accent','font-bold'); 
             
-            // 手機版底部導航 active 狀態 (簡單處理)
             const mobileBtns = document.querySelectorAll('.md\\:hidden.fixed .flex-col');
             mobileBtns.forEach(b => b.classList.remove('text-brand-accent'));
              if(id === 'page-home') mobileBtns[0].classList.add('text-brand-accent');
