@@ -17,9 +17,18 @@
         .modal-overlay.show { display: block; }
         #cart-sidebar { position: fixed; top: 0; right: 0; width: 100%; max-width: 400px; height: 100%; background: white; z-index: 100; transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; box-shadow: -5px 0 25px rgba(0,0,0,0.1); }
         #cart-sidebar.open { transform: translateX(0); }
-        #product-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 800px; max-height: 90vh; background: white; z-index: 100; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); overflow: hidden; flex-direction: column; }
+        
+        /* Modal 改良：確保高度不超過螢幕，並設定內部滾動 */
+        #product-modal { 
+            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+            width: 95%; max-width: 900px; 
+            height: 90vh; /* 固定高度 */
+            max-height: 90vh; 
+            background: white; z-index: 100; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); overflow: hidden; flex-direction: column; 
+        }
         #product-modal.open { display: flex; }
-        @media (min-width: 768px) { #product-modal { flex-direction: row; } }
+        @media (min-width: 768px) { #product-modal { flex-direction: row; height: 80vh; } }
+        
         .cart-float-btn { position: fixed; bottom: 90px; right: 20px; background: #C5A086; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2); cursor: pointer; z-index: 50; transition: 0.2s; }
         .cart-count { position: absolute; top: -5px; right: -5px; background: #b91c1c; color: white; font-size: 12px; width: 24px; height: 24px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; }
         @media (min-width: 768px) { .cart-float-btn { bottom: 30px; right: 30px; } }
@@ -34,16 +43,14 @@
     <script>
         const SHOP_CONFIG = {
             lineID: "866wnpdc", 
-
-            // 請注意：我把 description 用 ` (反引號) 包起來，這樣您可以直接在裡面換行
             products: [
                 { 
                     id: 1, 
-                    name: "柔嫩保養組", 
-                    price: 650, 
-                    originalPrice: 960,  
-                    tag: "推薦", 
-                    images: ["p01.jpg"], // 記得放照片
+                    name: "沙龍級植萃賦活指緣油", 
+                    price: 390, 
+                    originalPrice: 590, 
+                    tag: "熱銷", 
+                    images: ["p01.jpg"], 
                     description: `
 【商品介紹】
 添加頂級角鯊烷．清爽秒吸收｜5款精油香氛
@@ -95,12 +102,7 @@
 🔸 用法：取適量塗抹於指甲周圍肌膚，輕輕按摩至吸收即可。
 🔸 保存方式：請置於陰涼處，避免陽光直射。`
                 },
-                
-                // 其他商品維持原樣 (您之後可以照上面的格式修改它們)
-                { id: 2, 
-                    name: "精緻完美保養 三入禮盒組", 
-                    price: 1000, 
-                    originalPrice: 1460, description: "網友好評推薦款。", tag: "推薦", images: ["p02.jpg"] },
+                { id: 2, name: "團購好物 02", price: 450, originalPrice: 650, description: "網友好評推薦款。", tag: "推薦", images: ["p02.jpg"] },
                 { id: 3, name: "團購好物 03", price: 280, description: "小資族最愛，高CP值好物。", tag: "", images: ["p03.jpg"] },
                 { id: 4, name: "團購好物 04", price: 590, originalPrice: 880, description: "限量發售，售完不補。", tag: "", images: ["p04.jpg"] },
                 { id: 5, name: "團購好物 05", price: 350, description: "居家必備良品。", tag: "", images: ["p05.jpg"] },
@@ -113,37 +115,43 @@
             ]
         };
     </script>
+    
     <div id="overlay" class="modal-overlay" onclick="closeAllModals()"></div>
     <div id="lightbox" onclick="this.classList.remove('show')"><img id="lightbox-img" src=""></div>
 
     <div id="product-modal">
         <button onclick="closeAllModals()" class="absolute top-2 right-2 md:top-4 md:right-4 z-20 bg-black/20 hover:bg-black/40 rounded-full p-2 text-white transition">✕</button>
         
-        <div class="w-full md:w-1/2 bg-gray-50 p-4 md:p-6 flex flex-col items-center justify-center overflow-hidden h-auto md:h-full shrink-0 border-b md:border-b-0 md:border-r border-gray-100">
-            <div class="w-full h-64 md:h-80 flex items-center justify-center mb-4 bg-white rounded-lg shadow-sm">
+        <div class="w-full md:w-1/2 bg-gray-50 p-4 flex flex-col items-center justify-center shrink-0 border-b md:border-b-0 md:border-r border-gray-100 h-[35vh] md:h-full">
+            <div class="w-full h-full flex items-center justify-center bg-white rounded-lg shadow-sm overflow-hidden">
                 <img id="pm-image" src="" class="max-w-full max-h-full object-contain cursor-zoom-in" onclick="openLightbox(this.src)">
             </div>
-            <div id="pm-thumbs" class="flex gap-2 justify-center w-full overflow-x-auto p-1"></div>
+            <div id="pm-thumbs" class="flex gap-2 justify-center w-full overflow-x-auto p-1 mt-2 h-16 shrink-0"></div>
         </div>
 
-        <div class="w-full md:w-1/2 p-6 md:p-10 flex flex-col h-full overflow-y-auto bg-white justify-center">
-            <div class="flex-1 flex flex-col justify-center">
+        <div class="w-full md:w-1/2 flex flex-col h-[55vh] md:h-full bg-white relative">
+            
+            <div class="flex-1 overflow-y-auto p-6 scroll-smooth">
                 <div id="pm-tag" class="inline-block bg-brand-dark text-white text-xs px-2 py-1 rounded mb-2 w-fit" style="display:none">預購</div>
-                <h2 id="pm-title" class="text-3xl font-bold text-brand-dark mb-2">商品名稱</h2>
+                <h2 id="pm-title" class="text-2xl font-bold text-brand-dark mb-1">商品名稱</h2>
                 <div id="pm-price-container" class="mb-4 flex items-baseline gap-2"></div>
                 
-                <div id="pm-desc" class="text-gray-600 text-sm leading-relaxed mb-6 whitespace-pre-line border-l-4 border-brand-accent pl-3"></div>
-                
-                <div class="bg-brand-bg/30 p-4 rounded-lg border border-brand-bg">
-                    <label class="block text-sm font-bold text-gray-600 mb-3">購買數量</label>
-                    <div class="flex items-center">
-                        <button onclick="adjustQty(-1)" class="w-12 h-12 bg-white border border-gray-300 rounded-l hover:bg-gray-100 text-xl font-bold text-gray-500 transition">-</button>
-                        <input type="number" id="pm-qty" value="1" readonly class="w-20 h-12 text-center text-xl text-brand-dark font-bold border-t border-b border-gray-300 outline-none bg-white">
-                        <button onclick="adjustQty(1)" class="w-12 h-12 bg-white border border-gray-300 rounded-r hover:bg-gray-100 text-xl font-bold text-brand-accent transition">+</button>
+                <div id="pm-desc" class="text-gray-600 text-sm leading-relaxed whitespace-pre-line border-l-4 border-brand-accent pl-3 mb-4"></div>
+            </div>
+
+            <div class="p-4 border-t border-gray-100 bg-white shrink-0 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-10">
+                <div class="flex items-center justify-between gap-4">
+                    <div class="flex items-center border border-gray-300 rounded shrink-0">
+                        <button onclick="adjustQty(-1)" class="w-10 h-10 bg-gray-50 hover:bg-gray-200 text-lg font-bold text-gray-500">-</button>
+                        <input type="number" id="pm-qty" value="1" readonly class="w-12 h-10 text-center text-brand-dark font-bold border-l border-r border-gray-300 outline-none bg-white">
+                        <button onclick="adjustQty(1)" class="w-10 h-10 bg-gray-50 hover:bg-gray-200 text-lg font-bold text-brand-accent">+</button>
                     </div>
+                    
+                    <button onclick="confirmAddToCart()" class="flex-1 bg-brand-text text-white h-12 rounded-lg hover:bg-brand-accent transition font-bold text-lg shadow-md whitespace-nowrap">
+                        加入購物車
+                    </button>
                 </div>
             </div>
-            <button onclick="confirmAddToCart()" class="w-full bg-brand-text text-white py-4 rounded-lg hover:bg-brand-accent transition font-bold text-xl shadow-lg mt-8 mb-4">加入購物車</button>
         </div>
     </div>
 
@@ -255,7 +263,6 @@
             document.getElementById('pm-title').innerText = currentProduct.name;
             document.getElementById('pm-price-container').innerHTML = formatPriceHTML(currentProduct.price, currentProduct.originalPrice).replace('text-sm', 'text-lg').replace('text-brand-accent', 'text-brand-accent text-3xl');
             
-            // 填入說明文字 (預設為暫無說明)
             document.getElementById('pm-desc').innerText = currentProduct.description || "暫無說明";
 
             const tagEl = document.getElementById('pm-tag');
