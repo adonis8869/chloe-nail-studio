@@ -203,27 +203,29 @@
         <div onclick="switchPage('page-location')" class="flex flex-col items-center p-2 active:text-brand-accent"><span class="text-lg mb-1">📍</span><span>資訊</span></div>
     </div>
 
-    <script>
+<script>
         document.addEventListener('DOMContentLoaded', function() {
-            // 檢查是否看過須知
+            // 1. 檢查是否看過須知
             if (!localStorage.getItem('hasReadRules')) {
                 document.getElementById('rules-modal').classList.add('active');
                 document.body.style.overflow = 'hidden';
             }
             
-            // ★ 新增功能：載入時檢查網址 Hash，並自動跳轉
+            // 2. ★ 修正點：無論在這一頁還是哪一頁，都要先建立優惠內容
+            renderSite(); 
+            
+            // 3. 檢查網址 Hash 並跳轉
             const hash = window.location.hash.replace('#', '');
             if (hash && document.getElementById(hash)) {
                 switchPage(hash);
             } else {
-                renderSite(); // 預設首頁
+                updateView('page-home'); // 預設回首頁
             }
             
-            // ★ 新增功能：監聽瀏覽器「上一頁/下一頁」按鈕
+            // 4. 監聽上一頁/下一頁
             window.addEventListener('hashchange', function() {
                 const newHash = window.location.hash.replace('#', '');
                 if (newHash && document.getElementById(newHash)) {
-                    // 這裡不呼叫 switchPage 避免無限迴圈，直接做 UI 更新
                     updateView(newHash);
                 } else {
                     updateView('page-home');
@@ -240,6 +242,10 @@
         function renderSite() {
             const tabsContainer = document.getElementById('promo-tabs');
             const contentContainer = document.getElementById('promos-container');
+            
+            // 防呆：如果找不到容器就不執行，避免報錯
+            if (!tabsContainer || !contentContainer) return;
+
             let tabsHTML = '';
             let contentHTML = '';
 
@@ -258,37 +264,43 @@
 
             tabsContainer.innerHTML = tabsHTML;
             contentContainer.innerHTML = contentHTML;
-            if (SITE_CONFIG.promos.length > 0) { switchTab(SITE_CONFIG.promos[SITE_CONFIG.promos.length - 1].id); }
+            
+            // 預設選中最後一個優惠
+            if (SITE_CONFIG.promos.length > 0) { 
+                switchTab(SITE_CONFIG.promos[SITE_CONFIG.promos.length - 1].id); 
+            }
         }
 
         function switchTab(id) {
             document.querySelectorAll('.promo-content').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.promo-tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById(`tab-content-${id}`).classList.remove('hidden');
-            document.getElementById(`tab-btn-${id}`).classList.add('active');
+            
+            const content = document.getElementById(`tab-content-${id}`);
+            const btn = document.getElementById(`tab-btn-${id}`);
+            
+            if(content) content.classList.remove('hidden');
+            if(btn) btn.classList.add('active');
         }
 
-        // ★ 修改：切換頁面時，同時更新網址 Hash
         function switchPage(id){ 
-            window.location.hash = id; // 這會觸發 hashchange 事件，或者直接改變網址
+            window.location.hash = id; 
             updateView(id);
         }
 
-        // ★ 新增：純粹更新畫面 (不改網址，避免循環)
         function updateView(id) {
             document.querySelectorAll('.page-section').forEach(p=>p.classList.remove('active')); 
             
-            // 防呆機制：如果 id 找不到，預設回首頁
             const target = document.getElementById(id);
             if (target) {
                 target.classList.add('active'); 
             } else {
-                document.getElementById('page-home').classList.add('active');
+                // 如果找不到頁面，回首頁
+                const home = document.getElementById('page-home');
+                if(home) home.classList.add('active');
             }
 
             window.scrollTo(0,0); 
             
-            // 更新按鈕狀態
             document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('text-brand-accent','font-bold')); 
             const navId = 'nav-' + id.replace('page-','');
             const btn = document.getElementById(navId);
@@ -296,11 +308,11 @@
             
             const mobileBtns = document.querySelectorAll('.md\\:hidden.fixed .flex-col');
             mobileBtns.forEach(b => b.classList.remove('text-brand-accent'));
-             if(id === 'page-home') mobileBtns[0].classList.add('text-brand-accent');
-             if(id === 'page-news') mobileBtns[1].classList.add('text-brand-accent');
-             if(id === 'page-promos') mobileBtns[2].classList.add('text-brand-accent');
-             if(id === 'page-menu') mobileBtns[3].classList.add('text-brand-accent');
-             if(id === 'page-location') mobileBtns[4].classList.add('text-brand-accent');
+             if(id === 'page-home' && mobileBtns[0]) mobileBtns[0].classList.add('text-brand-accent');
+             if(id === 'page-news' && mobileBtns[1]) mobileBtns[1].classList.add('text-brand-accent');
+             if(id === 'page-promos' && mobileBtns[2]) mobileBtns[2].classList.add('text-brand-accent');
+             if(id === 'page-menu' && mobileBtns[3]) mobileBtns[3].classList.add('text-brand-accent');
+             if(id === 'page-location' && mobileBtns[4]) mobileBtns[4].classList.add('text-brand-accent');
         }
 
         function openLightbox(src){ document.getElementById('lightbox-img').src=src; document.getElementById('lightbox').classList.add('show'); }
