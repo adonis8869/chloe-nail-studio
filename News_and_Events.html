@@ -53,20 +53,18 @@
         #lightbox img { max-width: 100%; max-height: 95vh; object-fit: contain; }
     </style>
 </head>
-<body>
+<body class="pb-28">
 
     <div id="lightbox" onclick="this.classList.remove('show')">
         <img id="lightbox-img" src="">
     </div>
 
     <nav class="bg-brand-bg/95 backdrop-blur-sm border-b border-brand-accent/20 py-5 shadow-sm sticky top-0 z-40">
-        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
-            <div class="cursor-pointer" onclick="window.location.href='202512.html'"> <div class="text-2xl font-bold tracking-widest font-serif text-brand-text">CHLOE NAIL</div>
+        <div class="max-w-7xl mx-auto px-6 flex justify-center items-center">
+            <div class="text-center">
+                <div class="text-2xl font-bold tracking-widest font-serif text-brand-text">CHLOE NAIL</div>
                 <div class="font-hand text-lg text-brand-accent">Chloe nail studio</div>
             </div>
-            <a href="202512.html" class="hidden md:block text-brand-accent hover:text-brand-dark transition font-medium">
-                ← 優惠款式
-            </a>
         </div>
     </nav>
 
@@ -135,6 +133,15 @@
     <footer class="bg-brand-bg border-t border-brand-accent/20 py-8 mt-8 text-center text-sm text-brand-text/60">
         <p>© 2024 Chloe Nail Studio. All rights reserved.</p>
     </footer>
+
+    <a href="https://liff.line.me/2005658992-1YnkbR7K" target="_blank" class="fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur-md border-t border-brand-accent/30 py-3 z-50 flex flex-col items-center justify-center text-brand-dark shadow-[0_-4px_15px_rgba(0,0,0,0.1)] hover:bg-brand-bg transition cursor-pointer no-underline group">
+        <div class="w-14 h-14 rounded-full bg-brand-accent flex items-center justify-center shadow-md mb-1 group-hover:scale-105 transition-transform">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-7 h-7 text-white">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 9v7.5M10 12h4v4h-4v-4Z" />
+            </svg>
+        </div>
+        <div class="text-base font-bold tracking-wider text-brand-dark">點我預約</div>
+    </a>
 
     <script>
         // 只保留 Lightbox 功能
