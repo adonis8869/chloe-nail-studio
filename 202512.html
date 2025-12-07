@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chloe Nail Studio | 限定優惠款式</title>
+    <title>Chloe Nail Studio | 設計師作品集</title>
     <link rel="icon" href="favicon.png" type="image/png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,152 +13,212 @@
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: { 'brand-bg': '#F5F0F0', 'brand-text': '#8B7E74', 'brand-accent': '#C5A086', 'brand-white': '#FFFFFF', 'brand-dark': '#5D534A' },
-                    fontFamily: { 'sans': ['"Zen Maru Gothic"', 'sans-serif'], 'serif': ['"Zen Maru Gothic"', 'sans-serif'], 'hand': ['"Dancing Script"', 'cursive'] }
+                    colors: { 
+                        'brand-bg': '#F5F0F0', 
+                        'brand-text': '#8B7E74', 
+                        'brand-accent': '#C5A086', 
+                        'brand-dark': '#5D534A',
+                        'nav-active': '#A89080' 
+                    },
+                    fontFamily: { 
+                        'sans': ['"Zen Maru Gothic"', 'sans-serif'], 
+                        'serif': ['"Zen Maru Gothic"', 'sans-serif'], 
+                        'hand': ['"Dancing Script"', 'cursive'] 
+                    },
+                    boxShadow: {
+                        'nav': '0 -4px 20px rgba(0,0,0,0.05)'
+                    }
                 }
             }
         }
-        
-        // 🔧 後台設定區：在此修改優惠內容
+
+        // 🔧 後台設定區
         const SITE_CONFIG = {
-            promos: [
-                {
-                    id: "dec",
-                    tabName: "12月聖誕款",
-                    type: "gallery", 
-                    title: "December Specials", 
-                    subtitle: "12月聖誕跨年限定",
-                    description: "Chloe美甲師為你準備 高質感日常款 × 精緻聖誕限定款\n從奶霧、琥珀暈染到聖誕蝴蝶結、冬季藍，全都在這裡。",
-                    priceText: `<span class="block text-base font-normal mb-1">🔸 $1099 | 冬季基本款系列 (霧藍/莓紅/禮物包裝)</span><span class="block text-base font-normal mb-1">🔸 $1199 | 聖誕花草 × 奶霧系列 (柔霧雪季色調)</span><span class="block text-base font-normal">🔸 $1299 | 聖誕樹咖啡暈染 (聖誕限定/百搭顯白)</span>`,
-                    dateText: "*活動日期：12/01 - 12/31 (開放預約中)",
-                    images: ["dec_2.jpg", "dec_1.jpg", "dec_3.jpg"]
+            bookingLink: "https://liff.line.me/2005658992-1YnkbR7K", // 你的預約連結
+            artists: {
+                chloe: {
+                    name: "Chloe",
+                    title: "店長 / 資深設計師",
+                    desc: "擅長精緻暈染、高質感造型",
+                    // 這裡放 Chloe 的照片 (沿用之前的聖誕款或日常作品)
+                    images: ["dec_2.jpg", "dec_1.jpg", "dec_3.jpg", "chloe_4.jpg", "chloe_5.jpg"] 
+                },
+                qiqi: {
+                    name: "奇奇",
+                    title: "人氣美甲師",
+                    desc: "擅長日系小清新、可愛手繪風格",
+                    // 這裡放 奇奇 的 5 張照片
+                    images: ["qiqi_1.jpg", "qiqi_2.jpg", "qiqi_3.jpg", "qiqi_4.jpg", "qiqi_5.jpg"]
                 }
-                // 若要新增月份，複製上方大括號區塊貼上並修改即可
-            ]
+            }
         };
     </script>
     <style>
-        body { background-color: #F5F0F0; color: #8B7E74; font-family: "Zen Maru Gothic", sans-serif; }
+        body { background-color: #F5F0F0; color: #8B7E74; font-family: "Zen Maru Gothic", sans-serif; padding-bottom: 100px; /* 留給底部導航的空間 */ }
         
-        /* 動畫設定 */
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .animate-fade-in { animation: fadeIn 0.5s ease-in-out; }
-        
-        /* 圖片放大與燈箱 */
+        /* 圖片燈箱 */
         .zoomable { cursor: zoom-in; transition: transform 0.3s ease; } .zoomable:hover { transform: scale(1.02); }
         #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); z-index: 9999; justify-content: center; align-items: center; }
         #lightbox.show { display: flex; } #lightbox img { max-width: 100%; max-height: 95vh; }
 
-        /* 按鈕樣式 */
-        .promo-tab-btn { padding: 12px 36px; border-radius: 9999px; border: 2px solid #C5A086; color: #8B7E74; background-color: white; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .promo-tab-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 15px rgba(197, 160, 134, 0.3); color: #C5A086; }
-        .promo-tab-btn.active { background-color: #C5A086; color: white; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); transform: none; }
+        /* 切換動畫 */
+        .section-view { display: none; animation: fadeIn 0.4s ease-out; }
+        .section-view.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* 底部導航圖標樣式 */
+        .nav-icon-btn { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; width: 33%; cursor: pointer; position: relative; color: #C5A086; transition: color 0.3s; }
+        .nav-icon-btn.active { color: #5D534A; font-weight: bold; }
+        .nav-icon-btn span { font-size: 14px; margin-top: 4px; }
+        
+        /* 中間凸起按鈕樣式 */
+        .center-btn-wrapper { position: relative; top: -20px; }
+        .center-btn { 
+            width: 60px; height: 60px; 
+            background-color: #C5A086; 
+            border-radius: 50%; 
+            display: flex; justify-content: center; align-items: center; 
+            box-shadow: 0 4px 10px rgba(197, 160, 134, 0.4);
+            color: white;
+            transition: transform 0.2s;
+        }
+        .center-btn:active { transform: scale(0.95); }
+        
     </style>
 </head>
-<body class="min-h-screen flex flex-col">
-    
+<body>
+
     <div id="lightbox" onclick="this.classList.remove('show')"><img id="lightbox-img" src=""></div>
 
-    <header class="bg-brand-bg/95 backdrop-blur-sm border-b border-brand-accent/20 py-6 text-center shadow-sm sticky top-0 z-40">
-        <div class="cursor-pointer" onclick="window.location.reload()">
-            <div class="text-3xl font-bold tracking-widest font-serif text-brand-dark">CHLOE NAIL</div>
-            <div class="font-hand text-xl text-brand-accent">Special Offers</div>
-        </div>
+    <header class="bg-white/80 backdrop-blur-md border-b border-gray-100 py-4 sticky top-0 z-30 text-center">
+        <h1 class="text-2xl font-serif font-bold text-brand-dark tracking-wider">Chloe Nail Studio</h1>
+        <p class="text-sm text-brand-accent font-hand" id="header-subtitle">Select Artist</p>
     </header>
 
-    <main class="flex-grow py-12 px-6">
-        <div class="max-w-7xl mx-auto">
+    <main class="max-w-3xl mx-auto px-4 pt-6">
+        
+        <div id="view-chloe" class="section-view active">
+            <div class="flex items-center gap-4 mb-6 bg-white p-4 rounded-xl shadow-sm border border-brand-accent/20">
+                <div class="w-16 h-16 bg-brand-bg rounded-full flex items-center justify-center text-2xl overflow-hidden">
+                    👩🏻‍🎨
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold text-brand-dark">Chloe</h2>
+                    <p class="text-xs text-brand-accent">店長 / 資深美甲師</p>
+                    <p class="text-sm text-gray-500 mt-1">擅長精緻暈染、高質感造型</p>
+                </div>
+            </div>
             
-            <div class="text-center mb-10">
-                <h1 class="text-3xl md:text-4xl text-brand-text font-bold">Monthly Specials</h1>
-                <span class="block text-2xl font-hand text-brand-accent font-normal mt-2">每月限定優惠款式</span>
+            <h3 class="text-lg font-bold mb-4 text-brand-dark pl-2 border-l-4 border-brand-accent">Portfolio 作品集</h3>
+            <div class="grid grid-cols-2 gap-3" id="gallery-chloe">
+                </div>
+        </div>
+
+        <div id="view-qiqi" class="section-view">
+             <div class="flex items-center gap-4 mb-6 bg-white p-4 rounded-xl shadow-sm border border-brand-accent/20">
+                <div class="w-16 h-16 bg-brand-bg rounded-full flex items-center justify-center text-2xl overflow-hidden">
+                    👧🏻
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold text-brand-dark">奇奇 (Qiqi)</h2>
+                    <p class="text-xs text-brand-accent">人氣美甲師</p>
+                    <p class="text-sm text-gray-500 mt-1">擅長日系小清新、可愛手繪風格</p>
+                </div>
             </div>
 
-            <div class="flex flex-wrap justify-center gap-4 md:gap-8 mb-12" id="promo-tabs">
+            <h3 class="text-lg font-bold mb-4 text-brand-dark pl-2 border-l-4 border-brand-accent">Portfolio 作品集</h3>
+            <div class="grid grid-cols-2 gap-3" id="gallery-qiqi">
                 </div>
-
-            <div id="promos-container">
-                </div>
-
         </div>
+
     </main>
 
-    <footer class="bg-brand-text text-brand-bg py-8 text-center mt-auto">
-        <p class="font-hand text-xl mb-2">Chloe nail studio</p>
-        <p class="text-sm opacity-80">Copyright © 2025 Chloe Nail. All rights reserved.</p>
-        <div class="mt-4 flex justify-center gap-4 text-sm">
-             <a href="https://www.instagram.com/chloe_nail.studio_/" target="_blank" class="hover:text-brand-accent transition">Instagram</a>
-             <span>|</span>
-             <a href="https://line.me/R/ti/p/@866wnpdc" target="_blank" class="hover:text-brand-accent transition">Line 預約</a>
+    <nav class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-100 shadow-nav z-40 h-[80px] flex justify-between items-end px-6 pb-2">
+        
+        <div class="nav-icon-btn active" id="btn-chloe" onclick="switchArtist('chloe')">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <path d="M16 10a4 4 0 0 1-8 0"></path>
+            </svg>
+            <span>Chloe</span>
         </div>
-    </footer>
+
+        <div class="nav-icon-btn" onclick="openBooking()">
+            <div class="center-btn-wrapper">
+                <div class="center-btn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                </div>
+            </div>
+            <span class="font-bold text-brand-dark">點我預約</span>
+        </div>
+
+        <div class="nav-icon-btn" id="btn-qiqi" onclick="switchArtist('qiqi')">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+            </svg>
+            <span>奇奇</span>
+        </div>
+
+    </nav>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            renderSite();
+            renderGalleries();
         });
 
-        function renderSite() {
-            const tabsContainer = document.getElementById('promo-tabs');
-            const contentContainer = document.getElementById('promos-container');
-            
-            if (!tabsContainer || !contentContainer) return;
+        function renderGalleries() {
+            // 渲染 Chloe 的照片
+            const chloeContainer = document.getElementById('gallery-chloe');
+            if (SITE_CONFIG.artists.chloe.images.length > 0) {
+                chloeContainer.innerHTML = SITE_CONFIG.artists.chloe.images.map(img => 
+                    `<div class="aspect-[3/4] rounded-lg overflow-hidden shadow-sm bg-gray-100 relative group">
+                        <img src="${img}" onclick="openLightbox(this.src)" class="w-full h-full object-cover zoomable" onerror="this.src='https://via.placeholder.com/400x600?text=Chloe+Work'">
+                    </div>`
+                ).join('');
+            } else {
+                chloeContainer.innerHTML = '<p class="col-span-2 text-center text-gray-400 py-10">尚無作品照片</p>';
+            }
 
-            let tabsHTML = '';
-            let contentHTML = '';
-
-            // 讀取設定檔並生成 HTML
-            SITE_CONFIG.promos.forEach((promo, index) => {
-                // 生成按鈕
-                tabsHTML += `<button onclick="switchTab('${promo.id}')" id="tab-btn-${promo.id}" class="promo-tab-btn">${promo.tabName}</button>`;
-                
-                // 生成圖片區塊
-                let innerContent = '';
-                if (promo.type === "standard") {
-                     // 保留標準版型的邏輯 (若未來有需要)
-                    const items = promo.items.map((item, i) => `<div class="text-center group flex flex-col items-center"><div class="bg-brand-bg p-2 rounded-lg shadow-md transform ${i%2===0?'-rotate-1':'rotate-1'} hover:rotate-0 transition duration-500 mb-3"><img src="${item.image}" onclick="openLightbox(this.src)" class="w-full h-auto rounded zoomable" onerror="this.src='https://via.placeholder.com/300?text=Promo+Image'"></div><p class="text-lg text-brand-dark font-bold">${item.artist}</p><p class="text-brand-accent">${item.price}</p></div>`).join('');
-                    innerContent = `<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start"><div class="lg:col-span-1"><div class="bg-brand-bg p-2 rounded-lg shadow-md transform -rotate-1 hover:rotate-0 transition duration-500"><img src="${promo.infoImage}" onclick="openLightbox(this.src)" class="w-full h-auto rounded zoomable" onerror="this.src='https://via.placeholder.com/400x600?text=Info+Image'"></div></div><div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-8">${items}</div></div>`;
-                } else {
-                    // 畫廊版型 (目前的設定)
-                    const images = promo.images.map(img => `<div class="overflow-hidden rounded-lg shadow-md"><img src="${img}" onclick="openLightbox(this.src)" class="w-full h-auto object-cover zoomable hover:scale-105 transition duration-500" onerror="this.src='https://via.placeholder.com/300?text=Gallery+Image'"></div>`).join('');
-                    innerContent = `<div class="text-center mb-8"><p class="text-gray-600 whitespace-pre-line mb-2 leading-relaxed font-medium">${promo.description}</p><div class="text-xl text-brand-dark font-bold inline-block text-left bg-white p-6 rounded-lg shadow-sm border border-brand-accent/30 mt-4">${promo.priceText}</div></div><div class="grid grid-cols-1 md:grid-cols-3 gap-6">${images}</div>`;
-                }
-
-                // 組合完整內容區塊 (預設 hidden)
-                contentHTML += `
-                    <div id="tab-content-${promo.id}" class="promo-content hidden animate-fade-in">
-                        <h3 class="text-2xl md:text-3xl text-brand-dark font-serif text-center mb-2">${promo.title}</h3>
-                        <p class="text-xl text-brand-accent font-hand text-center mb-8">${promo.subtitle}</p>
-                        ${innerContent}
-                        <div class="text-center mt-12 py-4 bg-brand-white/50 rounded-lg text-sm text-gray-500 font-bold tracking-wide">${promo.dateText}</div>
-                    </div>`;
-            });
-
-            tabsContainer.innerHTML = tabsHTML;
-            contentContainer.innerHTML = contentHTML;
-            
-            // 預設選中最後一個優惠 (通常是最新月份)
-            if (SITE_CONFIG.promos.length > 0) { 
-                switchTab(SITE_CONFIG.promos[SITE_CONFIG.promos.length - 1].id); 
+            // 渲染 奇奇 的照片
+            const qiqiContainer = document.getElementById('gallery-qiqi');
+            if (SITE_CONFIG.artists.qiqi.images.length > 0) {
+                qiqiContainer.innerHTML = SITE_CONFIG.artists.qiqi.images.map(img => 
+                    `<div class="aspect-[3/4] rounded-lg overflow-hidden shadow-sm bg-gray-100 relative group">
+                        <img src="${img}" onclick="openLightbox(this.src)" class="w-full h-full object-cover zoomable" onerror="this.src='https://via.placeholder.com/400x600?text=Qiqi+Work'">
+                    </div>`
+                ).join('');
+            } else {
+                qiqiContainer.innerHTML = '<p class="col-span-2 text-center text-gray-400 py-10">尚無作品照片</p>';
             }
         }
 
-        // 切換分頁邏輯
-        function switchTab(id) {
-            // 隱藏所有內容
-            document.querySelectorAll('.promo-content').forEach(el => el.classList.add('hidden'));
-            // 移除所有按鈕的 active 狀態
-            document.querySelectorAll('.promo-tab-btn').forEach(btn => btn.classList.remove('active'));
+        function switchArtist(artistId) {
+            // 隱藏所有視圖
+            document.querySelectorAll('.section-view').forEach(el => el.classList.remove('active'));
+            // 移除導航激活狀態
+            document.getElementById('btn-chloe').classList.remove('active');
+            document.getElementById('btn-qiqi').classList.remove('active');
+
+            // 顯示目標視圖
+            document.getElementById(`view-${artistId}`).classList.add('active');
+            document.getElementById(`btn-${artistId}`).classList.add('active');
             
-            // 顯示目標內容
-            const content = document.getElementById(`tab-content-${id}`);
-            const btn = document.getElementById(`tab-btn-${id}`);
-            
-            if(content) content.classList.remove('hidden');
-            if(btn) btn.classList.add('active');
+            // 更新副標題
+            const subtitle = artistId === 'chloe' ? "Design by Chloe" : "Design by Qiqi";
+            document.getElementById('header-subtitle').innerText = subtitle;
+
+            window.scrollTo(0,0);
         }
 
-        // 開啟圖片燈箱
+        function openBooking() {
+            window.location.href = SITE_CONFIG.bookingLink;
+        }
+
         function openLightbox(src){ 
             document.getElementById('lightbox-img').src=src; 
             document.getElementById('lightbox').classList.add('show'); 
