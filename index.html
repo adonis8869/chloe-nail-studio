@@ -7,59 +7,78 @@
     <link rel="icon" href="favicon.png" type="image/png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600&family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600&family=Noto+Sans+TC:wght@300;400;500;700&family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: { 'brand-bg': '#F5F0F0', 'brand-text': '#8B7E74', 'brand-accent': '#C5A086', 'brand-white': '#FFFFFF', 'brand-dark': '#5D534A' },
-                    fontFamily: { 'sans': ['"Zen Maru Gothic"', 'sans-serif'], 'serif': ['"Zen Maru Gothic"', 'sans-serif'], 'hand': ['"Dancing Script"', 'cursive'] }
+                    fontFamily: { 
+                        'sans': ['"Zen Maru Gothic"', '"Noto Sans TC"', 'sans-serif'], 
+                        'serif': ['"Zen Maru Gothic"', '"Noto Sans TC"', 'sans-serif'], 
+                        'hand': ['"Dancing Script"', 'cursive'] 
+                    }
                 }
             }
         }
         
-        // 🔧 後台設定
+        // 🔧 後台設定 (連結與圖片)
         const SITE_CONFIG = {
-            promos: [
-                {
-                    id: "dec",
-                    tabName: "12月聖誕款",
-                    type: "gallery", 
-                    title: "December Specials", 
-                    subtitle: "12月聖誕跨年限定",
-                    description: "Chloe美甲師為你準備 高質感日常款 × 精緻聖誕限定款\n從奶霧、琥珀暈染到聖誕蝴蝶結、冬季藍，全都在這裡。",
-                    priceText: `<span class="block text-base font-normal mb-1">🔸 $1099 | 冬季基本款系列 (霧藍/莓紅/禮物包裝)</span><span class="block text-base font-normal mb-1">🔸 $1199 | 聖誕花草 × 奶霧系列 (柔霧雪季色調)</span><span class="block text-base font-normal">🔸 $1299 | 聖誕樹咖啡暈染 (聖誕限定/百搭顯白)</span>`,
-                    dateText: "*活動日期：12/01 - 12/31 (開放預約中)",
-                    images: ["dec_2.jpg", "dec_1.jpg", "dec_3.jpg"]
-                }
-            ]
+            bookingLink: "https://liff.line.me/2005658992-1YnkbR7K",
+            // 圖片設定
+            chloeImages: ["dec_2.jpg", "dec_1.jpg", "dec_3.jpg"],
+            qiqiImages: ["qiqi_1.jpg", "qiqi_2.jpg", "qiqi_3.jpg", "qiqi_4.jpg", "qiqi_5.jpg"]
         };
     </script>
     <style>
-        body { background-color: #F5F0F0; color: #8B7E74; font-family: "Zen Maru Gothic", sans-serif; }
+        body { background-color: #F5F0F0; color: #8B7E74; font-family: "Zen Maru Gothic", "Noto Sans TC", sans-serif; }
+        
+        /* 頁面切換動畫 */
         .page-section { display: none; animation: fadeIn 0.5s ease-in-out; padding-top: 100px; min-height: 80vh; }
         .page-section.active { display: block; }
         #page-home { padding-top: 0; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
+        /* 導航按鈕特效 */
         .nav-btn { position: relative; padding-bottom: 4px; cursor: pointer; }
         .nav-btn::after { content: ''; position: absolute; width: 0; height: 2px; bottom: 0; left: 0; background-color: #C5A086; transition: width 0.3s; }
         .nav-btn:hover::after, .nav-btn.active::after { width: 100%; }
         
+        /* 圖片放大與燈箱 */
         .zoomable { cursor: zoom-in; transition: transform 0.3s ease; } .zoomable:hover { transform: scale(1.02); }
-        
         #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); z-index: 9999; justify-content: center; align-items: center; }
         #lightbox.show { display: flex; } #lightbox img { max-width: 100%; max-height: 95vh; }
 
+        /* 預約須知彈窗 */
         #rules-modal { display: none; }
         #rules-modal.active { display: flex; }
-        @keyframes modalFadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-        .modal-content { animation: modalFadeIn 0.3s ease-out; }
+        .modal-content { animation: fadeIn 0.3s ease-out; }
 
-        .promo-tab-btn { padding: 12px 36px; border-radius: 9999px; border: 2px solid #C5A086; color: #8B7E74; background-color: white; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .promo-tab-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 15px rgba(197, 160, 134, 0.3); color: #C5A086; }
-        .promo-tab-btn.active { background-color: #C5A086; color: white; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); transform: none; }
+        /* ★ 新增：設計師切換按鈕樣式 (仿照您提供的樣式但做成頁面內版本) ★ */
+        .artist-tab-btn {
+            padding: 10px 30px;
+            border: 2px solid #C5A086;
+            border-radius: 50px;
+            color: #8B7E74;
+            background: transparent;
+            font-weight: bold;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .artist-tab-btn:hover {
+            background-color: rgba(197, 160, 134, 0.1);
+        }
+        .artist-tab-btn.active {
+            background-color: #C5A086;
+            color: white;
+            box-shadow: 0 4px 10px rgba(197, 160, 134, 0.4);
+        }
+        
+        /* 設計師內容區塊切換 */
+        .artist-content { display: none; animation: fadeIn 0.5s ease; }
+        .artist-content.active { display: block; }
+
     </style>
 </head>
 <body class="pb-24 md:pb-0">
@@ -72,8 +91,12 @@
                 <h3 class="text-xl font-bold text-brand-dark">Booking Rules</h3>
                 <p class="text-sm text-brand-accent">預約前請詳閱</p>
             </div>
-            <div class="flex-1 overflow-y-auto p-4 bg-gray-50"><img src="rules.jpg" class="w-full rounded shadow-sm" alt="預約須知" onerror="this.src='https://via.placeholder.com/400x600?text=Rules+Image+Missing'"></div>
-            <div class="p-4 border-t border-gray-100 bg-white"><button onclick="closeRulesModal()" class="w-full bg-brand-accent text-white py-3 rounded-full hover:bg-brand-dark transition font-bold tracking-widest shadow-lg transform active:scale-95">我已閱讀並同意</button></div>
+            <div class="flex-1 overflow-y-auto p-4 bg-gray-50">
+                <img src="rules.jpg" class="w-full rounded shadow-sm" alt="預約須知" onerror="this.src='https://via.placeholder.com/400x600?text=Rules+Image+Missing'">
+            </div>
+            <div class="p-4 border-t border-gray-100 bg-white">
+                <button onclick="closeRulesModal()" class="w-full bg-brand-accent text-white py-3 rounded-full hover:bg-brand-dark transition font-bold tracking-widest shadow-lg transform active:scale-95">我已閱讀並同意</button>
+            </div>
         </div>
     </div>
 
@@ -119,66 +142,84 @@
     <div id="page-promos" class="page-section">
         <div class="max-w-7xl mx-auto px-6">
             <div class="text-center mb-8">
-                <h2 class="text-3xl md:text-4xl text-brand-text font-bold">Monthly Specials <span class="block text-2xl font-hand text-brand-accent font-normal mt-2">每月限定優惠</span></h2>
+                <h2 class="text-3xl md:text-4xl text-brand-text font-bold">December Specials</h2>
+                <p class="text-xl font-hand text-brand-accent font-normal mt-2">12月聖誕跨年限定</p>
             </div>
-            <div class="flex flex-wrap justify-center gap-4 md:gap-8 mb-12" id="promo-tabs"></div>
-            <div id="promos-container"></div>
+
+            <div class="flex justify-center gap-6 mb-10">
+                <button onclick="switchArtist('chloe')" id="btn-chloe" class="artist-tab-btn active text-lg">Chloe</button>
+                <button onclick="switchArtist('qiqi')" id="btn-qiqi" class="artist-tab-btn text-lg">奇奇</button>
+            </div>
+
+            <div id="tab-chloe" class="artist-content active">
+                <div class="text-center mb-10">
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-brand-accent/30 inline-block text-left max-w-2xl mx-auto w-full">
+                        <p class="text-brand-dark mb-4 text-center font-medium text-lg">Chloe美甲師為你準備<br>高質感日常款 × 精緻聖誕限定款</p>
+                        <div class="space-y-3 text-base text-gray-600">
+                            <p><span class="text-brand-accent font-bold">🔸 $1099</span> | 冬季基本款系列 (霧藍/莓紅/禮物包裝)</p>
+                            <p><span class="text-brand-accent font-bold">🔸 $1199</span> | 聖誕花草 × 奶霧系列 (柔霧雪季色調)</p>
+                            <p><span class="text-brand-accent font-bold">🔸 $1299</span> | 聖誕樹咖啡暈染 (聖誕限定/百搭顯白)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="gallery-chloe"></div>
+                <div class="text-center mt-12 py-4 bg-white/50 rounded-lg text-sm text-gray-500 font-bold tracking-wide">
+                    *活動日期：12/01 - 12/31 (開放預約中)
+                </div>
+            </div>
+
+            <div id="tab-qiqi" class="artist-content">
+                <div class="text-center mb-10">
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-brand-accent/30 inline-block text-left max-w-2xl mx-auto w-full">
+                        <p class="text-brand-dark mb-4 text-center font-medium text-lg">奇奇美甲師為你準備<br>日系小清新 × 手繪塗鴉風</p>
+                        <div class="space-y-3 text-base text-gray-600">
+                            <p><span class="text-brand-accent font-bold">🔸 $999</span> | 塗鴉小清新系列 (格紋/小花/可愛櫻桃)</p>
+                            <p><span class="text-brand-accent font-bold">🔸 $1099</span> | 溫柔手繪系列 (豹紋/暈染/立體蝴蝶結)</p>
+                            <p><span class="text-brand-accent font-bold">🔸 $1199</span> | 聖誕系列 (聖誕紅綠/璀璨亮片/精緻聖誕樹)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="gallery-qiqi"></div>
+                <div class="text-center mt-12 py-4 bg-white/50 rounded-lg text-sm text-gray-500 font-bold tracking-wide">
+                    *活動日期：12/01 - 12/31 (開放預約中)
+                </div>
+            </div>
+
         </div>
     </div>
 
     <div id="page-news" class="page-section">
         <div class="max-w-7xl mx-auto px-6 text-center">
-            <h2 class="text-3xl text-brand-text font-bold mb-10">Latest News & Events <span class="block text-xl font-hand text-brand-accent font-normal mt-2">最新活動及訊息</span></h2>
-            
+            <h2 class="text-3xl text-brand-text font-bold mb-10">Latest News <span class="block text-xl font-hand text-brand-accent font-normal mt-2">最新活動及訊息</span></h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                
                 <div class="bg-white p-2 rounded shadow-sm hover:shadow-md transition relative group overflow-hidden">
-                    <img src="news_pedicure.jpg" onclick="openLightbox(this.src)" class="w-full h-auto rounded zoomable aspect-[4/5] object-cover" alt="新增足部專區" onerror="this.src='https://via.placeholder.com/600x800?text=News+Image'">
-                    <div class="absolute bottom-0 left-0 right-0 bg-brand-bg/95 p-4 text-brand-dark font-bold text-xl rounded-b border-t-2 border-brand-accent">
+                    <img src="news_pedicure.jpg" onclick="openLightbox(this.src)" class="w-full h-auto rounded zoomable aspect-[4/5] object-cover" onerror="this.src='https://via.placeholder.com/600?text=Pedicure'">
+                     <div class="absolute bottom-0 left-0 right-0 bg-brand-bg/95 p-4 text-brand-dark font-bold text-xl rounded-b border-t-2 border-brand-accent">
                         🎉 新增足部專區
                         <span class="block text-sm font-normal text-brand-accent mt-1">提供更舒適專業的足部保養體驗</span>
                     </div>
                 </div>
-
                 <div class="bg-white p-2 rounded shadow-sm hover:shadow-md transition">
-                    <img src="news_gel.jpg" onclick="openLightbox(this.src)" class="w-full h-auto rounded zoomable aspect-[4/5] object-cover" alt="手足凝膠服務" onerror="this.src='https://via.placeholder.com/600x800?text=News+Image'">
-                    <div class="p-3 text-center">
-                        <h3 class="text-brand-dark font-bold text-lg">手足凝膠服務</h3>
-                        <p class="text-sm text-gray-500 mt-1">細緻呵護您的指尖</p>
-                    </div>
+                    <img src="news_gel.jpg" onclick="openLightbox(this.src)" class="w-full h-auto rounded zoomable aspect-[4/5] object-cover" onerror="this.src='https://via.placeholder.com/600?text=Gel'">
+                    <div class="p-3 text-center"><h3 class="text-brand-dark font-bold">手足凝膠服務</h3></div>
                 </div>
-
                 <div class="bg-white p-2 rounded shadow-sm hover:shadow-md transition">
-                    <img src="news_care.jpg" onclick="openLightbox(this.src)" class="w-full h-auto rounded zoomable aspect-[4/5] object-cover" alt="凝膠加購保養服務" onerror="this.src='https://via.placeholder.com/600x800?text=News+Image'">
-                    <div class="p-3 text-center">
-                        <h3 class="text-brand-dark font-bold text-lg">凝膠加購保養</h3>
-                        <p class="text-sm text-gray-500 mt-1">搭配課程更優惠</p>
-                    </div>
+                    <img src="news_care.jpg" onclick="openLightbox(this.src)" class="w-full h-auto rounded zoomable aspect-[4/5] object-cover" onerror="this.src='https://via.placeholder.com/600?text=Care'">
+                    <div class="p-3 text-center"><h3 class="text-brand-dark font-bold">凝膠加購保養</h3></div>
                 </div>
-
                 <div class="bg-white p-2 rounded shadow-sm hover:shadow-md transition">
-                    <img src="news_winter.jpg" onclick="openLightbox(this.src)" class="w-full h-auto rounded zoomable aspect-[4/5] object-cover" alt="冬季深層保養" onerror="this.src='https://via.placeholder.com/600x800?text=News+Image'">
-                    <div class="p-3 text-center">
-                        <h3 class="text-brand-dark font-bold text-lg">冬季深層保養</h3>
-                        <p class="text-sm text-gray-500 mt-1">滋潤乾燥肌膚</p>
-                    </div>
+                    <img src="news_winter.jpg" onclick="openLightbox(this.src)" class="w-full h-auto rounded zoomable aspect-[4/5] object-cover" onerror="this.src='https://via.placeholder.com/600?text=Winter'">
+                    <div class="p-3 text-center"><h3 class="text-brand-dark font-bold">冬季深層保養</h3></div>
                 </div>
-                
                 <div class="bg-white p-2 rounded shadow-sm hover:shadow-md transition">
-                    <img src="news_value.jpg" onclick="openLightbox(this.src)" class="w-full h-auto rounded zoomable aspect-[4/5] object-cover" alt="加值服務" onerror="this.src='https://via.placeholder.com/600x800?text=News+Image'">
-                    <div class="p-3 text-center">
-                        <h3 class="text-brand-dark font-bold text-lg">VIP 加值服務</h3>
-                        <p class="text-sm text-gray-500 mt-1">會員專屬權益</p>
-                    </div>
+                    <img src="news_value.jpg" onclick="openLightbox(this.src)" class="w-full h-auto rounded zoomable aspect-[4/5] object-cover" onerror="this.src='https://via.placeholder.com/600?text=VIP'">
+                    <div class="p-3 text-center"><h3 class="text-brand-dark font-bold">VIP 加值服務</h3></div>
                 </div>
-
                 <div class="bg-white p-2 rounded shadow-sm hover:shadow-md transition">
-                    <img src="news_promo.jpg" onclick="openLightbox(this.src)" class="w-full h-auto rounded zoomable aspect-[4/5] object-cover" alt="優惠活動" onerror="this.src='https://via.placeholder.com/600x800?text=News+Image'">
-                    <div class="p-3 text-center">
-                        <h3 class="text-brand-dark font-bold text-lg">本月限定活動</h3>
-                        <p class="text-sm text-gray-500 mt-1">限時預約優惠</p>
-                    </div>
+                    <img src="news_promo.jpg" onclick="openLightbox(this.src)" class="w-full h-auto rounded zoomable aspect-[4/5] object-cover" onerror="this.src='https://via.placeholder.com/600?text=Promo'">
+                    <div class="p-3 text-center"><h3 class="text-brand-dark font-bold">優惠活動</h3></div>
                 </div>
+            </div>
         </div>
     </div>
 
@@ -218,31 +259,34 @@
     <div class="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-brand-accent/20 z-30 flex justify-around items-end py-2 px-2 text-[10px] text-brand-text shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
         <div onclick="switchPage('page-home')" class="flex flex-col items-center p-2 active:text-brand-accent"><span class="text-lg mb-1">🏠</span><span>首頁</span></div>
         <div onclick="switchPage('page-news')" class="flex flex-col items-center p-2 active:text-brand-accent"><span class="text-lg mb-1">📰</span><span>最新</span></div>
+        <div class="relative flex flex-col items-center -top-5 cursor-pointer" onclick="window.location.href=SITE_CONFIG.bookingLink">
+            <div class="bg-brand-accent text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg shadow-brand-accent/40 hover:scale-95 transition">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            </div>
+            <span class="font-bold text-brand-accent mt-1">預約</span>
+        </div>
         <div onclick="switchPage('page-promos')" class="flex flex-col items-center p-2 active:text-brand-accent"><span class="text-lg mb-1">✨</span><span>限定</span></div>
         <div onclick="switchPage('page-menu')" class="flex flex-col items-center p-2 active:text-brand-accent"><span class="text-lg mb-1">💅</span><span>價目</span></div>
-        <div onclick="switchPage('page-location')" class="flex flex-col items-center p-2 active:text-brand-accent"><span class="text-lg mb-1">📍</span><span>資訊</span></div>
     </div>
 
-<script>
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // 1. 檢查是否看過須知
+            // 1. 須知彈窗
             if (!localStorage.getItem('hasReadRules')) {
                 document.getElementById('rules-modal').classList.add('active');
                 document.body.style.overflow = 'hidden';
             }
             
-            // 2. ★ 修正點：無論在這一頁還是哪一頁，都要先建立優惠內容
-            renderSite(); 
-            
-            // 3. 檢查網址 Hash 並跳轉
+            // 2. 生成優惠頁面的圖片 (Chloe & Qiqi)
+            renderPromoGalleries();
+
+            // 3. 網址導航邏輯
             const hash = window.location.hash.replace('#', '');
             if (hash && document.getElementById(hash)) {
                 switchPage(hash);
             } else {
-                updateView('page-home'); // 預設回首頁
+                updateView('page-home');
             }
-            
-            // 4. 監聽上一頁/下一頁
             window.addEventListener('hashchange', function() {
                 const newHash = window.location.hash.replace('#', '');
                 if (newHash && document.getElementById(newHash)) {
@@ -259,49 +303,39 @@
             document.body.style.overflow = 'auto';
         }
 
-        function renderSite() {
-            const tabsContainer = document.getElementById('promo-tabs');
-            const contentContainer = document.getElementById('promos-container');
-            
-            // 防呆：如果找不到容器就不執行，避免報錯
-            if (!tabsContainer || !contentContainer) return;
+        // ★ 新增：生成 Chloe 和 奇奇 的圖片牆
+        function renderPromoGalleries() {
+            const chloeContainer = document.getElementById('gallery-chloe');
+            if(chloeContainer) {
+                chloeContainer.innerHTML = SITE_CONFIG.chloeImages.map(img => 
+                    `<div class="overflow-hidden rounded-lg shadow-md bg-white">
+                        <img src="${img}" onclick="openLightbox(this.src)" class="w-full h-auto object-cover zoomable hover:scale-105 transition duration-500" onerror="this.src='https://via.placeholder.com/600x800?text=Chloe+Works'">
+                    </div>`
+                ).join('');
+            }
 
-            let tabsHTML = '';
-            let contentHTML = '';
-
-            SITE_CONFIG.promos.forEach((promo, index) => {
-                tabsHTML += `<button onclick="switchTab('${promo.id}')" id="tab-btn-${promo.id}" class="promo-tab-btn">${promo.tabName}</button>`;
-                let innerContent = '';
-                if (promo.type === "standard") {
-                    const items = promo.items.map((item, i) => `<div class="text-center group flex flex-col items-center"><div class="bg-brand-bg p-2 rounded-lg shadow-md transform ${i%2===0?'-rotate-1':'rotate-1'} hover:rotate-0 transition duration-500 mb-3"><img src="${item.image}" onclick="openLightbox(this.src)" class="w-full h-auto rounded zoomable" onerror="this.src='https://via.placeholder.com/300?text=Promo+Image'"></div><p class="text-lg text-brand-dark font-bold">${item.artist}</p><p class="text-brand-accent">${item.price}</p></div>`).join('');
-                    innerContent = `<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start"><div class="lg:col-span-1"><div class="bg-brand-bg p-2 rounded-lg shadow-md transform -rotate-1 hover:rotate-0 transition duration-500"><img src="${promo.infoImage}" onclick="openLightbox(this.src)" class="w-full h-auto rounded zoomable" onerror="this.src='https://via.placeholder.com/400x600?text=Info+Image'"></div></div><div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-8">${items}</div></div>`;
-                } else {
-                    const images = promo.images.map(img => `<div class="overflow-hidden rounded-lg shadow-md"><img src="${img}" onclick="openLightbox(this.src)" class="w-full h-auto object-cover zoomable hover:scale-105 transition duration-500" onerror="this.src='https://via.placeholder.com/300?text=Gallery+Image'"></div>`).join('');
-                    innerContent = `<div class="text-center mb-8"><p class="text-gray-600 whitespace-pre-line mb-2 leading-relaxed">${promo.description}</p><div class="text-xl text-brand-dark font-bold inline-block text-left bg-white p-4 rounded shadow-sm border border-brand-bg">${promo.priceText}</div></div><div class="grid grid-cols-1 md:grid-cols-3 gap-6">${images}</div>`;
-                }
-                contentHTML += `<div id="tab-content-${promo.id}" class="promo-content hidden animate-fade-in"><h3 class="text-2xl md:text-3xl text-brand-dark font-serif text-center mb-2">${promo.title}</h3><p class="text-xl text-brand-accent font-hand text-center mb-8">${promo.subtitle}</p>${innerContent}<div class="text-center mt-8 text-sm text-gray-400">${promo.dateText}</div></div>`;
-            });
-
-            tabsContainer.innerHTML = tabsHTML;
-            contentContainer.innerHTML = contentHTML;
-            
-            // 預設選中最後一個優惠
-            if (SITE_CONFIG.promos.length > 0) { 
-                switchTab(SITE_CONFIG.promos[SITE_CONFIG.promos.length - 1].id); 
+            const qiqiContainer = document.getElementById('gallery-qiqi');
+            if(qiqiContainer) {
+                qiqiContainer.innerHTML = SITE_CONFIG.qiqiImages.map(img => 
+                    `<div class="overflow-hidden rounded-lg shadow-md bg-white">
+                        <img src="${img}" onclick="openLightbox(this.src)" class="w-full h-auto object-cover zoomable hover:scale-105 transition duration-500" onerror="this.src='https://via.placeholder.com/600x800?text=Qiqi+Works'">
+                    </div>`
+                ).join('');
             }
         }
 
-        function switchTab(id) {
-            document.querySelectorAll('.promo-content').forEach(el => el.classList.add('hidden'));
-            document.querySelectorAll('.promo-tab-btn').forEach(btn => btn.classList.remove('active'));
+        // ★ 新增：切換設計師 Tab
+        function switchArtist(artistId) {
+            // 隱藏所有內容
+            document.querySelectorAll('.artist-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.artist-tab-btn').forEach(btn => btn.classList.remove('active'));
             
-            const content = document.getElementById(`tab-content-${id}`);
-            const btn = document.getElementById(`tab-btn-${id}`);
-            
-            if(content) content.classList.remove('hidden');
-            if(btn) btn.classList.add('active');
+            // 顯示目標
+            document.getElementById(`tab-${artistId}`).classList.add('active');
+            document.getElementById(`btn-${artistId}`).classList.add('active');
         }
 
+        // 頁面切換
         function switchPage(id){ 
             window.location.hash = id; 
             updateView(id);
@@ -309,30 +343,29 @@
 
         function updateView(id) {
             document.querySelectorAll('.page-section').forEach(p=>p.classList.remove('active')); 
-            
             const target = document.getElementById(id);
             if (target) {
                 target.classList.add('active'); 
             } else {
-                // 如果找不到頁面，回首頁
                 const home = document.getElementById('page-home');
                 if(home) home.classList.add('active');
             }
-
             window.scrollTo(0,0); 
             
+            // 更新導航狀態
             document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('text-brand-accent','font-bold')); 
             const navId = 'nav-' + id.replace('page-','');
             const btn = document.getElementById(navId);
             if(btn) btn.classList.add('text-brand-accent','font-bold'); 
             
+            // 手機版導航狀態
             const mobileBtns = document.querySelectorAll('.md\\:hidden.fixed .flex-col');
             mobileBtns.forEach(b => b.classList.remove('text-brand-accent'));
              if(id === 'page-home' && mobileBtns[0]) mobileBtns[0].classList.add('text-brand-accent');
              if(id === 'page-news' && mobileBtns[1]) mobileBtns[1].classList.add('text-brand-accent');
-             if(id === 'page-promos' && mobileBtns[2]) mobileBtns[2].classList.add('text-brand-accent');
-             if(id === 'page-menu' && mobileBtns[3]) mobileBtns[3].classList.add('text-brand-accent');
-             if(id === 'page-location' && mobileBtns[4]) mobileBtns[4].classList.add('text-brand-accent');
+             // index 2 is center btn
+             if(id === 'page-promos' && mobileBtns[3]) mobileBtns[3].classList.add('text-brand-accent');
+             if(id === 'page-menu' && mobileBtns[4]) mobileBtns[4].classList.add('text-brand-accent');
         }
 
         function openLightbox(src){ document.getElementById('lightbox-img').src=src; document.getElementById('lightbox').classList.add('show'); }
