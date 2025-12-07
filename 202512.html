@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chloe Nail Studio | 限定優惠款式</title>
+    <link rel="icon" href="favicon.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600&family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { 'brand-bg': '#F5F0F0', 'brand-text': '#8B7E74', 'brand-accent': '#C5A086', 'brand-white': '#FFFFFF', 'brand-dark': '#5D534A' },
+                    fontFamily: { 'sans': ['"Zen Maru Gothic"', 'sans-serif'], 'serif': ['"Zen Maru Gothic"', 'sans-serif'], 'hand': ['"Dancing Script"', 'cursive'] }
+                }
+            }
+        }
+        
+        // 🔧 後台設定區：在此修改優惠內容
+        const SITE_CONFIG = {
+            promos: [
+                {
+                    id: "dec",
+                    tabName: "12月聖誕款",
+                    type: "gallery", 
+                    title: "December Specials", 
+                    subtitle: "12月聖誕跨年限定",
+                    description: "Chloe美甲師為你準備 高質感日常款 × 精緻聖誕限定款\n從奶霧、琥珀暈染到聖誕蝴蝶結、冬季藍，全都在這裡。",
+                    priceText: `<span class="block text-base font-normal mb-1">🔸 $1099 | 冬季基本款系列 (霧藍/莓紅/禮物包裝)</span><span class="block text-base font-normal mb-1">🔸 $1199 | 聖誕花草 × 奶霧系列 (柔霧雪季色調)</span><span class="block text-base font-normal">🔸 $1299 | 聖誕樹咖啡暈染 (聖誕限定/百搭顯白)</span>`,
+                    dateText: "*活動日期：12/01 - 12/31 (開放預約中)",
+                    images: ["dec_2.jpg", "dec_1.jpg", "dec_3.jpg"]
+                }
+                // 若要新增月份，複製上方大括號區塊貼上並修改即可
+            ]
+        };
+    </script>
+    <style>
+        body { background-color: #F5F0F0; color: #8B7E74; font-family: "Zen Maru Gothic", sans-serif; }
+        
+        /* 動畫設定 */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in { animation: fadeIn 0.5s ease-in-out; }
+        
+        /* 圖片放大與燈箱 */
+        .zoomable { cursor: zoom-in; transition: transform 0.3s ease; } .zoomable:hover { transform: scale(1.02); }
+        #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); z-index: 9999; justify-content: center; align-items: center; }
+        #lightbox.show { display: flex; } #lightbox img { max-width: 100%; max-height: 95vh; }
+
+        /* 按鈕樣式 */
+        .promo-tab-btn { padding: 12px 36px; border-radius: 9999px; border: 2px solid #C5A086; color: #8B7E74; background-color: white; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .promo-tab-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 15px rgba(197, 160, 134, 0.3); color: #C5A086; }
+        .promo-tab-btn.active { background-color: #C5A086; color: white; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); transform: none; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+    
+    <div id="lightbox" onclick="this.classList.remove('show')"><img id="lightbox-img" src=""></div>
+
+    <header class="bg-brand-bg/95 backdrop-blur-sm border-b border-brand-accent/20 py-6 text-center shadow-sm sticky top-0 z-40">
+        <div class="cursor-pointer" onclick="window.location.reload()">
+            <div class="text-3xl font-bold tracking-widest font-serif text-brand-dark">CHLOE NAIL</div>
+            <div class="font-hand text-xl text-brand-accent">Special Offers</div>
+        </div>
+    </header>
+
+    <main class="flex-grow py-12 px-6">
+        <div class="max-w-7xl mx-auto">
+            
+            <div class="text-center mb-10">
+                <h1 class="text-3xl md:text-4xl text-brand-text font-bold">Monthly Specials</h1>
+                <span class="block text-2xl font-hand text-brand-accent font-normal mt-2">每月限定優惠款式</span>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-4 md:gap-8 mb-12" id="promo-tabs">
+                </div>
+
+            <div id="promos-container">
+                </div>
+
+        </div>
+    </main>
+
+    <footer class="bg-brand-text text-brand-bg py-8 text-center mt-auto">
+        <p class="font-hand text-xl mb-2">Chloe nail studio</p>
+        <p class="text-sm opacity-80">Copyright © 2025 Chloe Nail. All rights reserved.</p>
+        <div class="mt-4 flex justify-center gap-4 text-sm">
+             <a href="https://www.instagram.com/chloe_nail.studio_/" target="_blank" class="hover:text-brand-accent transition">Instagram</a>
+             <span>|</span>
+             <a href="https://line.me/R/ti/p/@866wnpdc" target="_blank" class="hover:text-brand-accent transition">Line 預約</a>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            renderSite();
+        });
+
+        function renderSite() {
+            const tabsContainer = document.getElementById('promo-tabs');
+            const contentContainer = document.getElementById('promos-container');
+            
+            if (!tabsContainer || !contentContainer) return;
+
+            let tabsHTML = '';
+            let contentHTML = '';
+
+            // 讀取設定檔並生成 HTML
+            SITE_CONFIG.promos.forEach((promo, index) => {
+                // 生成按鈕
+                tabsHTML += `<button onclick="switchTab('${promo.id}')" id="tab-btn-${promo.id}" class="promo-tab-btn">${promo.tabName}</button>`;
+                
+                // 生成圖片區塊
+                let innerContent = '';
+                if (promo.type === "standard") {
+                     // 保留標準版型的邏輯 (若未來有需要)
+                    const items = promo.items.map((item, i) => `<div class="text-center group flex flex-col items-center"><div class="bg-brand-bg p-2 rounded-lg shadow-md transform ${i%2===0?'-rotate-1':'rotate-1'} hover:rotate-0 transition duration-500 mb-3"><img src="${item.image}" onclick="openLightbox(this.src)" class="w-full h-auto rounded zoomable" onerror="this.src='https://via.placeholder.com/300?text=Promo+Image'"></div><p class="text-lg text-brand-dark font-bold">${item.artist}</p><p class="text-brand-accent">${item.price}</p></div>`).join('');
+                    innerContent = `<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start"><div class="lg:col-span-1"><div class="bg-brand-bg p-2 rounded-lg shadow-md transform -rotate-1 hover:rotate-0 transition duration-500"><img src="${promo.infoImage}" onclick="openLightbox(this.src)" class="w-full h-auto rounded zoomable" onerror="this.src='https://via.placeholder.com/400x600?text=Info+Image'"></div></div><div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-8">${items}</div></div>`;
+                } else {
+                    // 畫廊版型 (目前的設定)
+                    const images = promo.images.map(img => `<div class="overflow-hidden rounded-lg shadow-md"><img src="${img}" onclick="openLightbox(this.src)" class="w-full h-auto object-cover zoomable hover:scale-105 transition duration-500" onerror="this.src='https://via.placeholder.com/300?text=Gallery+Image'"></div>`).join('');
+                    innerContent = `<div class="text-center mb-8"><p class="text-gray-600 whitespace-pre-line mb-2 leading-relaxed font-medium">${promo.description}</p><div class="text-xl text-brand-dark font-bold inline-block text-left bg-white p-6 rounded-lg shadow-sm border border-brand-accent/30 mt-4">${promo.priceText}</div></div><div class="grid grid-cols-1 md:grid-cols-3 gap-6">${images}</div>`;
+                }
+
+                // 組合完整內容區塊 (預設 hidden)
+                contentHTML += `
+                    <div id="tab-content-${promo.id}" class="promo-content hidden animate-fade-in">
+                        <h3 class="text-2xl md:text-3xl text-brand-dark font-serif text-center mb-2">${promo.title}</h3>
+                        <p class="text-xl text-brand-accent font-hand text-center mb-8">${promo.subtitle}</p>
+                        ${innerContent}
+                        <div class="text-center mt-12 py-4 bg-brand-white/50 rounded-lg text-sm text-gray-500 font-bold tracking-wide">${promo.dateText}</div>
+                    </div>`;
+            });
+
+            tabsContainer.innerHTML = tabsHTML;
+            contentContainer.innerHTML = contentHTML;
+            
+            // 預設選中最後一個優惠 (通常是最新月份)
+            if (SITE_CONFIG.promos.length > 0) { 
+                switchTab(SITE_CONFIG.promos[SITE_CONFIG.promos.length - 1].id); 
+            }
+        }
+
+        // 切換分頁邏輯
+        function switchTab(id) {
+            // 隱藏所有內容
+            document.querySelectorAll('.promo-content').forEach(el => el.classList.add('hidden'));
+            // 移除所有按鈕的 active 狀態
+            document.querySelectorAll('.promo-tab-btn').forEach(btn => btn.classList.remove('active'));
+            
+            // 顯示目標內容
+            const content = document.getElementById(`tab-content-${id}`);
+            const btn = document.getElementById(`tab-btn-${id}`);
+            
+            if(content) content.classList.remove('hidden');
+            if(btn) btn.classList.add('active');
+        }
+
+        // 開啟圖片燈箱
+        function openLightbox(src){ 
+            document.getElementById('lightbox-img').src=src; 
+            document.getElementById('lightbox').classList.add('show'); 
+        }
+    </script>
+</body>
+</html>
