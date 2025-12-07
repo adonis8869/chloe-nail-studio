@@ -49,9 +49,41 @@
         .scent-counter button { width: 30px; height: 30px; border-radius: 50%; border: 1px solid #ddd; background: white; color: #555; }
         .scent-counter button:hover { background: #f3f3f3; }
         .scent-counter input { width: 40px; text-align: center; border: none; outline: none; background: transparent; font-weight: bold; }
+
+        /* ★ 新增：Toast 提示框樣式 */
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: rgba(93, 83, 74, 0.95); /* 深咖啡色半透明 */
+            color: #fff;
+            text-align: center;
+            border-radius: 50px;
+            padding: 16px;
+            position: fixed;
+            z-index: 2000; /* 最上層 */
+            left: 50%;
+            bottom: 120px; /* 手機版位置 (避開浮動按鈕) */
+            transform: translateX(-50%);
+            font-size: 15px;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s, bottom 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        #toast.show {
+            visibility: visible;
+            opacity: 1;
+            bottom: 130px; /* 浮動動畫 */
+        }
     </style>
 </head>
 <body class="pb-24 md:pb-0">
+
+    <div id="toast">✅ 已成功加入購物車！</div>
 
     <script>
         const SHOP_CONFIG = {
@@ -661,14 +693,14 @@ STEP 2：潤養．緊緻 (Q10 身體乳)
             customOptionsDiv.innerHTML = "";
             customOptionsDiv.classList.add('hidden');
 
-            // 模式 1: Bundle Steps (強制每區選1個)
+            // 模式 1: Bundle Steps (組合包模式)
             if (currentProduct.bundleSteps) {
                 customOptionsDiv.classList.remove('hidden');
                 selectedBundle = {}; // 清空選擇
                 renderCustomOptions(); 
                 document.getElementById('pm-price-container').innerHTML = `<span class="text-brand-accent text-3xl font-bold">$${currentProduct.price}</span>`;
             
-            // 模式 2: Variants (單入/禮盒 + 數量計數)
+            // 模式 2: Variants (變體模式)
             } else if (currentProduct.variants) {
                 customOptionsDiv.classList.remove('hidden');
                 currentVariantIndex = 0;
@@ -854,6 +886,16 @@ STEP 2：潤養．緊緻 (Q10 身體乳)
             document.getElementById('lightbox').classList.add('show');
         }
 
+        // ★ 新增：顯示 Toast 訊息
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.innerText = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000); 
+        }
+
         let cart = [];
         function openCart() {
             document.getElementById('overlay').classList.add('show');
@@ -872,8 +914,13 @@ STEP 2：潤養．緊緻 (Q10 身體乳)
 
             // 處理組合包內容
             if (currentProduct.bundleSteps) {
-                const details = Object.values(selectedBundle).join(" + ");
-                customNote = `[內容: ${details}]`;
+                // 將物件轉為易讀的字串：1. 護手乳: 綻放
+                const details = currentProduct.bundleSteps.map((step, idx) => {
+                    // 取出標題中的簡稱 (例如 "1. 護手乳 (選1款)" -> "護手乳")
+                    const simpleName = step.name.split('(')[0].replace(/^\d+\.\s*/, '');
+                    return `${simpleName}: ${selectedBundle[idx]}`;
+                }).join(" / ");
+                customNote = `[${details}]`;
             }
             // 處理變體內容
             else if (currentProduct.variants) {
@@ -908,7 +955,8 @@ STEP 2：潤養．緊緻 (Q10 身體乳)
             }
             closeAllModals();
             updateCart();
-            openCart();
+            // ★ 修改：不自動開購物車，改顯示 Toast
+            showToast('✅ 已成功加入購物車！');
         }
         
         function removeFromCart(uid){ cart = cart.filter(i=>i.uid!==uid); updateCart(); }
