@@ -7,7 +7,7 @@
     <link rel="icon" href="favicon.png" type="image/png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600&family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600&family=Noto+Sans+TC:wght@300;400;500;700&family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -21,8 +21,9 @@
                         'nav-active': '#A89080' 
                     },
                     fontFamily: { 
-                        'sans': ['"Zen Maru Gothic"', 'sans-serif'], 
-                        'serif': ['"Zen Maru Gothic"', 'sans-serif'], 
+                        // 修改點 2: 在字體清單中加入 Noto Sans TC 作為候補，確保缺字時有好看的替代
+                        'sans': ['"Zen Maru Gothic"', '"Noto Sans TC"', 'sans-serif'], 
+                        'serif': ['"Zen Maru Gothic"', '"Noto Sans TC"', 'sans-serif'], 
                         'hand': ['"Dancing Script"', 'cursive'] 
                     },
                     boxShadow: {
@@ -49,7 +50,13 @@
         };
     </script>
     <style>
-        body { background-color: #F5F0F0; color: #8B7E74; font-family: "Zen Maru Gothic", sans-serif; padding-bottom: 120px; /* 留給底部導航空間 */ }
+        /* 修改點 3: Body 字體統一設定 */
+        body { 
+            background-color: #F5F0F0; 
+            color: #8B7E74; 
+            font-family: "Zen Maru Gothic", "Noto Sans TC", sans-serif; 
+            padding-bottom: 120px; 
+        }
         
         /* 圖片燈箱與放大效果 */
         .zoomable { cursor: zoom-in; transition: transform 0.3s ease; } .zoomable:hover { transform: scale(1.02); }
