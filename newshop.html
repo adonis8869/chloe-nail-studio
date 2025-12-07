@@ -35,9 +35,15 @@
         .thumb-img { border: 2px solid transparent; transition: all 0.2s; opacity: 0.6; }
         .thumb-img:hover, .thumb-img.active { border-color: #C5A086; opacity: 1; }
 
-        /* 選項按鈕樣式 */
-        .option-btn { border: 1px solid #ddd; padding: 8px 12px; border-radius: 6px; cursor: pointer; transition: all 0.2s; background: white; color: #555; }
+        /* 一般選項按鈕 */
+        .option-btn { border: 1px solid #ddd; padding: 8px 12px; border-radius: 6px; cursor: pointer; transition: all 0.2s; background: white; color: #555; font-size: 14px; }
+        .option-btn:hover { background: #f9f9f9; }
         .option-btn.active { border-color: #C5A086; background-color: #FFFBF5; color: #C5A086; font-weight: bold; }
+        
+        /* 組合包按鈕 */
+        .bundle-group { margin-bottom: 16px; }
+        .bundle-title { font-weight: bold; color: #5D534A; margin-bottom: 8px; display: block; font-size: 14px;}
+        .bundle-options { display: flex; flex-wrap: wrap; gap: 8px; }
         
         /* 計數器樣式 */
         .scent-counter button { width: 30px; height: 30px; border-radius: 50%; border: 1px solid #ddd; background: white; color: #555; }
@@ -98,16 +104,10 @@ LIPEXEL™ 頂級指緣油 (Night Care)
 • LIPEXEL™指緣油： LIPEXEL™、甜杏仁油、葡萄籽油、鱷梨油、精油等。
 • 用途： 全方位滋潤指緣肌膚，日間防護乾燥，夜間修護紋路。
 • 用法： 白天使用植萃賦活露隨時補充；晚上睡前使用LIPEXEL™指緣油加強按摩。
-• 保存方式： 請置於陰涼處，避免陽光直射，建議開封後 6 個月內使用完畢。`,variants: {
-                        types: [
-                            { name: "柔嫩保養組 (選2款)", price: 650, count: 2 }
-                        ],
-                        scents: [
-                            "植萃-綻放", "植萃-永恆", "植萃-謐靜", "植萃-愉悅", "植萃-抗菌花草",
-                            "指緣油-綻放", "指緣油-永恆", "指緣油-謐靜", "指緣油-愉悅", "指緣油-雨後"
-                        ]
-                    }
-
+• 保存方式： 請置於陰涼處，避免陽光直射，建議開封後 6 個月內使用完畢。`,bundleSteps: [
+                        { name: "1. 植萃賦活露 (選1款)", options: ["綻放", "永恆", "謐靜", "愉悅", "抗菌花草"] },
+                        { name: "2. 指緣油 (選1款)", options: ["綻放", "永恆", "謐靜", "愉悅", "雨後"] }
+                    ]
                 },
                 { id: 2, name: "精緻完美保養 三入禮盒組", price: 1000, originalPrice: 1460, description:  `
 禮盒介紹】12月聖誕禮盒，送禮自用都可以！今年交換禮物，不用再煩惱送什麼了！我們將工作室回購率最高的 3 大保養明星，裝進充滿節慶氛圍的 「聖誕限定包裝」 裡。從隨身防護到夜間修護，一次擁有「亮白、嫩膚、修護」三重功效。精緻的包裝設計，拿到手就是一份完美的禮物，無需再額外包裝，直接送進對方心坎裡！❤️
@@ -138,16 +138,11 @@ LIPEXEL™ 頂級指緣油 (Night Care)
 用途： 全方位手部保養，針對乾燥、暗沉、倒刺、硬皮一次解決。
 保存方式： 請置於陰涼乾燥處，避免陽光直射，建議開封後 6 個月內使用完畢。
 注意事項： 本產品含天然植物精油，孕婦或特殊體質者建議先諮詢醫師。
-`, tag: "", images: ["p02.jpg"],variants: {
-                        types: [
-                            { name: "三入禮盒 (選3款)", price: 1000, count: 3 }
-                        ],
-                        scents: [
-                            "護手乳-綻放", "護手乳-愉悅", "護手乳-抗菌花草",
-                            "植萃-綻放", "植萃-永恆", "植萃-謐靜", "植萃-愉悅", "植萃-抗菌花草",
-                            "指緣油-綻放", "指緣油-永恆", "指緣油-謐靜", "指緣油-愉悅", "指緣油-雨後"
-                        ]
-                    } },
+`, tag: "", images: ["p02.jpg"],bundleSteps: [
+                        { name: "1. 護手乳 (選1款)", options: ["綻放", "愉悅", "抗菌花草"] },
+                        { name: "2. 植萃賦活露 (選1款)", options: ["綻放", "永恆", "謐靜", "愉悅", "抗菌花草"] },
+                        { name: "3. 指緣油 (選1款)", options: ["綻放", "永恆", "謐靜", "愉悅", "雨後"] }
+                    ] },
                 { id: 3, name: "植萃賦活露系列", price: 350, originalPrice: 500, description:  `
 【商品介紹】
 添加頂級角鯊烷．清爽秒吸收｜5款精油香氛
@@ -437,15 +432,10 @@ STEP 2：潤養．緊緻 (Q10 身體乳)
 ⚠️注意事項
 孕婦注意： 「愉悅 (Joy)」款浴鹽含有孕婦不宜之精油，請避免選購該款浴鹽；身體乳則建議先諮詢醫師。
 使用順序： 建議先使用浴鹽去角質/泡澡，沖洗乾淨後，再擦身體乳，吸收效果最好。
-特定族群： 高血壓、心臟病患者請勿長時間泡熱水澡，建議改為「足浴」或「身體去角質」使用。 `, tag: "", images: ["p10.jpg"],variants: {
-                        types: [
-                            { name: "浴鹽光采呵護組 (選2款)", price: 1700, count: 2 }
-                        ],
-                        scents: [
-                            "身體乳-綻放", "身體乳-愉悅",
-                            "浴鹽-謐靜", "浴鹽-愉悅", "浴鹽-綻放", "浴鹽-雨後", "浴鹽-睡美人"
-                        ]
-                    } },
+特定族群： 高血壓、心臟病患者請勿長時間泡熱水澡，建議改為「足浴」或「身體去角質」使用。 `, tag: "", images: ["p10.jpg"],bundleSteps: [
+                        { name: "1. Q10 身體乳 (選1款)", options: ["綻放", "愉悅"] },
+                        { name: "2. SPA 浴鹽 (選1款)", options: ["謐靜", "愉悅", "綻放", "雨後", "睡美人"] }
+                    ]},
                 { id: 9, name: "天然醇香SPA浴鹽300g", price: 750, originalPrice: 1300, description: `
 【商品名稱】
 天然醇香 SPA 浴鹽 (300g)｜頂級精油香氛｜去角質＋泡澡舒壓｜5款療癒選擇
