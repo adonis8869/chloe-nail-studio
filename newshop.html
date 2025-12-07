@@ -35,18 +35,22 @@
         .thumb-img { border: 2px solid transparent; transition: all 0.2s; opacity: 0.6; }
         .thumb-img:hover, .thumb-img.active { border-color: #C5A086; opacity: 1; }
 
+        /* 一般選項按鈕 */
         .option-btn { border: 1px solid #ddd; padding: 8px 12px; border-radius: 6px; cursor: pointer; transition: all 0.2s; background: white; color: #555; font-size: 14px; }
         .option-btn:hover { background: #f9f9f9; }
         .option-btn.active { border-color: #C5A086; background-color: #FFFBF5; color: #C5A086; font-weight: bold; }
         
+        /* 組合包按鈕 */
         .bundle-group { margin-bottom: 16px; }
         .bundle-title { font-weight: bold; color: #5D534A; margin-bottom: 8px; display: block; font-size: 14px;}
         .bundle-options { display: flex; flex-wrap: wrap; gap: 8px; }
         
+        /* 計數器樣式 */
         .scent-counter button { width: 30px; height: 30px; border-radius: 50%; border: 1px solid #ddd; background: white; color: #555; }
         .scent-counter button:hover { background: #f3f3f3; }
         .scent-counter input { width: 40px; text-align: center; border: none; outline: none; background: transparent; font-weight: bold; }
 
+        /* Toast 提示框 */
         #toast {
             visibility: hidden;
             min-width: 250px;
@@ -613,9 +617,6 @@ STEP 2：潤養．緊緻 (Q10 身體乳)
         <div id="shop" class="text-center mb-12">
             <h2 class="text-3xl md:text-4xl text-brand-text font-bold">Group Buy</h2>
             <p class="font-hand text-2xl text-brand-accent">Chloe 嚴選團購</p>
-            <div class="flex justify-center mt-6">
-                <a href="#" onclick="openLine()" class="flex items-center justify-center gap-2 bg-brand-text text-white px-10 py-3 rounded hover:bg-brand-accent transition font-bold shadow-md">💬 官方 LINE 諮詢</a>
-            </div>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-12" id="shop-container"></div>
     </div>
@@ -626,8 +627,7 @@ STEP 2：潤養．緊緻 (Q10 身體乳)
             <div class="bg-brand-accent text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg shadow-brand-accent/40"><span class="text-2xl">🛒</span></div>
             <span class="font-bold text-brand-accent mt-1">購物車</span>
         </div>
-        <a href="#" onclick="openLine()" class="flex flex-col items-center p-2"><span class="text-lg mb-1">💬</span><span>客服</span></a>
-    </div>
+        <a href="#" class="flex flex-col items-center p-2 w-8"></a> </div>
 
     <script>
         function formatPriceHTML(price, originalPrice) {
@@ -652,7 +652,7 @@ STEP 2：潤養．緊緻 (Q10 身體乳)
         let currentProduct = null;
         let currentVariantIndex = 0; 
         let selectedScents = {}; // 用於 variants 模式
-        let selectedBundle = {}; // ★ 用於 bundleSteps 模式: { 0: "香味A", 1: "香味B" }
+        let selectedBundle = {}; // 用於 bundleSteps 模式
 
         function openProductModal(pid) {
             currentProduct = SHOP_CONFIG.products.find(p => p.id === pid);
@@ -685,14 +685,14 @@ STEP 2：潤養．緊緻 (Q10 身體乳)
             customOptionsDiv.innerHTML = "";
             customOptionsDiv.classList.add('hidden');
 
-            // 模式 1: Bundle Steps (組合包模式)
+            // 模式 1: Bundle Steps (組合包)
             if (currentProduct.bundleSteps) {
                 customOptionsDiv.classList.remove('hidden');
                 selectedBundle = {}; // 清空選擇
                 renderCustomOptions(); 
                 document.getElementById('pm-price-container').innerHTML = `<span class="text-brand-accent text-3xl font-bold">$${currentProduct.price}</span>`;
             
-            // 模式 2: Variants (變體模式)
+            // 模式 2: Variants (變體)
             } else if (currentProduct.variants) {
                 customOptionsDiv.classList.remove('hidden');
                 currentVariantIndex = 0;
@@ -703,7 +703,7 @@ STEP 2：潤養．緊緻 (Q10 身體乳)
             // 模式 3: 一般商品
             } else {
                 document.getElementById('pm-price-container').innerHTML = formatPriceHTML(currentProduct.price, currentProduct.originalPrice).replace('text-sm', 'text-lg').replace('text-brand-accent', 'text-brand-accent text-3xl');
-                validateScents(); // 雖然沒選項，但要重置按鈕狀態
+                validateScents(); // 重置按鈕
             }
 
             document.getElementById('pm-qty').value = 1;
@@ -717,7 +717,6 @@ STEP 2：潤養．緊緻 (Q10 身體乳)
         function renderCustomOptions() {
             let html = "";
 
-            // 模式 1: Bundle Steps (組合包模式)
             if (currentProduct.bundleSteps) {
                 currentProduct.bundleSteps.forEach((step, idx) => {
                     html += `
@@ -735,7 +734,6 @@ STEP 2：潤養．緊緻 (Q10 身體乳)
                     `;
                 });
             } 
-            // 模式 2: Variants (變體模式)
             else if (currentProduct.variants) {
                 const v = currentProduct.variants;
                 const currentType = v.types[currentVariantIndex];
@@ -755,9 +753,7 @@ STEP 2：潤養．緊緻 (Q10 身體乳)
                     </div>
                 `;
 
-                // ★ 修改點：檢查是否是固定內容 (count === 0)
                 if (currentType.fixedContent) {
-                    // 如果是固定內容，直接顯示文字，不顯示計數器
                     html += `
                         <div class="bg-brand-bg/30 p-4 rounded-lg border border-brand-bg text-center">
                             <label class="block text-sm font-bold text-gray-600 mb-2">2. 內容物確認</label>
@@ -767,7 +763,6 @@ STEP 2：潤養．緊緻 (Q10 身體乳)
                         </div>
                     `;
                 } else {
-                    // 正常顯示計數器
                     html += `
                         <div class="bg-brand-bg/30 p-4 rounded-lg border border-brand-bg">
                             <label class="block text-sm font-bold text-gray-600 mb-2">
@@ -831,7 +826,6 @@ STEP 2：潤養．緊緻 (Q10 身體乳)
             } else if (currentProduct.variants) {
                 const typeObj = currentProduct.variants.types[currentVariantIndex];
                 
-                // ★ 如果是固定內容 (count === 0)，直接通過驗證
                 if (typeObj.fixedContent) {
                     isValid = true;
                 } else {
@@ -922,15 +916,17 @@ STEP 2：潤養．緊緻 (Q10 身體乳)
             let customNote = "";
 
             if (currentProduct.bundleSteps) {
-                const details = Object.values(selectedBundle).join(" + ");
-                customNote = `[內容: ${details}]`;
+                const details = currentProduct.bundleSteps.map((step, idx) => {
+                    const simpleName = step.name.split('(')[0].replace(/^\d+\.\s*/, '');
+                    return `${simpleName}: ${selectedBundle[idx]}`;
+                }).join(" / ");
+                customNote = `[${details}]`;
             }
             else if (currentProduct.variants) {
                 const typeObj = currentProduct.variants.types[currentVariantIndex];
                 finalPrice = typeObj.price;
                 finalName = `${currentProduct.name} - ${typeObj.name}`;
                 
-                // ★ 修改點：如果是固定內容，使用固定描述
                 if (typeObj.fixedContent) {
                     customNote = `[${typeObj.fixedContent}]`;
                 } else {
@@ -993,10 +989,6 @@ STEP 2：潤養．緊緻 (Q10 身體乳)
 
         function updateCartTotal() { updateCart(); }
 
-        function openLine() {
-             window.open(`https://line.me/R/ti/p/@${SHOP_CONFIG.lineID}`, '_blank');
-        }
-
         function checkout() {
             if(!/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) { alert("⚠️ 建議使用手機下單，以確保 LINE 訊息格式正確！"); }
             if(cart.length===0) return alert('購物車是空的');
@@ -1016,5 +1008,7 @@ STEP 2：潤養．緊緻 (Q10 身體乳)
             window.open(`https://line.me/R/oaMessage/@${SHOP_CONFIG.lineID}/?${encodeURIComponent(msg)}`, '_blank');
         }
     </script>
+</body>
+</html>
 </body>
 </html>
