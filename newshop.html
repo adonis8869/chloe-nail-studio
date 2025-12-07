@@ -35,34 +35,30 @@
         .thumb-img { border: 2px solid transparent; transition: all 0.2s; opacity: 0.6; }
         .thumb-img:hover, .thumb-img.active { border-color: #C5A086; opacity: 1; }
 
-        /* 一般選項按鈕 */
         .option-btn { border: 1px solid #ddd; padding: 8px 12px; border-radius: 6px; cursor: pointer; transition: all 0.2s; background: white; color: #555; font-size: 14px; }
         .option-btn:hover { background: #f9f9f9; }
         .option-btn.active { border-color: #C5A086; background-color: #FFFBF5; color: #C5A086; font-weight: bold; }
         
-        /* 組合包按鈕 */
         .bundle-group { margin-bottom: 16px; }
         .bundle-title { font-weight: bold; color: #5D534A; margin-bottom: 8px; display: block; font-size: 14px;}
         .bundle-options { display: flex; flex-wrap: wrap; gap: 8px; }
         
-        /* 計數器樣式 */
         .scent-counter button { width: 30px; height: 30px; border-radius: 50%; border: 1px solid #ddd; background: white; color: #555; }
         .scent-counter button:hover { background: #f3f3f3; }
         .scent-counter input { width: 40px; text-align: center; border: none; outline: none; background: transparent; font-weight: bold; }
 
-        /* ★ 新增：Toast 提示框樣式 */
         #toast {
             visibility: hidden;
             min-width: 250px;
-            background-color: rgba(93, 83, 74, 0.95); /* 深咖啡色半透明 */
+            background-color: rgba(93, 83, 74, 0.95);
             color: #fff;
             text-align: center;
             border-radius: 50px;
             padding: 16px;
             position: fixed;
-            z-index: 2000; /* 最上層 */
+            z-index: 2000;
             left: 50%;
-            bottom: 120px; /* 手機版位置 (避開浮動按鈕) */
+            bottom: 120px;
             transform: translateX(-50%);
             font-size: 15px;
             font-weight: bold;
@@ -74,11 +70,7 @@
             justify-content: center;
             gap: 8px;
         }
-        #toast.show {
-            visibility: visible;
-            opacity: 1;
-            bottom: 130px; /* 浮動動畫 */
-        }
+        #toast.show { visibility: visible; opacity: 1; bottom: 130px; }
     </style>
 </head>
 <body class="pb-24 md:pb-0">
@@ -287,7 +279,7 @@ Q4：孕婦是否可以使用？ Ans: 產品皆使用天然精油，建議先於
                     variants: {
                         types: [
                             { name: "單入 (30ml)", price: 345, count: 1 },  // count: 1 代表選1個香味
-                            { name: "禮盒組 (3入)", price: 1000, count: 3 } // count: 3 代表選3個香味
+                            { name: "禮盒組 (3入)", price: 1000, count: 0, fixedContent: "內含：綻放 + 愉悅 + 抗菌花草 (各1入)" }
                         ],
                         scents: ["綻放 (玫瑰花香)", "愉悅 (花果果香)", "抗菌花草 (清新植物)"]
                     }
@@ -722,7 +714,6 @@ STEP 2：潤養．緊緻 (Q10 身體乳)
             document.body.style.overflow = 'hidden';
         }
 
-        // ★ 渲染客製化選項 UI (整合兩種模式)
         function renderCustomOptions() {
             let html = "";
 
@@ -762,35 +753,50 @@ STEP 2：潤養．緊緻 (Q10 身體乳)
                             `).join('')}
                         </div>
                     </div>
-
-                    <div class="bg-brand-bg/30 p-4 rounded-lg border border-brand-bg">
-                        <label class="block text-sm font-bold text-gray-600 mb-2">
-                            2. 選擇香味 (需選 ${currentType.count} 個)
-                            <span id="scent-status" class="text-xs font-normal ml-2 text-brand-accent">目前已選: 0</span>
-                        </label>
-                        <div class="space-y-3">
-                            ${v.scents.map(scent => `
-                                <div class="flex justify-between items-center">
-                                    <span class="text-sm text-gray-700">${scent}</span>
-                                    <div class="scent-counter flex items-center">
-                                        <button onclick="updateScent('${scent}', -1)">-</button>
-                                        <input type="text" value="${selectedScents[scent] || 0}" readonly>
-                                        <button onclick="updateScent('${scent}', 1)">+</button>
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
                 `;
+
+                // ★ 修改點：檢查是否是固定內容 (count === 0)
+                if (currentType.fixedContent) {
+                    // 如果是固定內容，直接顯示文字，不顯示計數器
+                    html += `
+                        <div class="bg-brand-bg/30 p-4 rounded-lg border border-brand-bg text-center">
+                            <label class="block text-sm font-bold text-gray-600 mb-2">2. 內容物確認</label>
+                            <div class="text-brand-dark font-bold bg-white p-3 rounded border border-gray-200">
+                                ${currentType.fixedContent}
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    // 正常顯示計數器
+                    html += `
+                        <div class="bg-brand-bg/30 p-4 rounded-lg border border-brand-bg">
+                            <label class="block text-sm font-bold text-gray-600 mb-2">
+                                2. 選擇香味 (需選 ${currentType.count} 個)
+                                <span id="scent-status" class="text-xs font-normal ml-2 text-brand-accent">目前已選: 0</span>
+                            </label>
+                            <div class="space-y-3">
+                                ${v.scents.map(scent => `
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-sm text-gray-700">${scent}</span>
+                                        <div class="scent-counter flex items-center">
+                                            <button onclick="updateScent('${scent}', -1)">-</button>
+                                            <input type="text" value="${selectedScents[scent] || 0}" readonly>
+                                            <button onclick="updateScent('${scent}', 1)">+</button>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
             }
             document.getElementById('pm-custom-options').innerHTML = html;
             validateScents();
         }
 
-        // ★ 組合包選擇函數
         function selectBundleOption(stepIdx, option) {
             selectedBundle[stepIdx] = option;
-            renderCustomOptions(); // 重繪以更新 active 樣式
+            renderCustomOptions(); 
         }
 
         function switchVariant(index) {
@@ -811,34 +817,38 @@ STEP 2：潤養．緊緻 (Q10 身體乳)
             renderCustomOptions();
         }
 
-        // ★ 統一驗證函數
         function validateScents() {
             const btn = document.getElementById('add-to-cart-btn');
             const errorMsg = document.getElementById('pm-error-msg');
             let isValid = false;
 
             if (currentProduct.bundleSteps) {
-                // 檢查是否每個步驟都選了
                 const totalSteps = currentProduct.bundleSteps.length;
                 const selectedCount = Object.keys(selectedBundle).length;
                 isValid = (totalSteps === selectedCount);
                 if (errorMsg) errorMsg.innerText = "請完成所有分類選擇";
 
             } else if (currentProduct.variants) {
-                // 檢查數量是否正確
-                const targetCount = currentProduct.variants.types[currentVariantIndex].count;
-                const currentTotal = Object.values(selectedScents).reduce((a, b) => a + b, 0);
-                const statusText = document.getElementById('scent-status');
-                if (statusText) {
-                    statusText.innerText = `目前已選: ${currentTotal} / ${targetCount}`;
-                    if(currentTotal === targetCount) statusText.classList.replace('text-red-500', 'text-brand-accent');
-                    else statusText.classList.replace('text-brand-accent', 'text-red-500');
+                const typeObj = currentProduct.variants.types[currentVariantIndex];
+                
+                // ★ 如果是固定內容 (count === 0)，直接通過驗證
+                if (typeObj.fixedContent) {
+                    isValid = true;
+                } else {
+                    const targetCount = typeObj.count;
+                    const currentTotal = Object.values(selectedScents).reduce((a, b) => a + b, 0);
+                    const statusText = document.getElementById('scent-status');
+                    if (statusText) {
+                        statusText.innerText = `目前已選: ${currentTotal} / ${targetCount}`;
+                        if(currentTotal === targetCount) statusText.classList.replace('text-red-500', 'text-brand-accent');
+                        else statusText.classList.replace('text-brand-accent', 'text-red-500');
+                    }
+                    isValid = (currentTotal === targetCount);
+                    if (errorMsg) errorMsg.innerText = "請選擇正確數量的香味";
                 }
-                isValid = (currentTotal === targetCount);
-                if (errorMsg) errorMsg.innerText = "請選擇正確數量的香味";
 
             } else {
-                isValid = true; // 一般商品無需驗證
+                isValid = true; 
             }
 
             if (isValid) {
@@ -886,7 +896,6 @@ STEP 2：潤養．緊緻 (Q10 身體乳)
             document.getElementById('lightbox').classList.add('show');
         }
 
-        // ★ 新增：顯示 Toast 訊息
         function showToast(message) {
             const toast = document.getElementById('toast');
             toast.innerText = message;
@@ -912,31 +921,29 @@ STEP 2：潤養．緊緻 (Q10 身體乳)
             let finalPrice = currentProduct.price;
             let customNote = "";
 
-            // 處理組合包內容
             if (currentProduct.bundleSteps) {
-                // 將物件轉為易讀的字串：1. 護手乳: 綻放
-                const details = currentProduct.bundleSteps.map((step, idx) => {
-                    // 取出標題中的簡稱 (例如 "1. 護手乳 (選1款)" -> "護手乳")
-                    const simpleName = step.name.split('(')[0].replace(/^\d+\.\s*/, '');
-                    return `${simpleName}: ${selectedBundle[idx]}`;
-                }).join(" / ");
-                customNote = `[${details}]`;
+                const details = Object.values(selectedBundle).join(" + ");
+                customNote = `[內容: ${details}]`;
             }
-            // 處理變體內容
             else if (currentProduct.variants) {
                 const typeObj = currentProduct.variants.types[currentVariantIndex];
                 finalPrice = typeObj.price;
                 finalName = `${currentProduct.name} - ${typeObj.name}`;
-                const scentStr = Object.entries(selectedScents)
-                    .filter(([k, v]) => v > 0)
-                    .map(([k, v]) => `${k} x${v}`)
-                    .join(", ");
-                customNote = `[香味: ${scentStr}]`;
+                
+                // ★ 修改點：如果是固定內容，使用固定描述
+                if (typeObj.fixedContent) {
+                    customNote = `[${typeObj.fixedContent}]`;
+                } else {
+                    const scentStr = Object.entries(selectedScents)
+                        .filter(([k, v]) => v > 0)
+                        .map(([k, v]) => `${k} x${v}`)
+                        .join(", ");
+                    customNote = `[香味: ${scentStr}]`;
+                }
             }
 
-            // 產生唯一 ID
             const uid = (currentProduct.variants || currentProduct.bundleSteps) ? 
-                `${currentProduct.id}-${customNote}` : 
+                `${currentProduct.id}-${currentVariantIndex}-${customNote}` : 
                 currentProduct.id;
 
             const item = cart.find(i => i.uid === uid);
@@ -955,7 +962,6 @@ STEP 2：潤養．緊緻 (Q10 身體乳)
             }
             closeAllModals();
             updateCart();
-            // ★ 修改：不自動開購物車，改顯示 Toast
             showToast('✅ 已成功加入購物車！');
         }
         
