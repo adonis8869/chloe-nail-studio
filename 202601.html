@@ -26,6 +26,15 @@
         // 🔧 後台設定：作品集與文案
         const SITE_CONFIG = {
             bookingLink: "https://liff.line.me/2005658992-1YnkbR7K",
+    
+    // ★ 新增：預約前要跳出的 3 張圖片 (請更換為你的實際檔名)
+    previewImages: [
+        "26springrule_1.jpg",  // 例如：價目表
+        "26springrule_2.jpg",  // 例如：預約須知
+        "rules.jpg"   // 例如：當月主打
+    ],
+
+    // ... (下面是原本的 collections 設定，不用動) ...
             
             // 這裡設定兩個主題的內容 (對應原本的 Chloe 和 奇奇 的內容)
             collections: [
@@ -186,13 +195,37 @@
 
             <div class="mt-16 text-center">
                 <p class="text-sm text-gray-400 mb-4">喜歡這個風格嗎？</p>
-                <button onclick="window.location.href=SITE_CONFIG.bookingLink" class="bg-brand-dark text-white px-12 py-4 rounded-full shadow-lg hover:bg-brand-accent transition text-lg font-bold tracking-widest transform hover:-translate-y-1">
+                <button onclick="openBookingPreview()" class="bg-brand-dark text-white px-12 py-4 rounded-full shadow-lg hover:bg-brand-accent transition text-lg font-bold tracking-widest transform hover:-translate-y-1">
                     立即預約此款式
                 </button>
             </div>
         </div>
     </div>
 
+    <div id="booking-preview-modal" class="fixed inset-0 z-[3000] bg-black/90 hidden items-center justify-center p-4 backdrop-blur-sm animation-fade-in">
+    <div class="bg-white rounded-xl shadow-2xl max-w-md w-full overflow-hidden flex flex-col max-h-[90vh]">
+        
+        <div class="p-4 bg-brand-bg border-b border-gray-100 flex justify-between items-center">
+            <h3 class="font-bold text-brand-dark text-lg">預約前請確認</h3>
+            <button onclick="closeBookingPreview()" class="text-gray-400 hover:text-gray-600">✕</button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+            <img id="bp-img-0" src="" class="w-full rounded-lg shadow-sm object-cover">
+            <img id="bp-img-1" src="" class="w-full rounded-lg shadow-sm object-cover">
+            <img id="bp-img-2" src="" class="w-full rounded-lg shadow-sm object-cover">
+        </div>
+
+        <div class="p-4 bg-white border-t border-gray-100">
+            <p class="text-center text-xs text-gray-500 mb-3">確認以上資訊沒問題後，將為您跳轉至 LINE 預約</p>
+            <button onclick="realBookingAction()" class="w-full bg-brand-accent text-white py-3 rounded-full hover:bg-brand-dark transition font-bold tracking-widest shadow-lg transform active:scale-95 flex items-center justify-center gap-2">
+                前往預約
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5l7 7-7 7"></path></svg>
+            </button>
+        </div>
+    </div>
+</div>
+    
     <header class="bg-brand-bg/95 backdrop-blur-sm border-b border-brand-accent/20 py-6 text-center shadow-sm sticky top-0 z-40">
         <div class="cursor-pointer" onclick="window.location.reload()">
             <div class="text-3xl font-bold tracking-widest font-serif text-brand-dark">CHLOE NAIL</div>
@@ -241,23 +274,23 @@
 
     <nav class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-100 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] z-40 h-[80px] flex justify-center items-start px-6">
         
-        <div class="center-btn-wrapper" onclick="window.location.href=SITE_CONFIG.bookingLink">
-            <div class="center-circle">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                    <line x1="16" y1="2" x2="16" y2="6"></line>
-                    <line x1="8" y1="2" x2="8" y2="6"></line>
-                    <line x1="3" y1="10" x2="21" y2="10"></line>
-                    <path d="M8 14h.01"></path>
-                    <path d="M12 14h.01"></path>
-                    <path d="M16 14h.01"></path>
-                    <path d="M8 18h.01"></path>
-                    <path d="M12 18h.01"></path>
-                    <path d="M16 18h.01"></path>
-                </svg>
-            </div>
-            <span class="center-text">立即預約</span>
-        </div>
+        <div class="center-btn-wrapper" onclick="openBookingPreview()">
+    <div class="center-circle">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+            <path d="M8 14h.01"></path>
+            <path d="M12 14h.01"></path>
+            <path d="M16 14h.01"></path>
+            <path d="M8 18h.01"></path>
+            <path d="M12 18h.01"></path>
+            <path d="M16 18h.01"></path>
+        </svg>
+    </div>
+    <span class="center-text">立即預約</span>
+</div>
 
     </nav>
 
@@ -326,6 +359,32 @@
             document.getElementById('lightbox-img').src=src; 
             document.getElementById('lightbox').classList.add('show'); 
         }
+        function openBookingPreview() {
+        // 1. 載入圖片 (如果有設定的話)
+        const images = SITE_CONFIG.previewImages || [];
+        
+        if (images.length > 0) document.getElementById('bp-img-0').src = images[0];
+        if (images.length > 1) document.getElementById('bp-img-1').src = images[1];
+        if (images.length > 2) document.getElementById('bp-img-2').src = images[2];
+
+        // 2. 顯示視窗
+        const modal = document.getElementById('booking-preview-modal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        document.body.style.overflow = 'hidden'; // 禁止背景捲動
+    }
+
+    function closeBookingPreview() {
+        const modal = document.getElementById('booking-preview-modal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        document.body.style.overflow = 'auto';
+    }
+
+    // 真．跳轉去預約
+    function realBookingAction() {
+        window.location.href = SITE_CONFIG.bookingLink;
+    }
     </script>
 </body>
 </html>
