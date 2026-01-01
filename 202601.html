@@ -369,10 +369,10 @@
         }
 
         function closeGalleryModal() {
-            const modal = document.getElementById('gallery-modal');
-            modal.classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
+    // ★ 修改：不直接操作 DOM，而是模擬按下「上一頁」
+    // 這會觸發步驟 1 的 popstate 事件，由那邊統一處理關閉邏輯
+    history.back();
+}
 
         function openLightbox(src){ 
             document.getElementById('lightbox-img').src=src; 
