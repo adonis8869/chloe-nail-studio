@@ -23,12 +23,72 @@
             }
         }
         
-        // 🔧 後台設定 (連結與圖片)
+        // 🔧 後台設定
         const SITE_CONFIG = {
             bookingLink: "https://liff.line.me/2005658992-1YnkbR7K",
-            // 圖片設定
-            chloeImages: ["dec_2.jpg", "dec_1.jpg", "dec_3.jpg"],
-            qiqiImages: ["qiqi_1.jpg", "qiqi_2.jpg", "qiqi_3.jpg", "qiqi_4.jpg", "qiqi_5.jpg"]
+            
+            // ★ 新增：預約前要跳出的 3 張預覽圖片 (請確認檔名)
+            previewImages: [
+                "26springrule_1.jpg",  
+                "26springrule_2.jpg",  
+                "rules.jpg"   
+            ],
+
+            // ★ 新增：優惠活動的詳細內容資料
+            collections: [
+                {
+                    id: "promo_a",
+                    title: "1-2月新年冬季限定",
+                    price: "$999 - $1299",
+                    cover: "261_2.jpg", // 封面圖
+                    description: `
+                        <p class="font-bold text-lg mb-2 text-brand-dark">Chloe 美甲師限定款</p>
+                        <p class="mb-4 text-gray-600">韓系甜美千金 × 復古高級感特調<br>從手繪櫻桃、立體蝴蝶結到經典小香風毛呢，指尖的換季儀式感全都在這裡。</p>
+                        <ul class="text-left space-y-2 bg-brand-bg/50 p-4 rounded-lg">
+                            <li><span class="text-brand-accent font-bold">$999</span> | 冬季知性藍調 深藍與奶油白的完美撞色，搭配手繪格紋，百搭又耐看。</li>
+                            <li><span class="text-brand-accent font-bold">$1099</span> | 奢華名媛毛呢 秋冬必備的立體毛呢紋，點綴吸睛貓眼，指尖瞬間高級起來。</li>
+                            <li><span class="text-brand-accent font-bold">$1199</span> | 焦糖拿鐵暈染 溫暖的棕色系漸層，加上微奢華珍珠點綴，溫柔姊姊首選。</li>
+                            <li><span class="text-brand-accent font-bold">$1299</span> | 夢幻少女圖鑑 超人氣立體蝴蝶結、可愛櫻桃與通透腮紅甲，精緻度滿分！</li>
+                        </ul>
+                    `,
+                    // 內頁作品圖
+                    images: ["261_1.jpg", "261_3.jpg", "261_4.jpg", "261_5.jpg"] 
+                },
+                {
+                    id: "promo_b",
+                    title: "1-2月新春限定",
+                    price: "$999 up",
+                    cover: "26spring_2.jpg", // 封面圖
+                    description: `
+                        <p class="font-bold text-lg mb-2 text-brand-dark">新春氣息漸濃，讓指尖換上最精緻的開運新衣！</p>
+                        <div class="mb-4 text-gray-600">
+                            <p class="mb-4">
+                                這次我們特別推出「高度客製化」的新年方案，<br>
+                                不論是想要閃亮吸睛的貓眼，還是質感滿分的鏡面造型，<br>
+                                都能隨心所欲拼湊出妳最愛的春節款式 ✨
+                            </p>
+                            <p class="font-bold text-brand-dark mb-2">🎨 活動內容</p>
+                            <ul class="list-none space-y-2">
+                                <li>
+                                    <span class="font-bold text-brand-accent">• 活動底價：$999</span><br>
+                                    <span class="text-sm">（底色可任選：經典單色 / 閃耀貓眼 / 高級鏡面）</span>
+                                </li>
+                                <li>
+                                    <span class="font-bold text-brand-accent">• 造型手繪加購：</span><br>
+                                    <span class="text-sm">可依照個人喜好，從圖中款式自由挑選搭配，讓每一指都是妳喜歡的樣子！</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <ul class="text-left space-y-2 bg-brand-bg/50 p-4 rounded-lg">
+                            <li><span class="text-brand-accent font-bold">$80</span> | 甜甜過好年系列 (糖葫蘆 / 日式水引結 / 手寫祝福)</li>
+                            <li><span class="text-brand-accent font-bold">$100</span> | 經典招財系列 (春聯福字 / 大吉大利橘 / 好運吊飾)</li>
+                            <li><span class="text-brand-accent font-bold">$120-150</span> | 精緻手繪萌寵 (開運達摩 / 招財花貓 / 童趣小木馬)</li>
+                        </ul>
+                    `,
+                    // 內頁作品圖
+                    images: ["26spring_1.jpg", "26spring_3.jpg", "26spring_4.jpg"]
+                }
+            ]
         };
     </script>
     <style>
@@ -55,29 +115,30 @@
         #rules-modal.active { display: flex; }
         .modal-content { animation: fadeIn 0.3s ease-out; }
 
-        /* ★ 新增：設計師切換按鈕樣式 (仿照您提供的樣式但做成頁面內版本) ★ */
-        .artist-tab-btn {
-            padding: 10px 30px;
-            border: 2px solid #C5A086;
-            border-radius: 50px;
-            color: #8B7E74;
-            background: transparent;
-            font-weight: bold;
-            transition: all 0.3s;
-            cursor: pointer;
+        /* ★ 新增：優惠卡片特效 (Promo Card) ★ */
+        .promo-card { transition: all 0.3s; cursor: pointer; position: relative; overflow: hidden; border-radius: 12px; background: white; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .promo-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .promo-card .cover-img { transition: transform 0.7s ease; }
+        .promo-card:hover .cover-img { transform: scale(1.05); }
+        .promo-card::after { 
+            content: '點擊查看詳情'; 
+            position: absolute; bottom: 0; left: 0; width: 100%; padding: 12px; 
+            background: rgba(93, 83, 74, 0.9); color: white; text-align: center; font-size: 14px; letter-spacing: 1px;
+            transform: translateY(100%); transition: transform 0.3s; 
         }
-        .artist-tab-btn:hover {
-            background-color: rgba(197, 160, 134, 0.1);
+        .promo-card:hover::after { transform: translateY(0); }
+
+        /* ★ 新增：作品集詳情頁 (Gallery Modal) ★ */
+        #gallery-modal { 
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: #F5F0F0; z-index: 2000; overflow-y: auto; 
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .artist-tab-btn.active {
-            background-color: #C5A086;
-            color: white;
-            box-shadow: 0 4px 10px rgba(197, 160, 134, 0.4);
-        }
-        
-        /* 設計師內容區塊切換 */
-        .artist-content { display: none; animation: fadeIn 0.5s ease; }
-        .artist-content.active { display: block; }
+        #gallery-modal.active { display: block; }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+        /* ★ 新增：預約預覽視窗動畫 ★ */
+        #booking-preview-modal.animation-fade-in { animation: fadeIn 0.3s ease-out; }
 
     </style>
 </head>
@@ -96,6 +157,60 @@
             </div>
             <div class="p-4 border-t border-gray-100 bg-white">
                 <button onclick="closeRulesModal()" class="w-full bg-brand-accent text-white py-3 rounded-full hover:bg-brand-dark transition font-bold tracking-widest shadow-lg transform active:scale-95">我已閱讀並同意</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="gallery-modal">
+        <div class="sticky top-0 bg-brand-bg/95 backdrop-blur shadow-sm p-4 flex justify-between items-center z-50 border-b border-gray-200">
+            <button onclick="closeGalleryModal()" class="text-brand-dark flex items-center gap-1 font-bold text-lg hover:text-brand-accent transition">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+                返回
+            </button>
+            <span class="font-serif font-bold text-brand-dark text-lg tracking-wider">DETAILS</span>
+            <div class="w-8"></div> 
+        </div>
+
+        <div class="max-w-3xl mx-auto p-6 pb-32">
+            <h2 id="gm-title" class="text-3xl font-bold text-brand-dark mb-2 text-center mt-4"></h2>
+            <p id="gm-price" class="text-center text-brand-accent text-xl font-serif mb-8"></p>
+            
+            <div id="gm-desc" class="text-gray-600 bg-white p-6 rounded-xl shadow-sm border border-brand-accent/20 mb-10 leading-relaxed text-center"></div>
+            
+            <div class="flex items-center gap-4 mb-8">
+                <div class="h-px bg-gray-300 flex-1"></div>
+                <span class="text-brand-dark font-hand text-2xl">Works Gallery</span>
+                <div class="h-px bg-gray-300 flex-1"></div>
+            </div>
+            
+            <div id="gm-grid" class="space-y-6"></div>
+
+            <div class="mt-16 text-center">
+                <p class="text-sm text-gray-400 mb-4">喜歡這個風格嗎？</p>
+                <button onclick="openBookingPreview()" class="bg-brand-dark text-white px-12 py-4 rounded-full shadow-lg hover:bg-brand-accent transition text-lg font-bold tracking-widest transform hover:-translate-y-1">
+                    立即預約此款式
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="booking-preview-modal" class="fixed inset-0 z-[3000] bg-black/90 hidden items-center justify-center p-4 backdrop-blur-sm animation-fade-in">
+        <div class="bg-white rounded-xl shadow-2xl max-w-md w-full overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="p-4 bg-brand-bg border-b border-gray-100 flex justify-between items-center">
+                <h3 class="font-bold text-brand-dark text-lg">預約前請確認</h3>
+                <button onclick="closeBookingPreview()" class="text-gray-400 hover:text-gray-600">✕</button>
+            </div>
+            <div class="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+                <img id="bp-img-0" src="" class="w-full rounded-lg shadow-sm object-cover">
+                <img id="bp-img-1" src="" class="w-full rounded-lg shadow-sm object-cover">
+                <img id="bp-img-2" src="" class="w-full rounded-lg shadow-sm object-cover">
+            </div>
+            <div class="p-4 bg-white border-t border-gray-100">
+                <p class="text-center text-xs text-gray-500 mb-3">確認以上資訊沒問題後，將為您跳轉至 LINE 預約</p>
+                <button onclick="realBookingAction()" class="w-full bg-brand-accent text-white py-3 rounded-full hover:bg-brand-dark transition font-bold tracking-widest shadow-lg transform active:scale-95 flex items-center justify-center gap-2">
+                    前往預約
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5l7 7-7 7"></path></svg>
+                </button>
             </div>
         </div>
     </div>
@@ -140,51 +255,39 @@
     </div>
 
     <div id="page-promos" class="page-section">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center mb-8">
-                <h2 class="text-3xl md:text-4xl text-brand-text font-bold">December Specials</h2>
-                <p class="text-xl font-hand text-brand-accent font-normal mt-2">12月聖誕跨年限定</p>
+        <div class="max-w-4xl mx-auto px-6">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl text-brand-text font-bold">Seasonal Specials</h2>
+                <p class="text-xl font-hand text-brand-accent font-normal mt-2">1-2月 新春/冬季 限定</p>
             </div>
 
-            <div class="flex justify-center gap-6 mb-10">
-                <button onclick="switchArtist('chloe')" id="btn-chloe" class="artist-tab-btn active text-lg">Chloe</button>
-                <button onclick="switchArtist('qiqi')" id="btn-qiqi" class="artist-tab-btn text-lg">奇奇</button>
-            </div>
-
-            <div id="tab-chloe" class="artist-content active">
-                <div class="text-center mb-10">
-                    <div class="bg-white p-6 rounded-lg shadow-sm border border-brand-accent/30 inline-block text-left max-w-2xl mx-auto w-full">
-                        <p class="text-brand-dark mb-4 text-center font-medium text-lg">Chloe美甲師為你準備<br>高質感日常款 × 精緻聖誕限定款</p>
-                        <div class="space-y-3 text-base text-gray-600">
-                            <p><span class="text-brand-accent font-bold">🔸 $1099</span> | 冬季基本款系列 (霧藍/莓紅/禮物包裝)</p>
-                            <p><span class="text-brand-accent font-bold">🔸 $1199</span> | 聖誕花草 × 奶霧系列 (柔霧雪季色調)</p>
-                            <p><span class="text-brand-accent font-bold">🔸 $1299</span> | 聖誕樹咖啡暈染 (聖誕限定/百搭顯白)</p>
-                        </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="promo-card" onclick="openGalleryModal(0)">
+                    <div class="h-80 overflow-hidden relative">
+                        <img id="cover-0" src="" class="cover-img w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black/10 hover:bg-transparent transition"></div>
+                    </div>
+                    <div class="p-6 text-center">
+                        <h3 id="title-0" class="text-2xl font-bold text-brand-dark mb-2"></h3>
+                        <p id="price-0" class="text-brand-accent font-serif text-xl tracking-wide"></p>
                     </div>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="gallery-chloe"></div>
-                <div class="text-center mt-12 py-4 bg-white/50 rounded-lg text-sm text-gray-500 font-bold tracking-wide">
-                    *活動日期：12/01 - 12/31 (開放預約中)
-                </div>
-            </div>
 
-            <div id="tab-qiqi" class="artist-content">
-                <div class="text-center mb-10">
-                    <div class="bg-white p-6 rounded-lg shadow-sm border border-brand-accent/30 inline-block text-left max-w-2xl mx-auto w-full">
-                        <p class="text-brand-dark mb-4 text-center font-medium text-lg">奇奇美甲師為你準備<br>日系小清新 × 手繪塗鴉風</p>
-                        <div class="space-y-3 text-base text-gray-600">
-                            <p><span class="text-brand-accent font-bold">🔸 $999</span> | 塗鴉小清新系列 (格紋/小花/可愛櫻桃)</p>
-                            <p><span class="text-brand-accent font-bold">🔸 $1099</span> | 溫柔手繪系列 (豹紋/暈染/立體蝴蝶結)</p>
-                            <p><span class="text-brand-accent font-bold">🔸 $1199</span> | 聖誕系列 (聖誕紅綠/璀璨亮片/精緻聖誕樹)</p>
-                        </div>
+                <div class="promo-card" onclick="openGalleryModal(1)">
+                    <div class="h-80 overflow-hidden relative">
+                        <img id="cover-1" src="" class="cover-img w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black/10 hover:bg-transparent transition"></div>
+                    </div>
+                    <div class="p-6 text-center">
+                        <h3 id="title-1" class="text-2xl font-bold text-brand-dark mb-2"></h3>
+                        <p id="price-1" class="text-brand-accent font-serif text-xl tracking-wide"></p>
                     </div>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="gallery-qiqi"></div>
-                <div class="text-center mt-12 py-4 bg-white/50 rounded-lg text-sm text-gray-500 font-bold tracking-wide">
-                    *活動日期：12/01 - 12/31 (開放預約中)
-                </div>
             </div>
 
+            <div class="text-center py-4 bg-white/60 rounded-lg text-sm text-gray-500 font-bold tracking-wide border border-brand-accent/10">
+                *活動日期：即日起至 2/28 止 (開放預約中)
+            </div>
         </div>
     </div>
 
@@ -259,7 +362,7 @@
     <div class="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-brand-accent/20 z-30 flex justify-around items-end py-2 px-2 text-[10px] text-brand-text shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
         <div onclick="switchPage('page-home')" class="flex flex-col items-center p-2 active:text-brand-accent"><span class="text-lg mb-1">🏠</span><span>首頁</span></div>
         <div onclick="switchPage('page-news')" class="flex flex-col items-center p-2 active:text-brand-accent"><span class="text-lg mb-1">📰</span><span>最新</span></div>
-        <div class="relative flex flex-col items-center -top-5 cursor-pointer" onclick="window.location.href=SITE_CONFIG.bookingLink">
+        <div class="relative flex flex-col items-center -top-5 cursor-pointer" onclick="openBookingPreview()">
             <div class="bg-brand-accent text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg shadow-brand-accent/40 hover:scale-95 transition">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
             </div>
@@ -270,6 +373,33 @@
     </div>
 
     <script>
+        // 處理手機返回鍵邏輯 (整合 Modal 和 Page)
+        window.addEventListener('popstate', function(event) {
+            // 優先檢查 Modal 是否開啟
+            const galleryModal = document.getElementById('gallery-modal');
+            if (galleryModal.classList.contains('active')) {
+                galleryModal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+                return; // 如果關閉了 Modal，就不繼續執行頁面切換
+            }
+
+            const bookingModal = document.getElementById('booking-preview-modal');
+            if (bookingModal && !bookingModal.classList.contains('hidden')) {
+                bookingModal.classList.add('hidden');
+                bookingModal.classList.remove('flex');
+                document.body.style.overflow = 'auto';
+                return;
+            }
+
+            // 如果沒有 Modal，則執行原本的頁面切換邏輯
+            const newHash = window.location.hash.replace('#', '');
+            if (newHash && document.getElementById(newHash)) {
+                updateView(newHash);
+            } else {
+                updateView('page-home');
+            }
+        });
+
         document.addEventListener('DOMContentLoaded', function() {
             // 1. 須知彈窗
             if (!localStorage.getItem('hasReadRules')) {
@@ -277,62 +407,22 @@
                 document.body.style.overflow = 'hidden';
             }
             
-            // 2. 生成優惠頁面的圖片 (Chloe & Qiqi)
-            renderPromoGalleries();
+            // 2. 初始化優惠封面 (新功能)
+            renderCovers();
 
-            // 3. 網址導航邏輯
+            // 3. 網址導航邏輯 (Hash)
             const hash = window.location.hash.replace('#', '');
             if (hash && document.getElementById(hash)) {
                 switchPage(hash);
             } else {
                 updateView('page-home');
             }
-            window.addEventListener('hashchange', function() {
-                const newHash = window.location.hash.replace('#', '');
-                if (newHash && document.getElementById(newHash)) {
-                    updateView(newHash);
-                } else {
-                    updateView('page-home');
-                }
-            });
         });
 
         function closeRulesModal() {
             localStorage.setItem('hasReadRules', 'true');
             document.getElementById('rules-modal').classList.remove('active');
             document.body.style.overflow = 'auto';
-        }
-
-        // ★ 新增：生成 Chloe 和 奇奇 的圖片牆
-        function renderPromoGalleries() {
-            const chloeContainer = document.getElementById('gallery-chloe');
-            if(chloeContainer) {
-                chloeContainer.innerHTML = SITE_CONFIG.chloeImages.map(img => 
-                    `<div class="overflow-hidden rounded-lg shadow-md bg-white">
-                        <img src="${img}" onclick="openLightbox(this.src)" class="w-full h-auto object-cover zoomable hover:scale-105 transition duration-500" onerror="this.src='https://via.placeholder.com/600x800?text=Chloe+Works'">
-                    </div>`
-                ).join('');
-            }
-
-            const qiqiContainer = document.getElementById('gallery-qiqi');
-            if(qiqiContainer) {
-                qiqiContainer.innerHTML = SITE_CONFIG.qiqiImages.map(img => 
-                    `<div class="overflow-hidden rounded-lg shadow-md bg-white">
-                        <img src="${img}" onclick="openLightbox(this.src)" class="w-full h-auto object-cover zoomable hover:scale-105 transition duration-500" onerror="this.src='https://via.placeholder.com/600x800?text=Qiqi+Works'">
-                    </div>`
-                ).join('');
-            }
-        }
-
-        // ★ 新增：切換設計師 Tab
-        function switchArtist(artistId) {
-            // 隱藏所有內容
-            document.querySelectorAll('.artist-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.artist-tab-btn').forEach(btn => btn.classList.remove('active'));
-            
-            // 顯示目標
-            document.getElementById(`tab-${artistId}`).classList.add('active');
-            document.getElementById(`btn-${artistId}`).classList.add('active');
         }
 
         // 頁面切換
@@ -363,12 +453,87 @@
             mobileBtns.forEach(b => b.classList.remove('text-brand-accent'));
              if(id === 'page-home' && mobileBtns[0]) mobileBtns[0].classList.add('text-brand-accent');
              if(id === 'page-news' && mobileBtns[1]) mobileBtns[1].classList.add('text-brand-accent');
-             // index 2 is center btn
              if(id === 'page-promos' && mobileBtns[3]) mobileBtns[3].classList.add('text-brand-accent');
              if(id === 'page-menu' && mobileBtns[4]) mobileBtns[4].classList.add('text-brand-accent');
         }
 
+        // 全局燈箱
         function openLightbox(src){ document.getElementById('lightbox-img').src=src; document.getElementById('lightbox').classList.add('show'); }
+
+        /* =========================================
+           ★ 以下是新增的功能邏輯 (從第一個代碼移植) ★
+           ========================================= */
+
+        // 1. 渲染優惠頁面的封面卡片
+        function renderCovers() {
+            SITE_CONFIG.collections.forEach((col, idx) => {
+                const titleEl = document.getElementById(`title-${idx}`);
+                const priceEl = document.getElementById(`price-${idx}`);
+                const coverEl = document.getElementById(`cover-${idx}`);
+                
+                if (titleEl) titleEl.innerText = col.title;
+                if (priceEl) priceEl.innerText = col.price;
+                if (coverEl) {
+                    coverEl.src = col.cover;
+                    coverEl.onerror = function() { this.src='https://via.placeholder.com/600x800?text=Cover+Image'; };
+                }
+            });
+        }
+
+        // 2. 開啟詳情頁 Modal
+        function openGalleryModal(index) {
+            // 加入歷史紀錄，讓手機按上一頁時可以只關閉視窗
+            history.pushState({ modal: 'gallery' }, null, '');
+            
+            const data = SITE_CONFIG.collections[index];
+            const modal = document.getElementById('gallery-modal');
+            
+            document.getElementById('gm-title').innerText = data.title;
+            document.getElementById('gm-price').innerText = data.price;
+            document.getElementById('gm-desc').innerHTML = data.description;
+            
+            // 生成圖片網格
+            const grid = document.getElementById('gm-grid');
+            grid.innerHTML = data.images.map(img => 
+                `<div class="overflow-hidden rounded-lg shadow-md bg-white">
+                    <img src="${img}" onclick="openLightbox(this.src)" class="w-full h-auto object-cover zoomable hover:scale-105 transition duration-500" onerror="this.src='https://via.placeholder.com/600x800?text=Gallery+Image'">
+                </div>`
+            ).join('');
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden'; 
+        }
+
+        // 3. 關閉詳情頁 (模擬按上一頁)
+        function closeGalleryModal() {
+            history.back();
+        }
+
+        // 4. 開啟預約前預覽視窗
+        function openBookingPreview() {
+            const images = SITE_CONFIG.previewImages || [];
+            if (images.length > 0) document.getElementById('bp-img-0').src = images[0];
+            if (images.length > 1) document.getElementById('bp-img-1').src = images[1];
+            if (images.length > 2) document.getElementById('bp-img-2').src = images[2];
+
+            const modal = document.getElementById('booking-preview-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // 5. 關閉預約前預覽視窗
+        function closeBookingPreview() {
+            const modal = document.getElementById('booking-preview-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = 'auto';
+        }
+
+        // 6. 跳轉 LINE
+        function realBookingAction() {
+            window.location.href = SITE_CONFIG.bookingLink;
+        }
     </script>
 </body>
 </html>
