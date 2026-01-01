@@ -135,54 +135,74 @@
     <div id="page-rules" class="page-section">
         <div class="max-w-5xl mx-auto px-6 text-center">
             <h2 class="text-3xl text-brand-text font-bold mb-8">Booking Rules <span class="block text-xl font-hand text-brand-accent font-normal mt-2">預約須知</span></h2>
-            <div class="bg-white p-2 rounded shadow-sm"><img src="rules.jpg" onclick="openLightbox(this.src)" class="w-full h-auto rounded-sm zoomable" onerror="this.src='https://via.placeholder.com/800x1200?text=Rules+Image'"></div>
+            <div class="bg-white p-2 rounded shadow-sm"><img src="26springrule_1.jpg,26springrule_2.jpg,rules.jpg" onclick="openLightbox(this.src)" class="w-full h-auto rounded-sm zoomable" onerror="this.src='https://via.placeholder.com/800x1200?text=Rules+Image'"></div>
         </div>
     </div>
 
     <div id="page-promos" class="page-section">
         <div class="max-w-7xl mx-auto px-6">
             <div class="text-center mb-8">
-                <h2 class="text-3xl md:text-4xl text-brand-text font-bold">December Specials</h2>
-                <p class="text-xl font-hand text-brand-accent font-normal mt-2">12月聖誕跨年限定</p>
+                <h2 class="text-3xl md:text-4xl text-brand-text font-bold">Seasonal Specials</h2>
+                <p class="text-xl font-hand text-brand-accent font-normal mt-2">1-2月限定優惠</p>
             </div>
 
-            <div class="flex justify-center gap-6 mb-10">
-                <button onclick="switchArtist('chloe')" id="btn-chloe" class="artist-tab-btn active text-lg">Chloe</button>
-                <button onclick="switchArtist('qiqi')" id="btn-qiqi" class="artist-tab-btn text-lg">奇奇</button>
-            </div>
-
-            <div id="tab-chloe" class="artist-content active">
-                <div class="text-center mb-10">
-                    <div class="bg-white p-6 rounded-lg shadow-sm border border-brand-accent/30 inline-block text-left max-w-2xl mx-auto w-full">
-                        <p class="text-brand-dark mb-4 text-center font-medium text-lg">Chloe美甲師為你準備<br>高質感日常款 × 精緻聖誕限定款</p>
-                        <div class="space-y-3 text-base text-gray-600">
-                            <p><span class="text-brand-accent font-bold">🔸 $1099</span> | 冬季基本款系列 (霧藍/莓紅/禮物包裝)</p>
-                            <p><span class="text-brand-accent font-bold">🔸 $1199</span> | 聖誕花草 × 奶霧系列 (柔霧雪季色調)</p>
-                            <p><span class="text-brand-accent font-bold">🔸 $1299</span> | 聖誕樹咖啡暈染 (聖誕限定/百搭顯白)</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="gallery-chloe"></div>
-                <div class="text-center mt-12 py-4 bg-white/50 rounded-lg text-sm text-gray-500 font-bold tracking-wide">
-                    *活動日期：12/01 - 12/31 (開放預約中)
-                </div>
-            </div>
-
-            <div id="tab-qiqi" class="artist-content">
-                <div class="text-center mb-10">
-                    <div class="bg-white p-6 rounded-lg shadow-sm border border-brand-accent/30 inline-block text-left max-w-2xl mx-auto w-full">
-                        <p class="text-brand-dark mb-4 text-center font-medium text-lg">奇奇美甲師為你準備<br>日系小清新 × 手繪塗鴉風</p>
-                        <div class="space-y-3 text-base text-gray-600">
-                            <p><span class="text-brand-accent font-bold">🔸 $999</span> | 塗鴉小清新系列 (格紋/小花/可愛櫻桃)</p>
-                            <p><span class="text-brand-accent font-bold">🔸 $1099</span> | 溫柔手繪系列 (豹紋/暈染/立體蝴蝶結)</p>
-                            <p><span class="text-brand-accent font-bold">🔸 $1199</span> | 聖誕系列 (聖誕紅綠/璀璨亮片/精緻聖誕樹)</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="gallery-qiqi"></div>
-                <div class="text-center mt-12 py-4 bg-white/50 rounded-lg text-sm text-gray-500 font-bold tracking-wide">
-                    *活動日期：12/01 - 12/31 (開放預約中)
-                </div>
+              collections: [
+                {
+                    id: "promo_a",
+                    title: "1-2月新年冬季限定",
+                    price: "$999 - $1299",
+                    cover: "261_2.jpg", // 外面看到的封面圖 (使用 Chloe 的第一張)
+                    description: `
+                        <p class="font-bold text-lg mb-2 text-brand-dark">Chloe 美甲師限定款</p>
+                        <p class="mb-4 text-gray-600">韓系甜美千金 × 復古高級感特調<br>從手繪櫻桃、立體蝴蝶結到經典小香風毛呢，指尖的換季儀式感全都在這裡。</p>
+                        <ul class="text-left space-y-2 bg-brand-bg/50 p-4 rounded-lg">
+                            <li><span class="text-brand-accent font-bold">$999</span> | 冬季知性藍調 深藍與奶油白的完美撞色，搭配手繪格紋，百搭又耐看。</li>
+                            <li><span class="text-brand-accent font-bold">$1099</span> | 奢華名媛毛呢 秋冬必備的立體毛呢紋，點綴吸睛貓眼，指尖瞬間高級起來。</li>
+                            <li><span class="text-brand-accent font-bold">$1199</span> | 焦糖拿鐵暈染 溫暖的棕色系漸層，加上微奢華珍珠點綴，溫柔姊姊首選。</li>
+                            <li><span class="text-brand-accent font-bold">$1299</span> | 夢幻少女圖鑑 超人氣立體蝴蝶結、可愛櫻桃與通透腮紅甲，精緻度滿分！</li>
+                        </ul>
+                    `,
+                    // 點進去後看到的更多圖片 (Chloe 的作品)
+                    images: ["261_1.jpg", "261_3.jpg", "261_4.jpg", "261_5.jpg"] 
+                },
+                {
+                    id: "promo_b",
+                    title: "1-2月新春限定",
+                    price: "$999 up",
+                    cover: "26spring_2.jpg", // 外面看到的封面圖 (使用 奇奇 的第一張)
+                    description: `
+                        <p class="font-bold text-lg mb-2 text-brand-dark">新春氣息漸濃，讓指尖換上最精緻的開運新衣！</p>
+                        <div class="mb-4 text-gray-600">
+    <p class="mb-4">
+        這次我們特別推出「高度客製化」的新年方案，<br>
+        不論是想要閃亮吸睛的貓眼，還是質感滿分的鏡面造型，<br>
+        都能隨心所欲拼湊出妳最愛的春節款式 ✨
+    </p>
+    
+    <p class="font-bold text-brand-dark mb-2">🎨 活動內容</p>
+    
+    <ul class="list-none space-y-2">
+        <li>
+            <span class="font-bold text-brand-accent">• 活動底價：$999</span><br>
+            <span class="text-sm">（底色可任選：經典單色 / 閃耀貓眼 / 高級鏡面）</span>
+        </li>
+        <li>
+            <span class="font-bold text-brand-accent">• 造型手繪加購：</span><br>
+            <span class="text-sm">可依照個人喜好，從圖中款式自由挑選搭配，讓每一指都是妳喜歡的樣子！</span>
+        </li>
+    </ul>
+</div>
+                        <ul class="text-left space-y-2 bg-brand-bg/50 p-4 rounded-lg">
+                            <li><span class="text-brand-accent font-bold">$80</span> | 甜甜過好年系列 (糖葫蘆 / 日式水引結 / 手寫祝福)</li>
+                            <li><span class="text-brand-accent font-bold">$100</span> | 經典招財系列 (春聯福字 / 大吉大利橘 / 好運吊飾)</li>
+                            <li><span class="text-brand-accent font-bold">$120-150</span> | 精緻手繪萌寵 (開運達摩 / 招財花貓 / 童趣小木馬)</li>
+                        </ul>
+                    `,
+                    // 點進去後看到的更多圖片 (奇奇 的作品)
+                    images: ["26spring_1.jpg", "26spring_3.jpg", "26spring_4.jpg"]
+                }
+            ]
+        };
             </div>
 
         </div>
