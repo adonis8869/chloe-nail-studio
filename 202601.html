@@ -295,6 +295,24 @@
     </nav>
 
     <script>
+        window.addEventListener('popstate', function(event) {
+    // 檢查作品集視窗是否開啟
+    const galleryModal = document.getElementById('gallery-modal');
+    if (galleryModal.classList.contains('active')) {
+        // 如果視窗是開的，就執行原本的關閉動作（移除 active, 恢復捲動）
+        galleryModal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+        return; // 結束，不繼續執行
+    }
+
+    // (選用) 如果你剛剛加的「預約前預覽視窗」也要支援手機返回關閉，也可以加在這裡
+    const bookingModal = document.getElementById('booking-preview-modal');
+    if (bookingModal && !bookingModal.classList.contains('hidden')) {
+        bookingModal.classList.add('hidden');
+        bookingModal.classList.remove('flex');
+        document.body.style.overflow = 'auto';
+    }
+});
         document.addEventListener('DOMContentLoaded', function() {
             // 1. 須知彈窗
             if (!localStorage.getItem('hasReadRules')) {
@@ -330,6 +348,7 @@
 
         // ★ 開啟子頁面 (Gallery Modal)
         function openGalleryModal(index) {
+            history.pushState({ modal: 'gallery' }, null, '');
             const data = SITE_CONFIG.collections[index];
             const modal = document.getElementById('gallery-modal');
             
