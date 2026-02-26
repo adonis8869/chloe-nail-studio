@@ -41,14 +41,8 @@
                 description: `
                     <p class="font-bold text-lg mb-2 text-brand-dark">初春溫柔定調，指尖上的氣質心機</p>
                     <p class="mb-4 text-gray-600">本期設計以「透亮、顯白、溫柔」為核心。無論是清新俏皮的手繪圖騰，還是高級冷冽的冰透暈染，完美應對妳的每一個日常。</p>
-                    <ul class="text-left space-y-2 bg-brand-bg/50 p-4 rounded-lg">
-                        <li><span class="text-brand-accent font-bold">🔸 $999</span> | 甜美小清新 (粉嫩蝴蝶結 / 幸運草)</li>
-                        <li><span class="text-brand-accent font-bold">🔸 $1099</span> | 浪漫手繪花卉 (香芋紫 / 氣質格紋)</li>
-                        <li><span class="text-brand-accent font-bold">🔸 $1199</span> | 質感璀璨流沙 (焦糖琥珀 / 閃耀)</li>
-                        <li><span class="text-brand-accent font-bold">🔸 $1299</span> | 高級精緻特調 (透色貝殼 / 灰藍線條)</li>
-                    </ul>
                 `,
-                // 將 5 張圖片放在一起展示
+                // 將所有圖片放在一起展示
                 images: ["IMG_9667.jpg", "IMG_9669.jpg", "IMG_9670.jpg", "IMG_9671.jpg", "IMG_9672.jpg"] 
             }
         };
@@ -149,14 +143,15 @@
             const container = document.getElementById('gallery-container');
             const data = SITE_CONFIG.collection;
 
-            // 1. 生成照片牆 HTML
+            // 1. 生成照片堆疊 HTML
             const imagesHTML = data.images.map(img => `
-                <div class="overflow-hidden rounded-lg shadow-md bg-white group">
+                <div class="overflow-hidden rounded-lg shadow-md bg-white group w-full">
                     <img src="${img}" onclick="openLightbox(this.src)" class="w-full h-auto object-cover cursor-zoom-in transition duration-500 group-hover:scale-105 group-hover:opacity-95" onerror="this.src='https://via.placeholder.com/600x800?text=Gallery+Image'">
                 </div>
             `).join('');
 
-            // 2. 組合文案與照片牆
+            // 2. 組合文案與照片堆疊
+            // 關鍵修改：將 grid 改為 flex-col 和 space-y-8 來實現垂直大圖堆疊
             container.innerHTML = `
                 <div class="animate-[fadeIn_0.5s_ease-out]">
                     <div class="mb-10 max-w-2xl mx-auto">
@@ -165,7 +160,7 @@
                         </div>
                     </div>
                     
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="flex flex-col space-y-8">
                         ${imagesHTML}
                     </div>
                 </div>
