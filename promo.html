@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chloe Nail Studio | 3月限定優惠</title>
+    <link rel="icon" href="favicon.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600&family=Noto+Sans+TC:wght@300;400;500;700&family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { 
+                        'brand-bg': '#F5F0F0', 
+                        'brand-text': '#8B7E74', 
+                        'brand-accent': '#C5A086', 
+                        'brand-dark': '#5D534A',
+                        'nav-active': '#A89080' 
+                    },
+                    fontFamily: { 
+                        'sans': ['"Zen Maru Gothic"', '"Noto Sans TC"', 'sans-serif'], 
+                        'serif': ['"Zen Maru Gothic"', '"Noto Sans TC"', 'sans-serif'], 
+                        'hand': ['"Dancing Script"', 'cursive'] 
+                    },
+                    boxShadow: {
+                        'nav': '0 -4px 20px rgba(0,0,0,0.05)',
+                        'float': '0 4px 15px rgba(197, 160, 134, 0.4)'
+                    }
+                }
+            }
+        }
+
+        // 🔧 後台設定區：作品集與文案
+        const SITE_CONFIG = {
+            bookingLink: "https://liff.line.me/2005658992-1YnkbR7K", 
+            
+            // 這裡設定兩個主題的內容 (點進去子頁面的資料)
+            collections: [
+                {
+                    title: "清新浪漫系列",
+                    price: "$999 - $1099",
+                    cover: "IMG_9667.jpg", // 封面圖 1
+                    description: `
+                        <p class="font-bold text-lg mb-2 text-brand-dark">初春溫柔定調，甜美微甜</p>
+                        <p class="mb-4 text-gray-600">本期設計以「透亮、顯白、溫柔」為核心。清新俏皮的手繪圖騰，完美應對妳的約會日常。</p>
+                        <ul class="text-left space-y-2 bg-brand-bg/50 p-4 rounded-lg">
+                            <li><span class="text-brand-accent font-bold">🔸 $999</span> | 甜美小清新 (粉嫩蝴蝶結 / 幸運草)</li>
+                            <li><span class="text-brand-accent font-bold">🔸 $1099</span> | 氣質初綻手繪 (香芋紫花卉 / 經典格紋)</li>
+                        </ul>
+                    `,
+                    // 子頁面內顯示的圖片
+                    images: ["IMG_9667.jpg", "IMG_9670.jpg"] 
+                },
+                {
+                    title: "高級質感系列",
+                    price: "$1199 - $1299",
+                    cover: "IMG_9669.jpg", // 封面圖 2
+                    description: `
+                        <p class="font-bold text-lg mb-2 text-brand-dark">指尖上的氣質心機</p>
+                        <p class="mb-4 text-gray-600">高級冷冽的冰透暈染與璀璨流沙，完美展現低調奢華的清冷高級感。</p>
+                        <ul class="text-left space-y-2 bg-brand-bg/50 p-4 rounded-lg">
+                            <li><span class="text-brand-accent font-bold">🔸 $1199</span> | 奢華琥珀系列 (焦糖琥珀 / 流金閃耀)</li>
+                            <li><span class="text-brand-accent font-bold">🔸 $1299</span> | 精緻高訂特調 (裸色貝殼片 / 冰透灰藍線條)</li>
+                        </ul>
+                    `,
+                    // 子頁面內顯示的圖片
+                    images: ["IMG_9669.jpg", "IMG_9671.jpg", "IMG_9672.jpg"]
+                }
+            ]
+        };
+    </script>
+    <style>
+        body { 
+            background-color: #F5F0F0; 
+            color: #8B7E74; 
+            font-family: "Zen Maru Gothic", "Noto Sans TC", sans-serif; 
+            padding-bottom: 120px; 
+        }
+        
+        /* 圖片燈箱與放大效果 */
+        .zoomable { cursor: zoom-in; transition: transform 0.3s ease; } 
+        .zoomable:hover { transform: scale(1.02); }
+        #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); z-index: 9999; justify-content: center; align-items: center; }
+        #lightbox.show { display: flex; } 
+        #lightbox img { max-width: 100%; max-height: 95vh; object-fit: contain; }
+
+        /* 中間凸起預約按鈕樣式 */
+        .center-btn-wrapper { 
+            position: relative; 
+            top: -25px; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+        .center-circle { 
+            width: 65px; height: 65px; 
+            background-color: #C5A086; 
+            border-radius: 50%; 
+            display: flex; justify-content: center; align-items: center; 
+            box-shadow: 0 4px 15px rgba(197, 160, 134, 0.5);
+            color: white;
+            transition: transform 0.2s, background-color 0.2s;
+            margin-bottom: 6px;
+        }
+        .center-btn-wrapper:active .center-circle { transform: scale(0.95); background-color: #A89080; }
+        .center-text { font-weight: bold; color: #5D534A; font-size: 15px; letter-spacing: 1px; }
+
+        /* ★ 子頁面 (Gallery Modal) 動畫與樣式 ★ */
+        #gallery-modal { 
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: #F5F0F0; z-index: 2000; overflow-y: auto; 
+            animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        #gallery-modal.active { display: block; }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+        /* 封面卡片特效 */
+        .promo-card { transition: all 0.3s; cursor: pointer; position: relative; overflow: hidden; border-radius: 12px; background: white; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .promo-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .promo-card .cover-img { transition: transform 0.7s ease; }
+        .promo-card:hover .cover-img { transform: scale(1.05); }
+        .promo-card::after { 
+            content: '點擊查看詳情'; 
+            position: absolute; bottom: 0; left: 0; width: 100%; padding: 12px; 
+            background: rgba(93, 83, 74, 0.9); color: white; text-align: center; font-size: 14px; letter-spacing: 1px;
+            transform: translateY(100%); transition: transform 0.3s; 
+        }
+        .promo-card:hover::after { transform: translateY(0); }
+
+    </style>
+</head>
+<body>
+
+    <div id="lightbox" onclick="this.classList.remove('show')"><img id="lightbox-img" src=""></div>
+
+    <header class="bg-brand-bg/95 backdrop-blur-sm border-b border-brand-accent/20 py-6 text-center shadow-sm sticky top-0 z-40">
+        <div class="cursor-pointer" onclick="window.location.reload()">
+            <div class="text-3xl font-bold tracking-widest font-serif text-brand-dark">CHLOE NAIL</div>
+            <div class="font-hand text-xl text-brand-accent">Spring Collection</div>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-6 pt-10">
+        
+        <div class="text-center mb-10">
+            <h2 class="text-3xl md:text-4xl text-brand-text font-bold">Jan. & Feb. Specials</h2>
+            <span class="block text-xl font-hand text-brand-accent font-normal mt-2">1-2月 初春限定優惠</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12" id="covers-container">
+            </div>
+        
+        <div class="text-center py-4 bg-white/60 rounded-lg text-sm text-gray-500 font-bold tracking-wide border border-brand-accent/10">
+            *活動日期：即日起至 2/28 止 (開放預約中)
+        </div>
+
+    </main>
+
+    <div id="gallery-modal">
+        <div class="sticky top-0 bg-brand-bg/95 backdrop-blur shadow-sm p-4 flex justify-between items-center z-50 border-b border-gray-200">
+            <button onclick="closeGalleryModal()" class="text-brand-dark flex items-center gap-1 font-bold text-lg hover:text-brand-accent transition">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+                返回
+            </button>
+            <span class="font-serif font-bold text-brand-dark text-lg tracking-wider">DETAILS</span>
+            <div class="w-8"></div> </div>
+
+        <div class="max-w-3xl mx-auto p-6 pb-32">
+            <h2 id="gm-title" class="text-3xl font-bold text-brand-dark mb-2 text-center mt-2"></h2>
+            <p id="gm-price" class="text-center text-brand-accent text-xl font-serif mb-8"></p>
+            
+            <div id="gm-desc" class="text-gray-600 bg-white p-6 rounded-xl shadow-sm border border-brand-accent/20 mb-10 leading-relaxed text-center"></div>
+            
+            <div class="flex items-center gap-4 mb-8">
+                <div class="h-px bg-gray-300 flex-1"></div>
+                <span class="text-brand-dark font-hand text-2xl">Works Gallery</span>
+                <div class="h-px bg-gray-300 flex-1"></div>
+            </div>
+            
+            <div id="gm-grid" class="space-y-6">
+                </div>
+
+            <div class="mt-16 text-center">
+                <p class="text-sm text-gray-400 mb-4">喜歡這個風格嗎？</p>
+                <button onclick="window.location.href=SITE_CONFIG.bookingLink" class="bg-brand-dark text-white px-12 py-4 rounded-full shadow-lg hover:bg-brand-accent transition text-lg font-bold tracking-widest transform hover:-translate-y-1">
+                    立即預約此款式
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <nav class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-100 shadow-nav z-40 h-[80px] flex justify-center items-start">
+        <div class="center-btn-wrapper" onclick="window.location.href=SITE_CONFIG.bookingLink">
+            <div class="center-circle">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                    <path d="M8 14h.01"></path>
+                    <path d="M12 14h.01"></path>
+                    <path d="M16 14h.01"></path>
+                    <path d="M8 18h.01"></path>
+                    <path d="M12 18h.01"></path>
+                    <path d="M16 18h.01"></path>
+                </svg>
+            </div>
+            <span class="center-text">點我預約</span>
+        </div>
+    </nav>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 1. 初始化生成封面卡片
+            renderCovers();
+
+            // 2. 監聽歷史紀錄變化 (支援手機滑動返回 / 瀏覽器上一頁)
+            window.addEventListener('popstate', function() {
+                const modal = document.getElementById('gallery-modal');
+                // 如果目前網址沒有 #gallery，且 modal 開著，就關閉它
+                if (modal.classList.contains('active') && window.location.hash !== '#gallery') {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = 'auto'; // 恢復背景滾動
+                }
+            });
+        });
+
+        // 動態生成兩個主題封面
+        function renderCovers() {
+            const container = document.getElementById('covers-container');
+            container.innerHTML = SITE_CONFIG.collections.map((col, idx) => `
+                <div class="promo-card" onclick="openGalleryModal(${idx})">
+                    <div class="h-80 overflow-hidden relative">
+                        <img src="${col.cover}" class="cover-img w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/600x800?text=Cover+Image'">
+                        <div class="absolute inset-0 bg-black/10 hover:bg-transparent transition"></div>
+                    </div>
+                    <div class="p-6 text-center">
+                        <h3 class="text-2xl font-bold text-brand-dark mb-2">${col.title}</h3>
+                        <p class="text-brand-accent font-serif text-xl tracking-wide">${col.price}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ★ 開啟子頁面 (加入歷史紀錄防手滑)
+        function openGalleryModal(index) {
+            const data = SITE_CONFIG.collections[index];
+            const modal = document.getElementById('gallery-modal');
+            
+            // 填入資料
+            document.getElementById('gm-title').innerText = data.title;
+            document.getElementById('gm-price').innerText = data.price;
+            document.getElementById('gm-desc').innerHTML = data.description;
+            
+            // 生成圖片列表
+            const grid = document.getElementById('gm-grid');
+            grid.innerHTML = data.images.map(img => 
+                `<div class="overflow-hidden rounded-lg shadow-md bg-white">
+                    <img src="${img}" onclick="openLightbox(this.src)" class="w-full h-auto object-cover cursor-zoom-in hover:opacity-95 transition" onerror="this.src='https://via.placeholder.com/600x800?text=Gallery+Image'">
+                </div>`
+            ).join('');
+
+            // ★ 關鍵：推送一個虛擬的歷史紀錄，讓瀏覽器以為到了新的一頁
+            history.pushState(null, null, '#gallery'); 
+            
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden'; // 禁止背景滾動
+        }
+
+        // ★ 關閉子頁面
+        function closeGalleryModal() {
+            // 如果網址上有 #gallery，我們觸發 history.back()，它會引發 popstate 自動關閉
+            if (window.location.hash === '#gallery') {
+                history.back(); 
+            } else {
+                // 防呆：如果狀態異常，直接強制關閉
+                document.getElementById('gallery-modal').classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // 燈箱功能
+        function openLightbox(src){ 
+            document.getElementById('lightbox-img').src=src; 
+            document.getElementById('lightbox').classList.add('show'); 
+        }
+    </script>
+</body>
+</html>
