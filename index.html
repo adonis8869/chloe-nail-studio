@@ -29,64 +29,18 @@
             
             // ★ 預約前要跳出的 3 張預覽圖片
             previewImages: [
-                "26springrule_1.jpg",  
-                "26springrule_2.jpg",  
                 "rules.jpg"   
             ],
 
             // ★ 優惠活動的詳細內容資料
-            collections: [
-                {
-                    id: "promo_a",
-                    title: "1-2月新年冬季限定",
-                    price: "$999 - $1299",
-                    cover: "261_2.jpg", // 封面圖
-                    description: `
-                        <p class="font-bold text-lg mb-2 text-brand-dark">Chloe 美甲師限定款</p>
-                        <p class="mb-4 text-gray-600">韓系甜美千金 × 復古高級感特調<br>從手繪櫻桃、立體蝴蝶結到經典小香風毛呢，指尖的換季儀式感全都在這裡。</p>
-                        <ul class="text-left space-y-2 bg-brand-bg/50 p-4 rounded-lg">
-                            <li><span class="text-brand-accent font-bold">$999</span> | 冬季知性藍調 深藍與奶油白的完美撞色，搭配手繪格紋，百搭又耐看。</li>
-                            <li><span class="text-brand-accent font-bold">$1099</span> | 奢華名媛毛呢 秋冬必備的立體毛呢紋，點綴吸睛貓眼，指尖瞬間高級起來。</li>
-                            <li><span class="text-brand-accent font-bold">$1199</span> | 焦糖拿鐵暈染 溫暖的棕色系漸層，加上微奢華珍珠點綴，溫柔姊姊首選。</li>
-                            <li><span class="text-brand-accent font-bold">$1299</span> | 夢幻少女圖鑑 超人氣立體蝴蝶結、可愛櫻桃與通透腮紅甲，精緻度滿分！</li>
-                        </ul>
-                    `,
-                    images: ["261_1.jpg", "261_3.jpg", "261_4.jpg", "261_5.jpg"] 
-                },
-                {
-                    id: "promo_b",
-                    title: "1-2月新春限定",
-                    price: "$999 up",
-                    cover: "26spring_2.jpg", // 封面圖
-                    description: `
-                        <p class="font-bold text-lg mb-2 text-brand-dark">新春氣息漸濃，讓指尖換上最精緻的開運新衣！</p>
-                        <div class="mb-4 text-gray-600">
-                            <p class="mb-4">
-                                這次我們特別推出「高度客製化」的新年方案，<br>
-                                不論是想要閃亮吸睛的貓眼，還是質感滿分的鏡面造型，<br>
-                                都能隨心所欲拼湊出妳最愛的春節款式 ✨
-                            </p>
-                            <p class="font-bold text-brand-dark mb-2">🎨 活動內容</p>
-                            <ul class="list-none space-y-2">
-                                <li>
-                                    <span class="font-bold text-brand-accent">• 活動底價：$999</span><br>
-                                    <span class="text-sm">（底色可任選：經典單色 / 閃耀貓眼 / 高級鏡面）</span>
-                                </li>
-                                <li>
-                                    <span class="font-bold text-brand-accent">• 造型手繪加購：</span><br>
-                                    <span class="text-sm">可依照個人喜好，從圖中款式自由挑選搭配，讓每一指都是妳喜歡的樣子！</span>
-                                </li>
-                            </ul>
-                        </div>
-                        <ul class="text-left space-y-2 bg-brand-bg/50 p-4 rounded-lg">
-                            <li><span class="text-brand-accent font-bold">$80</span> | 甜甜過好年系列 (糖葫蘆 / 日式水引結 / 手寫祝福)</li>
-                            <li><span class="text-brand-accent font-bold">$100</span> | 經典招財系列 (春聯福字 / 大吉大利橘 / 好運吊飾)</li>
-                            <li><span class="text-brand-accent font-bold">$120-150</span> | 精緻手繪萌寵 (開運達摩 / 招財花貓 / 童趣小木馬)</li>
-                        </ul>
-                    `,
-                    images: ["26spring_1.jpg", "26spring_3.jpg", "26spring_4.jpg"]
-                }
-            ]
+             collection: {
+                description: `
+                    <p class="font-bold text-lg mb-2 text-brand-dark">初春溫柔定調，指尖上的氣質心機</p>
+                    <p class="mb-4 text-gray-600">本期設計以「透亮、顯白、溫柔」為核心。無論是清新俏皮的手繪圖騰，還是高級冷冽的冰透暈染，完美應對妳的每一個日常。</p>
+                `,
+                // 將所有圖片放在一起展示
+                images: ["IMG_9669.jpg", "IMG_9670.jpg", "IMG_9671.jpg", "IMG_9672.jpg"] 
+            }
         };
     </script>
     <style>
@@ -259,13 +213,7 @@
             <div class="flex flex-col gap-6">
                 <div class="bg-white p-2 rounded shadow-sm">
                     <img src="rules.jpg" onclick="openLightbox(this.src)" class="w-full h-auto rounded-sm zoomable" onerror="this.src='https://via.placeholder.com/800x1200?text=Rules+Page+1'">
-                </div>
-                <div class="bg-white p-2 rounded shadow-sm">
-                    <img src="26springrule_1.jpg" onclick="openLightbox(this.src)" class="w-full h-auto rounded-sm zoomable" onerror="this.src='https://via.placeholder.com/800x1200?text=Rules+Page+2'">
-                </div>
-                <div class="bg-white p-2 rounded shadow-sm">
-                    <img src="26springrule_2.jpg" onclick="openLightbox(this.src)" class="w-full h-auto rounded-sm zoomable" onerror="this.src='https://via.placeholder.com/800x1200?text=Rules+Page+3'">
-                </div>
+                </div> 
             </div>
             </div>
     </div>
@@ -273,8 +221,8 @@
     <div id="page-promos" class="page-section">
         <div class="max-w-4xl mx-auto px-6">
             <div class="text-center mb-10">
-                <h2 class="text-3xl md:text-4xl text-brand-text font-bold">Seasonal Specials</h2>
-                <p class="text-xl font-hand text-brand-accent font-normal mt-2">1-2月 新春/冬季 限定</p>
+                <h2 class="text-3xl md:text-4xl text-brand-text font-bold">Month Specials</h2>
+                <p class="text-xl font-hand text-brand-accent font-normal mt-2">當月 優惠款</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
@@ -302,7 +250,7 @@
             </div>
 
             <div class="text-center py-4 bg-white/60 rounded-lg text-sm text-gray-500 font-bold tracking-wide border border-brand-accent/10">
-                *活動日期：即日起至 2/28 止 (開放預約中)
+                *活動日期：即日起至 4/30 止 (開放預約中)
             </div>
         </div>
     </div>
