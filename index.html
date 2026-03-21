@@ -35,275 +35,78 @@
             ],
 
             // ★ 優惠活動的詳細內容資料
-            collections: [
-                {
-                    id: "promo_a",
-                    title: "1-2月新年冬季限定",
-                    price: "$999 - $1299",
-                    cover: "261_2.jpg", // 封面圖
-                    description: `
-                        <p class="font-bold text-lg mb-2 text-brand-dark">Chloe 美甲師限定款</p>
-                        <p class="mb-4 text-gray-600">韓系甜美千金 × 復古高級感特調<br>從手繪櫻桃、立體蝴蝶結到經典小香風毛呢，指尖的換季儀式感全都在這裡。</p>
-                        <ul class="text-left space-y-2 bg-brand-bg/50 p-4 rounded-lg">
-                            <li><span class="text-brand-accent font-bold">$999</span> | 冬季知性藍調 深藍與奶油白的完美撞色，搭配手繪格紋，百搭又耐看。</li>
-                            <li><span class="text-brand-accent font-bold">$1099</span> | 奢華名媛毛呢 秋冬必備的立體毛呢紋，點綴吸睛貓眼，指尖瞬間高級起來。</li>
-                            <li><span class="text-brand-accent font-bold">$1199</span> | 焦糖拿鐵暈染 溫暖的棕色系漸層，加上微奢華珍珠點綴，溫柔姊姊首選。</li>
-                            <li><span class="text-brand-accent font-bold">$1299</span> | 夢幻少女圖鑑 超人氣立體蝴蝶結、可愛櫻桃與通透腮紅甲，精緻度滿分！</li>
-                        </ul>
-                    `,
-                    images: ["261_1.jpg", "261_3.jpg", "261_4.jpg", "261_5.jpg"] 
-                },
-                {
-                    id: "promo_b",
-                    title: "1-2月新春限定",
-                    price: "$999 up",
-                    cover: "26spring_2.jpg", // 封面圖
-                    description: `
-                        <p class="font-bold text-lg mb-2 text-brand-dark">新春氣息漸濃，讓指尖換上最精緻的開運新衣！</p>
-                        <div class="mb-4 text-gray-600">
-                            <p class="mb-4">
-                                這次我們特別推出「高度客製化」的新年方案，<br>
-                                不論是想要閃亮吸睛的貓眼，還是質感滿分的鏡面造型，<br>
-                                都能隨心所欲拼湊出妳最愛的春節款式 ✨
-                            </p>
-                            <p class="font-bold text-brand-dark mb-2">🎨 活動內容</p>
-                            <ul class="list-none space-y-2">
-                                <li>
-                                    <span class="font-bold text-brand-accent">• 活動底價：$999</span><br>
-                                    <span class="text-sm">（底色可任選：經典單色 / 閃耀貓眼 / 高級鏡面）</span>
-                                </li>
-                                <li>
-                                    <span class="font-bold text-brand-accent">• 造型手繪加購：</span><br>
-                                    <span class="text-sm">可依照個人喜好，從圖中款式自由挑選搭配，讓每一指都是妳喜歡的樣子！</span>
-                                </li>
-                            </ul>
-                        </div>
-                        <ul class="text-left space-y-2 bg-brand-bg/50 p-4 rounded-lg">
-                            <li><span class="text-brand-accent font-bold">$80</span> | 甜甜過好年系列 (糖葫蘆 / 日式水引結 / 手寫祝福)</li>
-                            <li><span class="text-brand-accent font-bold">$100</span> | 經典招財系列 (春聯福字 / 大吉大利橘 / 好運吊飾)</li>
-                            <li><span class="text-brand-accent font-bold">$120-150</span> | 精緻手繪萌寵 (開運達摩 / 招財花貓 / 童趣小木馬)</li>
-                        </ul>
-                    `,
-                    images: ["26spring_1.jpg", "26spring_3.jpg", "26spring_4.jpg"]
-                }
-            ]
+           collection: {
+                description: `
+                    <p class="font-bold text-lg mb-2 text-brand-dark">初春溫柔定調，指尖上的氣質心機</p>
+                    <p class="mb-4 text-gray-600">本期設計以「透亮、顯白、溫柔」為核心。無論是清新俏皮的手繪圖騰，還是高級冷冽的冰透暈染，完美應對妳的每一個日常。</p>
+                `,
+                // 將所有圖片放在一起展示
+                images: ["IMG_9669.jpg", "IMG_9670.jpg", "IMG_9671.jpg", "IMG_9672.jpg"] 
+            }
         };
     </script>
     <style>
-        body { background-color: #F5F0F0; color: #8B7E74; font-family: "Zen Maru Gothic", "Noto Sans TC", sans-serif; }
+        body { 
+            background-color: #F5F0F0; 
+            color: #8B7E74; 
+            font-family: "Zen Maru Gothic", "Noto Sans TC", sans-serif; 
+            padding-bottom: 120px; 
+        }
         
-        /* 頁面切換動畫 */
-        .page-section { display: none; animation: fadeIn 0.5s ease-in-out; padding-top: 100px; min-height: 80vh; }
-        .page-section.active { display: block; }
-        #page-home { padding-top: 0; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        /* 導航按鈕特效 */
-        .nav-btn { position: relative; padding-bottom: 4px; cursor: pointer; }
-        .nav-btn::after { content: ''; position: absolute; width: 0; height: 2px; bottom: 0; left: 0; background-color: #C5A086; transition: width 0.3s; }
-        .nav-btn:hover::after, .nav-btn.active::after { width: 100%; }
-        
-        /* 圖片放大與燈箱 */
-        .zoomable { cursor: zoom-in; transition: transform 0.3s ease; } .zoomable:hover { transform: scale(1.02); }
+        /* 圖片燈箱與放大效果 */
+        .zoomable { cursor: zoom-in; transition: transform 0.3s ease; } 
+        .zoomable:hover { transform: scale(1.02); }
         #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); z-index: 9999; justify-content: center; align-items: center; }
-        #lightbox.show { display: flex; } #lightbox img { max-width: 100%; max-height: 95vh; }
+        #lightbox.show { display: flex; } 
+        #lightbox img { max-width: 100%; max-height: 95vh; object-fit: contain; }
 
-        /* 預約須知彈窗 */
-        #rules-modal { display: none; }
-        #rules-modal.active { display: flex; }
-        .modal-content { animation: fadeIn 0.3s ease-out; }
-
-        /* 優惠卡片特效 */
-        .promo-card { transition: all 0.3s; cursor: pointer; position: relative; overflow: hidden; border-radius: 12px; background: white; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        .promo-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-        .promo-card .cover-img { transition: transform 0.7s ease; }
-        .promo-card:hover .cover-img { transform: scale(1.05); }
-        .promo-card::after { 
-            content: '點擊查看詳情'; 
-            position: absolute; bottom: 0; left: 0; width: 100%; padding: 12px; 
-            background: rgba(93, 83, 74, 0.9); color: white; text-align: center; font-size: 14px; letter-spacing: 1px;
-            transform: translateY(100%); transition: transform 0.3s; 
+        /* 中間凸起預約按鈕樣式 */
+        .center-btn-wrapper { 
+            position: relative; 
+            top: -25px; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
         }
-        .promo-card:hover::after { transform: translateY(0); }
-
-        /* 作品集詳情頁 (Gallery Modal) */
-        #gallery-modal { 
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: #F5F0F0; z-index: 2000; overflow-y: auto; 
-            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        .center-circle { 
+            width: 65px; height: 65px; 
+            background-color: #C5A086; 
+            border-radius: 50%; 
+            display: flex; justify-content: center; align-items: center; 
+            box-shadow: 0 4px 15px rgba(197, 160, 134, 0.5);
+            color: white;
+            transition: transform 0.2s, background-color 0.2s;
+            margin-bottom: 6px;
         }
-        #gallery-modal.active { display: block; }
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-
-        /* 預約預覽視窗動畫 */
-        #booking-preview-modal.animation-fade-in { animation: fadeIn 0.3s ease-out; }
-
-        /* 懸浮按鈕動畫 (呼吸效果) */
-        @keyframes breathe {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(197, 160, 134, 0.7); }
-            50% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(197, 160, 134, 0); }
-        }
-        .fab-breathe { animation: breathe 2s infinite; }
+        .center-btn-wrapper:active .center-circle { transform: scale(0.95); background-color: #A89080; }
+        .center-text { font-weight: bold; color: #5D534A; font-size: 15px; letter-spacing: 1px; }
 
     </style>
 </head>
-<body class="pb-24 md:pb-0">
-    
+<body>
+
     <div id="lightbox" onclick="this.classList.remove('show')"><img id="lightbox-img" src=""></div>
 
-    <div id="rules-modal" class="fixed inset-0 z-[100] bg-black/80 items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-white rounded-lg shadow-2xl max-w-lg w-full max-h-[90vh] flex flex-col modal-content overflow-hidden">
-            <div class="p-4 border-b border-gray-100 text-center bg-brand-bg">
-                <h3 class="text-xl font-bold text-brand-dark">Booking Rules</h3>
-                <p class="text-sm text-brand-accent">預約前請詳閱</p>
-            </div>
-            <div class="flex-1 overflow-y-auto p-4 bg-gray-50">
-                <img src="rules.jpg" class="w-full rounded shadow-sm" alt="預約須知" onerror="this.src='https://via.placeholder.com/400x600?text=Rules+Image+Missing'">
-            </div>
-            <div class="p-4 border-t border-gray-100 bg-white">
-                <button onclick="closeRulesModal()" class="w-full bg-brand-accent text-white py-3 rounded-full hover:bg-brand-dark transition font-bold tracking-widest shadow-lg transform active:scale-95">我已閱讀並同意</button>
-            </div>
+    <header class="bg-brand-bg/95 backdrop-blur-sm border-b border-brand-accent/20 py-6 text-center shadow-sm sticky top-0 z-40">
+        <div class="cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+            <div class="text-3xl font-bold tracking-widest font-serif text-brand-dark">CHLOE NAIL</div>
+            <div class="font-hand text-xl text-brand-accent">March & April Specials</div>
         </div>
-    </div>
+    </header>
 
-    <div id="gallery-modal">
-        <div class="sticky top-0 bg-brand-bg/95 backdrop-blur shadow-sm p-4 flex justify-between items-center z-50 border-b border-gray-200">
-            <button onclick="closeGalleryModal()" class="text-brand-dark flex items-center gap-1 font-bold text-lg hover:text-brand-accent transition">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-                返回
-            </button>
-            <span class="font-serif font-bold text-brand-dark text-lg tracking-wider">DETAILS</span>
-            <div class="w-8"></div> 
+    <main class="max-w-4xl mx-auto px-6 pt-10">
+        
+        <div class="text-center mb-8">
+            <h2 class="text-3xl md:text-4xl text-brand-text font-bold">March & April Specials</h2>
+            <span class="block text-xl font-hand text-brand-accent font-normal mt-2">3-4月 優惠款</span>
         </div>
 
-        <div class="max-w-3xl mx-auto p-6 pb-32">
-            <h2 id="gm-title" class="text-3xl font-bold text-brand-dark mb-2 text-center mt-4"></h2>
-            <p id="gm-price" class="text-center text-brand-accent text-xl font-serif mb-8"></p>
-            
-            <div id="gm-desc" class="text-gray-600 bg-white p-6 rounded-xl shadow-sm border border-brand-accent/20 mb-10 leading-relaxed text-center"></div>
-            
-            <div class="flex items-center gap-4 mb-8">
-                <div class="h-px bg-gray-300 flex-1"></div>
-                <span class="text-brand-dark font-hand text-2xl">Works Gallery</span>
-                <div class="h-px bg-gray-300 flex-1"></div>
+        <div id="gallery-container" class="mb-12">
             </div>
-            
-            <div id="gm-grid" class="space-y-6"></div>
-
-            <div class="mt-16 text-center">
-                <p class="text-sm text-gray-400 mb-4">喜歡這個風格嗎？</p>
-                <button onclick="openBookingPreview()" class="bg-brand-dark text-white px-12 py-4 rounded-full shadow-lg hover:bg-brand-accent transition text-lg font-bold tracking-widest transform hover:-translate-y-1">
-                    立即預約此款式
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <div id="booking-preview-modal" class="fixed inset-0 z-[3000] bg-black/90 hidden items-center justify-center p-4 backdrop-blur-sm animation-fade-in">
-        <div class="bg-white rounded-xl shadow-2xl max-w-md w-full overflow-hidden flex flex-col max-h-[90vh]">
-            <div class="p-4 bg-brand-bg border-b border-gray-100 flex justify-between items-center">
-                <h3 class="font-bold text-brand-dark text-lg">預約前請確認</h3>
-                <button onclick="closeBookingPreview()" class="text-gray-400 hover:text-gray-600">✕</button>
-            </div>
-            <div class="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
-                <img id="bp-img-0" src="" class="w-full rounded-lg shadow-sm object-cover">
-                <img id="bp-img-1" src="" class="w-full rounded-lg shadow-sm object-cover">
-                <img id="bp-img-2" src="" class="w-full rounded-lg shadow-sm object-cover">
-            </div>
-            <div class="p-4 bg-white border-t border-gray-100">
-                <p class="text-center text-xs text-gray-500 mb-3">確認以上資訊沒問題後，將為您跳轉至 LINE 預約</p>
-                <button onclick="realBookingAction()" class="w-full bg-brand-accent text-white py-3 rounded-full hover:bg-brand-dark transition font-bold tracking-widest shadow-lg transform active:scale-95 flex items-center justify-center gap-2">
-                    前往預約
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5l7 7-7 7"></path></svg>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <nav class="hidden md:flex fixed w-full z-40 bg-brand-bg/95 backdrop-blur-sm border-b border-brand-accent/20 py-5 justify-center items-center space-x-8 text-brand-text font-medium shadow-sm">
-        <div onclick="switchPage('page-home')" class="nav-btn active" id="nav-home">首頁</div>
-        <div onclick="switchPage('page-rules')" class="nav-btn" id="nav-rules">預約須知</div>
-        <div onclick="switchPage('page-promos')" class="nav-btn text-brand-accent" id="nav-promos">✨ 限定優惠</div>
-        <div class="text-center px-4 cursor-pointer" onclick="switchPage('page-home')">
-            <div class="text-2xl font-bold tracking-widest font-serif">CHLOE NAIL</div>
-            <div class="font-hand text-lg text-brand-accent">Chloe nail studio</div>
-        </div>
-        <div onclick="switchPage('page-news')" class="nav-btn" id="nav-news">最新活動</div>
-        <div onclick="switchPage('page-menu')" class="nav-btn" id="nav-menu">服務價目</div>
-        <div onclick="switchPage('page-location')" class="nav-btn" id="nav-location">預約資訊</div>
-    </nav>
-
-    <div class="md:hidden text-center py-4 bg-brand-bg border-b border-brand-accent/20 sticky top-0 z-40 shadow-sm/50 backdrop-blur-md bg-opacity-90 cursor-pointer" onclick="switchPage('page-home')">
-        <div class="text-xl font-bold text-brand-text tracking-widest font-serif">CHLOE NAIL</div>
-        <div class="font-hand text-sm text-brand-accent">Chloe nail studio</div>
-    </div>
-
-    <div id="page-home" class="page-section active">
-        <header class="h-screen flex items-center justify-center px-4 text-center relative">
-            <div class="absolute inset-0 z-0"><img src="Title.jpg" class="w-full h-full object-cover opacity-90" onerror="this.src='https://images.unsplash.com/photo-1519014816548-bf5fe059e98b?q=80&w=2070'"></div>
-            <div class="relative z-10 text-white drop-shadow-lg bg-black/10 p-8 rounded-lg backdrop-blur-[2px]">
-                <h1 class="text-5xl md:text-7xl font-serif tracking-widest mb-4">Chloe Nail</h1>
-                <p class="font-hand text-3xl md:text-4xl mb-8">Professional Nail Services</p>
-                <div class="flex flex-col md:flex-row gap-4 justify-center">
-                    <button onclick="switchPage('page-promos')" class="bg-brand-accent/90 text-white px-8 py-3 hover:bg-brand-accent transition rounded shadow-lg font-bold">限定優惠款</button>
-                    <button onclick="switchPage('page-news')" class="bg-white/80 text-brand-dark px-8 py-3 hover:bg-white transition rounded shadow-lg font-bold">最新活動訊息</button>
-                </div>
-            </div>
-        </header>
-    </div>
-
-    <div id="page-rules" class="page-section">
-        <div class="max-w-5xl mx-auto px-6 text-center">
-            <h2 class="text-3xl text-brand-text font-bold mb-8">Booking Rules <span class="block text-xl font-hand text-brand-accent font-normal mt-2">預約須知</span></h2>
-            
-            <div class="flex flex-col gap-6">
-                <div class="bg-white p-2 rounded shadow-sm">
-                    <img src="rules.jpg" onclick="openLightbox(this.src)" class="w-full h-auto rounded-sm zoomable" onerror="this.src='https://via.placeholder.com/800x1200?text=Rules+Page+1'">
-                </div>
-                <div class="bg-white p-2 rounded shadow-sm">
-                    <img src="26springrule_1.jpg" onclick="openLightbox(this.src)" class="w-full h-auto rounded-sm zoomable" onerror="this.src='https://via.placeholder.com/800x1200?text=Rules+Page+2'">
-                </div>
-                <div class="bg-white p-2 rounded shadow-sm">
-                    <img src="26springrule_2.jpg" onclick="openLightbox(this.src)" class="w-full h-auto rounded-sm zoomable" onerror="this.src='https://via.placeholder.com/800x1200?text=Rules+Page+3'">
-                </div>
-            </div>
-            </div>
-    </div>
-
-    <div id="page-promos" class="page-section">
-        <div class="max-w-4xl mx-auto px-6">
-            <div class="text-center mb-10">
-                <h2 class="text-3xl md:text-4xl text-brand-text font-bold">Seasonal Specials</h2>
-                <p class="text-xl font-hand text-brand-accent font-normal mt-2">1-2月 新春/冬季 限定</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-                <div class="promo-card" onclick="openGalleryModal(0)">
-                    <div class="h-80 overflow-hidden relative">
-                        <img id="cover-0" src="" class="cover-img w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-black/10 hover:bg-transparent transition"></div>
-                    </div>
-                    <div class="p-6 text-center">
-                        <h3 id="title-0" class="text-2xl font-bold text-brand-dark mb-2"></h3>
-                        <p id="price-0" class="text-brand-accent font-serif text-xl tracking-wide"></p>
-                    </div>
-                </div>
-
-                <div class="promo-card" onclick="openGalleryModal(1)">
-                    <div class="h-80 overflow-hidden relative">
-                        <img id="cover-1" src="" class="cover-img w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-black/10 hover:bg-transparent transition"></div>
-                    </div>
-                    <div class="p-6 text-center">
-                        <h3 id="title-1" class="text-2xl font-bold text-brand-dark mb-2"></h3>
-                        <p id="price-1" class="text-brand-accent font-serif text-xl tracking-wide"></p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="text-center py-4 bg-white/60 rounded-lg text-sm text-gray-500 font-bold tracking-wide border border-brand-accent/10">
-                *活動日期：即日起至 2/28 止 (開放預約中)
-            </div>
+        
+        <div class="text-center py-4 bg-white/60 rounded-lg text-sm text-gray-500 font-bold tracking-wide border border-brand-accent/10 mb-10">
+            *活動日期：即日起至 4/30 止 (開放預約中)
         </div>
     </div>
 
