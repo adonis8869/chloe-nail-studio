@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chloe Nail Studio | 3-4月限定優惠</title>
+    <link rel="icon" href="favicon.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600&family=Noto+Sans+TC:wght@300;400;500;700&family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { 
+                        'brand-bg': '#F5F0F0', 
+                        'brand-text': '#8B7E74', 
+                        'brand-accent': '#C5A086', 
+                        'brand-dark': '#5D534A',
+                        'nav-active': '#A89080' 
+                    },
+                    fontFamily: { 
+                        'sans': ['"Zen Maru Gothic"', '"Noto Sans TC"', 'sans-serif'], 
+                        'serif': ['"Zen Maru Gothic"', '"Noto Sans TC"', 'sans-serif'], 
+                        'hand': ['"Dancing Script"', 'cursive'] 
+                    },
+                    boxShadow: {
+                        'nav': '0 -4px 20px rgba(0,0,0,0.05)',
+                        'float': '0 4px 15px rgba(197, 160, 134, 0.4)'
+                    }
+                }
+            }
+        }
+
+        // 🔧 後台設定區：統一文案與所有圖片
+        const SITE_CONFIG = {
+            bookingLink: "https://liff.line.me/2005658992-1YnkbR7K", 
+            
+            collection: {
+                description: `
+                    <p class="font-bold text-lg mb-2 text-brand-dark">初春溫柔定調，指尖上的氣質心機</p>
+                    <p class="mb-4 text-gray-600">本期設計以「透亮、顯白、溫柔」為核心。無論是清新俏皮的手繪圖騰，還是高級冷冽的冰透暈染，完美應對妳的每一個日常。</p>
+                `,
+                // 將所有圖片放在一起展示
+                images: ["IMG_9669.jpg", "IMG_9670.jpg", "IMG_9671.jpg", "IMG_9672.jpg"] 
+            }
+        };
+    </script>
+    <style>
+        body { 
+            background-color: #F5F0F0; 
+            color: #8B7E74; 
+            font-family: "Zen Maru Gothic", "Noto Sans TC", sans-serif; 
+            padding-bottom: 120px; 
+        }
+        
+        /* 圖片燈箱與放大效果 */
+        .zoomable { cursor: zoom-in; transition: transform 0.3s ease; } 
+        .zoomable:hover { transform: scale(1.02); }
+        #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); z-index: 9999; justify-content: center; align-items: center; }
+        #lightbox.show { display: flex; } 
+        #lightbox img { max-width: 100%; max-height: 95vh; object-fit: contain; }
+
+        /* 中間凸起預約按鈕樣式 */
+        .center-btn-wrapper { 
+            position: relative; 
+            top: -25px; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+        .center-circle { 
+            width: 65px; height: 65px; 
+            background-color: #C5A086; 
+            border-radius: 50%; 
+            display: flex; justify-content: center; align-items: center; 
+            box-shadow: 0 4px 15px rgba(197, 160, 134, 0.5);
+            color: white;
+            transition: transform 0.2s, background-color 0.2s;
+            margin-bottom: 6px;
+        }
+        .center-btn-wrapper:active .center-circle { transform: scale(0.95); background-color: #A89080; }
+        .center-text { font-weight: bold; color: #5D534A; font-size: 15px; letter-spacing: 1px; }
+
+    </style>
+</head>
+<body>
+
+    <div id="lightbox" onclick="this.classList.remove('show')"><img id="lightbox-img" src=""></div>
+
+    <header class="bg-brand-bg/95 backdrop-blur-sm border-b border-brand-accent/20 py-6 text-center shadow-sm sticky top-0 z-40">
+        <div class="cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+            <div class="text-3xl font-bold tracking-widest font-serif text-brand-dark">CHLOE NAIL</div>
+            <div class="font-hand text-xl text-brand-accent">March & April Specials</div>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-6 pt-10">
+        
+        <div class="text-center mb-8">
+            <h2 class="text-3xl md:text-4xl text-brand-text font-bold">March & April Specials</h2>
+            <span class="block text-xl font-hand text-brand-accent font-normal mt-2">3-4月 優惠款</span>
+        </div>
+
+        <div id="gallery-container" class="mb-12">
+            </div>
+        
+        <div class="text-center py-4 bg-white/60 rounded-lg text-sm text-gray-500 font-bold tracking-wide border border-brand-accent/10 mb-10">
+            *活動日期：即日起至 4/30 止 (開放預約中)
+        </div>
+
+    </main>
+
+    <nav class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-100 shadow-nav z-40 h-[80px] flex justify-center items-start">
+        <div class="center-btn-wrapper" onclick="window.location.href=SITE_CONFIG.bookingLink">
+            <div class="center-circle">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                    <path d="M8 14h.01"></path>
+                    <path d="M12 14h.01"></path>
+                    <path d="M16 14h.01"></path>
+                    <path d="M8 18h.01"></path>
+                    <path d="M12 18h.01"></path>
+                    <path d="M16 18h.01"></path>
+                </svg>
+            </div>
+            <span class="center-text">點我預約</span>
+        </div>
+    </nav>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化生成文案與照片牆
+            renderGallery();
+        });
+
+        function renderGallery() {
+            const container = document.getElementById('gallery-container');
+            const data = SITE_CONFIG.collection;
+
+            // 1. 生成照片堆疊 HTML
+            const imagesHTML = data.images.map(img => `
+                <div class="overflow-hidden rounded-lg shadow-md bg-white group w-full">
+                    <img src="${img}" onclick="openLightbox(this.src)" class="w-full h-auto object-cover cursor-zoom-in transition duration-500 group-hover:scale-105 group-hover:opacity-95" onerror="this.src='https://via.placeholder.com/600x800?text=Gallery+Image'">
+                </div>
+            `).join('');
+
+            // 2. 組合文案與照片堆疊
+            // 關鍵修改：將 grid 改為 flex-col 和 space-y-8 來實現垂直大圖堆疊
+            container.innerHTML = `
+                <div class="animate-[fadeIn_0.5s_ease-out]">
+                    <div class="mb-10 max-w-2xl mx-auto">
+                        <div class="text-gray-600 bg-white p-6 rounded-xl shadow-sm border border-brand-accent/20 leading-relaxed text-center">
+                            ${data.description}
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-col space-y-8">
+                        ${imagesHTML}
+                    </div>
+                </div>
+            `;
+        }
+
+        // 燈箱功能
+        function openLightbox(src){ 
+            document.getElementById('lightbox-img').src=src; 
+            document.getElementById('lightbox').classList.add('show'); 
+        }
+    </script>
+</body>
+</html>
