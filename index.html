@@ -13,38 +13,54 @@
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: { 'brand-bg': '#F5F0F0', 'brand-text': '#8B7E74', 'brand-accent': '#C5A086', 'brand-white': '#FFFFFF', 'brand-dark': '#5D534A' },
+                    colors: { 
+                        'brand-bg': '#F5F0F0', 
+                        'brand-text': '#8B7E74', 
+                        'brand-accent': '#C5A086', 
+                        'brand-white': '#FFFFFF', 
+                        'brand-dark': '#5D534A',
+                        'nav-active': '#A89080' 
+                    },
                     fontFamily: { 
                         'sans': ['"Zen Maru Gothic"', '"Noto Sans TC"', 'sans-serif'], 
                         'serif': ['"Zen Maru Gothic"', '"Noto Sans TC"', 'sans-serif'], 
                         'hand': ['"Dancing Script"', 'cursive'] 
+                    },
+                    boxShadow: {
+                        'nav': '0 -4px 20px rgba(0,0,0,0.05)',
+                        'float': '0 4px 15px rgba(197, 160, 134, 0.4)'
                     }
                 }
             }
         }
-        
-        // 🔧 後台設定
-        const SITE_CONFIG = {
-            bookingLink: "https://liff.line.me/2005658992-1YnkbR7K",
-            
-            // ★ 預約前要跳出的 3 張預覽圖片
-            previewImages: [
-                "rules.jpg"   
-            ],
 
-            // ★ 優惠活動的詳細內容資料
-             collection: {
+        // 🔧 後台設定區：主站連結與限定優惠內容
+        const SITE_CONFIG = {
+            bookingLink: "https://liff.line.me/2005658992-1YnkbR7K", 
+            
+            // 3月份限定優惠資料
+            promoData: {
                 description: `
                     <p class="font-bold text-lg mb-2 text-brand-dark">初春溫柔定調，指尖上的氣質心機</p>
                     <p class="mb-4 text-gray-600">本期設計以「透亮、顯白、溫柔」為核心。無論是清新俏皮的手繪圖騰，還是高級冷冽的冰透暈染，完美應對妳的每一個日常。</p>
+                    <ul class="text-left space-y-2 bg-brand-bg/50 p-4 rounded-lg">
+                        <li><span class="text-brand-accent font-bold">🔸 $999</span> | 甜美小清新 (粉嫩蝴蝶結 / 幸運草)</li>
+                        <li><span class="text-brand-accent font-bold">🔸 $1099</span> | 浪漫手繪花卉 (香芋紫 / 氣質格紋)</li>
+                        <li><span class="text-brand-accent font-bold">🔸 $1199</span> | 質感璀璨流沙 (焦糖琥珀 / 閃耀)</li>
+                        <li><span class="text-brand-accent font-bold">🔸 $1299</span> | 高級精緻特調 (透色貝殼 / 灰藍線條)</li>
+                    </ul>
                 `,
-                // 將所有圖片放在一起展示
-                images: ["IMG_9669.jpg", "IMG_9670.jpg", "IMG_9671.jpg", "IMG_9672.jpg"] 
+                images: ["IMG_9667.jpg", "IMG_9669.jpg", "IMG_9670.jpg", "IMG_9671.jpg", "IMG_9672.jpg"] 
             }
         };
     </script>
     <style>
-        body { background-color: #F5F0F0; color: #8B7E74; font-family: "Zen Maru Gothic", "Noto Sans TC", sans-serif; }
+        body { 
+            background-color: #F5F0F0; 
+            color: #8B7E74; 
+            font-family: "Zen Maru Gothic", "Noto Sans TC", sans-serif; 
+            padding-bottom: 100px; 
+        }
         
         /* 頁面切換動畫 */
         .page-section { display: none; animation: fadeIn 0.5s ease-in-out; padding-top: 100px; min-height: 80vh; }
@@ -58,50 +74,41 @@
         .nav-btn:hover::after, .nav-btn.active::after { width: 100%; }
         
         /* 圖片放大與燈箱 */
-        .zoomable { cursor: zoom-in; transition: transform 0.3s ease; } .zoomable:hover { transform: scale(1.02); }
+        .zoomable { cursor: zoom-in; transition: transform 0.3s ease; } 
+        .zoomable:hover { transform: scale(1.02); }
         #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); z-index: 9999; justify-content: center; align-items: center; }
-        #lightbox.show { display: flex; } #lightbox img { max-width: 100%; max-height: 95vh; }
+        #lightbox.show { display: flex; } 
+        #lightbox img { max-width: 100%; max-height: 95vh; object-fit: contain; }
 
         /* 預約須知彈窗 */
         #rules-modal { display: none; }
         #rules-modal.active { display: flex; }
         .modal-content { animation: fadeIn 0.3s ease-out; }
 
-        /* 優惠卡片特效 */
-        .promo-card { transition: all 0.3s; cursor: pointer; position: relative; overflow: hidden; border-radius: 12px; background: white; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        .promo-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-        .promo-card .cover-img { transition: transform 0.7s ease; }
-        .promo-card:hover .cover-img { transform: scale(1.05); }
-        .promo-card::after { 
-            content: '點擊查看詳情'; 
-            position: absolute; bottom: 0; left: 0; width: 100%; padding: 12px; 
-            background: rgba(93, 83, 74, 0.9); color: white; text-align: center; font-size: 14px; letter-spacing: 1px;
-            transform: translateY(100%); transition: transform 0.3s; 
+        /* 中間凸起按鈕樣式 */
+        .center-btn-wrapper { 
+            position: relative; 
+            top: -25px; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
         }
-        .promo-card:hover::after { transform: translateY(0); }
-
-        /* 作品集詳情頁 (Gallery Modal) */
-        #gallery-modal { 
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: #F5F0F0; z-index: 2000; overflow-y: auto; 
-            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        .center-circle { 
+            width: 60px; height: 60px; 
+            background-color: #C5A086; 
+            border-radius: 50%; 
+            display: flex; justify-content: center; align-items: center; 
+            box-shadow: 0 4px 15px rgba(197, 160, 134, 0.5);
+            color: white;
+            transition: transform 0.2s, background-color 0.2s;
+            margin-bottom: 4px;
         }
-        #gallery-modal.active { display: block; }
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-
-        /* 預約預覽視窗動畫 */
-        #booking-preview-modal.animation-fade-in { animation: fadeIn 0.3s ease-out; }
-
-        /* 懸浮按鈕動畫 (呼吸效果) */
-        @keyframes breathe {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(197, 160, 134, 0.7); }
-            50% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(197, 160, 134, 0); }
-        }
-        .fab-breathe { animation: breathe 2s infinite; }
-
+        .center-btn-wrapper:active .center-circle { transform: scale(0.95); background-color: #A89080; }
+        .center-text { font-weight: bold; color: #5D534A; font-size: 14px; }
     </style>
 </head>
-<body class="pb-24 md:pb-0">
+<body>
     
     <div id="lightbox" onclick="this.classList.remove('show')"><img id="lightbox-img" src=""></div>
 
@@ -116,60 +123,6 @@
             </div>
             <div class="p-4 border-t border-gray-100 bg-white">
                 <button onclick="closeRulesModal()" class="w-full bg-brand-accent text-white py-3 rounded-full hover:bg-brand-dark transition font-bold tracking-widest shadow-lg transform active:scale-95">我已閱讀並同意</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="gallery-modal">
-        <div class="sticky top-0 bg-brand-bg/95 backdrop-blur shadow-sm p-4 flex justify-between items-center z-50 border-b border-gray-200">
-            <button onclick="closeGalleryModal()" class="text-brand-dark flex items-center gap-1 font-bold text-lg hover:text-brand-accent transition">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-                返回
-            </button>
-            <span class="font-serif font-bold text-brand-dark text-lg tracking-wider">DETAILS</span>
-            <div class="w-8"></div> 
-        </div>
-
-        <div class="max-w-3xl mx-auto p-6 pb-32">
-            <h2 id="gm-title" class="text-3xl font-bold text-brand-dark mb-2 text-center mt-4"></h2>
-            <p id="gm-price" class="text-center text-brand-accent text-xl font-serif mb-8"></p>
-            
-            <div id="gm-desc" class="text-gray-600 bg-white p-6 rounded-xl shadow-sm border border-brand-accent/20 mb-10 leading-relaxed text-center"></div>
-            
-            <div class="flex items-center gap-4 mb-8">
-                <div class="h-px bg-gray-300 flex-1"></div>
-                <span class="text-brand-dark font-hand text-2xl">Works Gallery</span>
-                <div class="h-px bg-gray-300 flex-1"></div>
-            </div>
-            
-            <div id="gm-grid" class="space-y-6"></div>
-
-            <div class="mt-16 text-center">
-                <p class="text-sm text-gray-400 mb-4">喜歡這個風格嗎？</p>
-                <button onclick="openBookingPreview()" class="bg-brand-dark text-white px-12 py-4 rounded-full shadow-lg hover:bg-brand-accent transition text-lg font-bold tracking-widest transform hover:-translate-y-1">
-                    立即預約此款式
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <div id="booking-preview-modal" class="fixed inset-0 z-[3000] bg-black/90 hidden items-center justify-center p-4 backdrop-blur-sm animation-fade-in">
-        <div class="bg-white rounded-xl shadow-2xl max-w-md w-full overflow-hidden flex flex-col max-h-[90vh]">
-            <div class="p-4 bg-brand-bg border-b border-gray-100 flex justify-between items-center">
-                <h3 class="font-bold text-brand-dark text-lg">預約前請確認</h3>
-                <button onclick="closeBookingPreview()" class="text-gray-400 hover:text-gray-600">✕</button>
-            </div>
-            <div class="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
-                <img id="bp-img-0" src="" class="w-full rounded-lg shadow-sm object-cover">
-                <img id="bp-img-1" src="" class="w-full rounded-lg shadow-sm object-cover">
-                <img id="bp-img-2" src="" class="w-full rounded-lg shadow-sm object-cover">
-            </div>
-            <div class="p-4 bg-white border-t border-gray-100">
-                <p class="text-center text-xs text-gray-500 mb-3">確認以上資訊沒問題後，將為您跳轉至 LINE 預約</p>
-                <button onclick="realBookingAction()" class="w-full bg-brand-accent text-white py-3 rounded-full hover:bg-brand-dark transition font-bold tracking-widest shadow-lg transform active:scale-95 flex items-center justify-center gap-2">
-                    前往預約
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5l7 7-7 7"></path></svg>
-                </button>
             </div>
         </div>
     </div>
@@ -209,49 +162,24 @@
     <div id="page-rules" class="page-section">
         <div class="max-w-5xl mx-auto px-6 text-center">
             <h2 class="text-3xl text-brand-text font-bold mb-8">Booking Rules <span class="block text-xl font-hand text-brand-accent font-normal mt-2">預約須知</span></h2>
-            
-            <div class="flex flex-col gap-6">
-                <div class="bg-white p-2 rounded shadow-sm">
-                    <img src="rules.jpg" onclick="openLightbox(this.src)" class="w-full h-auto rounded-sm zoomable" onerror="this.src='https://via.placeholder.com/800x1200?text=Rules+Page+1'">
-                </div> 
-            </div>
-            </div>
+            <div class="bg-white p-2 rounded shadow-sm"><img src="rules.jpg" onclick="openLightbox(this.src)" class="w-full h-auto rounded-sm zoomable" onerror="this.src='https://via.placeholder.com/800x1200?text=Rules+Image'"></div>
+        </div>
     </div>
 
     <div id="page-promos" class="page-section">
         <div class="max-w-4xl mx-auto px-6">
-            <div class="text-center mb-10">
-                <h2 class="text-3xl md:text-4xl text-brand-text font-bold">Month Specials</h2>
-                <p class="text-xl font-hand text-brand-accent font-normal mt-2">當月 優惠款</p>
+            
+            <div class="text-center mb-8">
+                <h2 class="text-3xl md:text-4xl text-brand-text font-bold">March Specials</h2>
+                <span class="block text-xl font-hand text-brand-accent font-normal mt-2">3月 優惠款</span>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-                <div class="promo-card" onclick="openGalleryModal(0)">
-                    <div class="h-80 overflow-hidden relative">
-                        <img id="cover-0" src="" class="cover-img w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-black/10 hover:bg-transparent transition"></div>
-                    </div>
-                    <div class="p-6 text-center">
-                        <h3 id="title-0" class="text-2xl font-bold text-brand-dark mb-2"></h3>
-                        <p id="price-0" class="text-brand-accent font-serif text-xl tracking-wide"></p>
-                    </div>
-                </div>
-
-                <div class="promo-card" onclick="openGalleryModal(1)">
-                    <div class="h-80 overflow-hidden relative">
-                        <img id="cover-1" src="" class="cover-img w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-black/10 hover:bg-transparent transition"></div>
-                    </div>
-                    <div class="p-6 text-center">
-                        <h3 id="title-1" class="text-2xl font-bold text-brand-dark mb-2"></h3>
-                        <p id="price-1" class="text-brand-accent font-serif text-xl tracking-wide"></p>
-                    </div>
-                </div>
+            <div id="promo-gallery-container" class="mb-12"></div>
+            
+            <div class="text-center py-4 bg-white/60 rounded-lg text-sm text-gray-500 font-bold tracking-wide border border-brand-accent/10 mb-10">
+                *活動日期：即日起至 3/31 止 (開放預約中)
             </div>
 
-            <div class="text-center py-4 bg-white/60 rounded-lg text-sm text-gray-500 font-bold tracking-wide border border-brand-accent/10">
-                *活動日期：即日起至 4/30 止 (開放預約中)
-            </div>
         </div>
     </div>
 
@@ -323,93 +251,81 @@
         </div>
     </div>
 
-    <div class="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-brand-accent/20 z-30 flex justify-around items-end py-2 px-2 text-[10px] text-brand-text shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
-        <div onclick="switchPage('page-news')" class="flex flex-col items-center p-2 active:text-brand-accent w-1/5">
-            <span class="text-lg mb-1">📰</span><span>最新</span>
-        </div>
-        <div onclick="switchPage('page-promos')" class="flex flex-col items-center p-2 active:text-brand-accent w-1/5">
-            <span class="text-lg mb-1">✨</span><span>限定</span>
-        </div>
-        <div class="relative flex flex-col items-center -top-5 cursor-pointer w-1/5" onclick="openBookingPreview()">
+    <div class="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-brand-accent/20 z-30 flex justify-between items-end py-2 px-2 text-[10px] text-brand-text shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
+        <div onclick="switchPage('page-home')" class="flex flex-col items-center p-2 active:text-brand-accent cursor-pointer nav-btn-m w-1/5"><span class="text-xl mb-1">🏠</span><span>首頁</span></div>
+        <div onclick="switchPage('page-news')" class="flex flex-col items-center p-2 active:text-brand-accent cursor-pointer nav-btn-m w-1/5"><span class="text-xl mb-1">📰</span><span>最新</span></div>
+        
+        <div class="relative flex flex-col items-center -top-5 cursor-pointer w-1/5" onclick="window.location.href=SITE_CONFIG.bookingLink">
             <div class="bg-brand-accent text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg shadow-brand-accent/40 hover:scale-95 transition">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
             </div>
             <span class="font-bold text-brand-accent mt-1">預約</span>
         </div>
-        <div onclick="switchPage('page-menu')" class="flex flex-col items-center p-2 active:text-brand-accent w-1/5">
-            <span class="text-lg mb-1">💅</span><span>價目</span>
-        </div>
-        <div onclick="switchPage('page-location')" class="flex flex-col items-center p-2 active:text-brand-accent w-1/5">
-            <span class="text-lg mb-1">📍</span><span>資訊</span>
-        </div>
-    </div>
-
-    <div onclick="openBookingPreview()" class="hidden md:flex fixed bottom-10 right-10 z-50 cursor-pointer group fab-breathe">
-        <div class="relative bg-brand-dark text-white w-16 h-16 rounded-full flex items-center justify-center shadow-2xl hover:bg-brand-accent transition-all duration-300 transform group-hover:-translate-y-1">
-            <div class="absolute inset-0 rounded-full bg-white opacity-0 group-hover:animate-ping"></div>
-            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                <line x1="16" y1="2" x2="16" y2="6"></line>
-                <line x1="8" y1="2" x2="8" y2="6"></line>
-                <line x1="3" y1="10" x2="21" y2="10"></line>
-            </svg>
-        </div>
-        <div class="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-white text-brand-dark text-xs font-bold px-3 py-1 rounded shadow-md opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-            立即預約
-        </div>
+        
+        <div onclick="switchPage('page-promos')" class="flex flex-col items-center p-2 active:text-brand-accent cursor-pointer nav-btn-m w-1/5"><span class="text-xl mb-1">✨</span><span>限定</span></div>
+        <div onclick="switchPage('page-menu')" class="flex flex-col items-center p-2 active:text-brand-accent cursor-pointer nav-btn-m w-1/5"><span class="text-xl mb-1">💅</span><span>價目</span></div>
     </div>
 
     <script>
-        // 處理手機返回鍵邏輯 (整合 Modal 和 Page)
-        window.addEventListener('popstate', function(event) {
-            // 優先檢查 Modal 是否開啟
-            const galleryModal = document.getElementById('gallery-modal');
-            if (galleryModal.classList.contains('active')) {
-                galleryModal.classList.remove('active');
-                document.body.style.overflow = 'auto';
-                return; // 如果關閉了 Modal，就不繼續執行頁面切換
-            }
-
-            const bookingModal = document.getElementById('booking-preview-modal');
-            if (bookingModal && !bookingModal.classList.contains('hidden')) {
-                bookingModal.classList.add('hidden');
-                bookingModal.classList.remove('flex');
-                document.body.style.overflow = 'auto';
-                return;
-            }
-
-            // 如果沒有 Modal，則執行原本的頁面切換邏輯
-            const newHash = window.location.hash.replace('#', '');
-            if (newHash && document.getElementById(newHash)) {
-                updateView(newHash);
-            } else {
-                updateView('page-home');
-            }
-        });
-
         document.addEventListener('DOMContentLoaded', function() {
-            // 1. 須知彈窗
+            // 1. 須知彈窗檢查
             if (!localStorage.getItem('hasReadRules')) {
                 document.getElementById('rules-modal').classList.add('active');
                 document.body.style.overflow = 'hidden';
             }
             
-            // 2. 初始化優惠封面
-            renderCovers();
+            // 2. 生成 3 月優惠的內容 (大圖直放)
+            renderPromoGallery();
 
-            // 3. 網址導航邏輯 (Hash)
+            // 3. 網址導航邏輯
             const hash = window.location.hash.replace('#', '');
             if (hash && document.getElementById(hash)) {
                 switchPage(hash);
             } else {
                 updateView('page-home');
             }
+            
+            window.addEventListener('hashchange', function() {
+                const newHash = window.location.hash.replace('#', '');
+                if (newHash && document.getElementById(newHash)) {
+                    updateView(newHash);
+                } else {
+                    updateView('page-home');
+                }
+            });
         });
 
         function closeRulesModal() {
             localStorage.setItem('hasReadRules', 'true');
             document.getElementById('rules-modal').classList.remove('active');
             document.body.style.overflow = 'auto';
+        }
+
+        // ★ 動態生成 3 月大圖直放的結構
+        function renderPromoGallery() {
+            const container = document.getElementById('promo-gallery-container');
+            const data = SITE_CONFIG.promoData;
+
+            // 垂直大圖堆疊
+            const imagesHTML = data.images.map(img => `
+                <div class="overflow-hidden rounded-lg shadow-md bg-white group w-full">
+                    <img src="${img}" onclick="openLightbox(this.src)" class="w-full h-auto object-cover cursor-zoom-in transition duration-500 group-hover:scale-105 group-hover:opacity-95" onerror="this.src='https://via.placeholder.com/600x800?text=Gallery+Image'">
+                </div>
+            `).join('');
+
+            container.innerHTML = `
+                <div class="animate-[fadeIn_0.5s_ease-out]">
+                    <div class="mb-10 max-w-2xl mx-auto">
+                        <div class="text-gray-600 bg-white p-6 rounded-xl shadow-sm border border-brand-accent/20 leading-relaxed text-center">
+                            ${data.description}
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-col space-y-8">
+                        ${imagesHTML}
+                    </div>
+                </div>
+            `;
         }
 
         // 頁面切換
@@ -429,88 +345,24 @@
             }
             window.scrollTo(0,0); 
             
-            // 更新電腦版導航狀態
+            // 更新上方導航列
             document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('text-brand-accent','font-bold')); 
             const navId = 'nav-' + id.replace('page-','');
             const btn = document.getElementById(navId);
             if(btn) btn.classList.add('text-brand-accent','font-bold'); 
             
-            // ★ 修改：更新手機版導航狀態 (對應新的按鈕順序)
-            const mobileBtns = document.querySelectorAll('.md\\:hidden.fixed > div'); 
+            // 更新下方導航列
+            const mobileBtns = document.querySelectorAll('.nav-btn-m');
             mobileBtns.forEach(b => b.classList.remove('text-brand-accent'));
-            
-            if(id === 'page-news' && mobileBtns[0]) mobileBtns[0].classList.add('text-brand-accent');
-            if(id === 'page-promos' && mobileBtns[1]) mobileBtns[1].classList.add('text-brand-accent');
-            // index 2 is booking button
-            if(id === 'page-menu' && mobileBtns[3]) mobileBtns[3].classList.add('text-brand-accent');
-            if(id === 'page-location' && mobileBtns[4]) mobileBtns[4].classList.add('text-brand-accent');
+            if(id === 'page-home') mobileBtns[0].classList.add('text-brand-accent');
+            if(id === 'page-news') mobileBtns[1].classList.add('text-brand-accent');
+            if(id === 'page-promos') mobileBtns[2].classList.add('text-brand-accent');
+            if(id === 'page-menu') mobileBtns[3].classList.add('text-brand-accent');
         }
 
-        // 全局燈箱
-        function openLightbox(src){ document.getElementById('lightbox-img').src=src; document.getElementById('lightbox').classList.add('show'); }
-
-        // 渲染優惠頁面的封面卡片
-        function renderCovers() {
-            SITE_CONFIG.collections.forEach((col, idx) => {
-                const titleEl = document.getElementById(`title-${idx}`);
-                const priceEl = document.getElementById(`price-${idx}`);
-                const coverEl = document.getElementById(`cover-${idx}`);
-                
-                if (titleEl) titleEl.innerText = col.title;
-                if (priceEl) priceEl.innerText = col.price;
-                if (coverEl) {
-                    coverEl.src = col.cover;
-                    coverEl.onerror = function() { this.src='https://via.placeholder.com/600x800?text=Cover+Image'; };
-                }
-            });
-        }
-
-        // 開啟詳情頁 Modal
-        function openGalleryModal(index) {
-            history.pushState({ modal: 'gallery' }, null, '');
-            const data = SITE_CONFIG.collections[index];
-            const modal = document.getElementById('gallery-modal');
-            
-            document.getElementById('gm-title').innerText = data.title;
-            document.getElementById('gm-price').innerText = data.price;
-            document.getElementById('gm-desc').innerHTML = data.description;
-            
-            const grid = document.getElementById('gm-grid');
-            grid.innerHTML = data.images.map(img => 
-                `<div class="overflow-hidden rounded-lg shadow-md bg-white">
-                    <img src="${img}" onclick="openLightbox(this.src)" class="w-full h-auto object-cover zoomable hover:scale-105 transition duration-500" onerror="this.src='https://via.placeholder.com/600x800?text=Gallery+Image'">
-                </div>`
-            ).join('');
-
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden'; 
-        }
-
-        function closeGalleryModal() {
-            history.back();
-        }
-
-        function openBookingPreview() {
-            const images = SITE_CONFIG.previewImages || [];
-            if (images.length > 0) document.getElementById('bp-img-0').src = images[0];
-            if (images.length > 1) document.getElementById('bp-img-1').src = images[1];
-            if (images.length > 2) document.getElementById('bp-img-2').src = images[2];
-
-            const modal = document.getElementById('booking-preview-modal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeBookingPreview() {
-            const modal = document.getElementById('booking-preview-modal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-            document.body.style.overflow = 'auto';
-        }
-
-        function realBookingAction() {
-            window.location.href = SITE_CONFIG.bookingLink;
+        function openLightbox(src){ 
+            document.getElementById('lightbox-img').src=src; 
+            document.getElementById('lightbox').classList.add('show'); 
         }
     </script>
 </body>
